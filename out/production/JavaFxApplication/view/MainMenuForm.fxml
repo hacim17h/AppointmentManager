@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="400.0" prefWidth="500.0">
@@ -17,7 +16,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
                      <children>
-                        <Label text="Application Manager Main Menu">
+                        <Label text="Appointment Manager Main Menu">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
