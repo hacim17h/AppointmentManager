@@ -1,5 +1,6 @@
 package main;
 
+import DAO.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,9 +20,8 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        //Just a little test to see if github is working!
-        main.JDBC.openConnection();
+        JDBC.openConnection();
         launch(args);
-        main.JDBC.closeConnection();
+        JDBC.closeConnection();
     }
 }
