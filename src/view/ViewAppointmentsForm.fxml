@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="700.0" prefWidth="1500.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1500.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1000.0">
+                     <children>
+                        <Label text="Appointment Information">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="500.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="500.0">
+                     <children>
+                        <RadioButton fx:id="appointmentAllRButton" mnemonicParsing="false" prefWidth="70.0" selected="true" text="All">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="appointmentGroup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="appointmentWeekRButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="This Week" toggleGroup="$appointmentGroup">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </RadioButton>
+                        <RadioButton fx:id="appointmentMonthRButton" layoutX="97.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="This Month" toggleGroup="$appointmentGroup">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-radius: 5px;">
+               <children>
+                  <TableView prefHeight="200.0" prefWidth="1450.0">
+                    <columns>
+                      <TableColumn fx:id="appointmentIDCol" prefWidth="108.0" text="Appointment ID" />
+                      <TableColumn fx:id="appointmentTitleCol" prefWidth="197.0" text="Title" />
+                        <TableColumn fx:id="appointmentDescriptionCol" prefWidth="207.0" text="Description" />
+                        <TableColumn fx:id="appointmentLocationCol" prefWidth="153.0" text="Location" />
+                        <TableColumn fx:id="appointmentContactCol" prefWidth="174.0" text="Contact" />
+                        <TableColumn fx:id="appointmentTypeCol" prefWidth="140.0" text="Type" />
+                        <TableColumn fx:id="appointmentStartCol" prefWidth="145.0" text="Appointment Start" />
+                        <TableColumn fx:id="appointmentEndCol" prefWidth="124.0" text="Appointment End" />
+                        <TableColumn fx:id="appointmentCustomerIDCol" prefWidth="103.0" text="Customer ID" />
+                        <TableColumn fx:id="appointmentUserIDCol" prefWidth="98.0" text="User ID" />
+                    </columns>
+                     <HBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </HBox.margin>
+                  </TableView>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="1200.0">
+                     <children>
+                        <Button fx:id="appointmentAddButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Add Appointment">
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="appointmentEditButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Edit Appointment">
+                           <HBox.margin>
+                              <Insets right="40.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="appointmentDeleteButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Delete Appointment">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="290.0">
+                     <children>
+                        <Button fx:id="appointmentMainMenu" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Return to Main Menu" />
+                     </children>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
