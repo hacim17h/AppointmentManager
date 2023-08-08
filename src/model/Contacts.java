@@ -1,6 +1,6 @@
 package model;
 
-/**A class that stores and retrieves various contacts information.*/
+/**A class that stores and retrieves various contact information.*/
 public class Contacts {
     /**
      * Stores the contact ID.
