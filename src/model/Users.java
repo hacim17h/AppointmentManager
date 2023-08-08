@@ -18,11 +18,6 @@ public class Users {
     String password;
 
     /**
-     * Gets the id. A getter method that returns the user id.
-     * @return user id
-     */
-
-    /**
      * A class constructor that initializes the id, name, and email for the contact.
      * @param id user id
      * @param name username
@@ -33,6 +28,11 @@ public class Users {
         setName(name);
         setPassword(password);
     }
+
+    /**
+     * Gets the id. A getter method that returns the user id.
+     * @return user id
+     */
     public int getId() {
         return id;
     }
