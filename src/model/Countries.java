@@ -17,16 +17,15 @@ public class Countries {
     private String name;
 
     /**
-     * Stores the first level divisions of the country.
+     * Stores the first-level divisions of the country.
      */
     private ObservableList<Divisions> divisions = FXCollections.observableArrayList();
 
     /**
-     * Initializes default parameters. A default constructor that initializes the id, name, and first
-     * level divisions for the country.
+     * A class constructor that initializes the id, name, and first-level divisions for the country.
      * @param id country id
      * @param name country name
-     * @param divisions country first level divisions
+     * @param divisions country first-level divisions
      */
     public Countries(int id, String name, ObservableList<Divisions> divisions){
         setId(id);
@@ -67,16 +66,16 @@ public class Countries {
     }
 
     /**
-     * Gets the divisions. A getter method that returns the first level divisions.
-     * @return first level divisions
+     * Gets the divisions. A getter method that returns the first-level divisions.
+     * @return first-level divisions
      */
     public ObservableList<Divisions> getDivisions() {
         return divisions;
     }
 
     /**
-     * Sets the divisions. A setter method that returns the first level divisions.
-     * @param divisions  first level divisions
+     * Sets the divisions. A setter method that returns the first-level divisions.
+     * @param divisions  first-level divisions
      */
     public void setDivisions(ObservableList<Divisions> divisions) {
         this.divisions.addAll(divisions);
