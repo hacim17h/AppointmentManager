@@ -2,7 +2,7 @@ package model;
 
 import javafx.collections.ObservableList;
 
-/**A class that stores and retrieving various first-level division information.*/
+/**A class that stores and retrieves various first-level division information.*/
 public class Divisions {
     /**
      * Stores the first-level divison ID.

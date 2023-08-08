@@ -4,7 +4,7 @@ package model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/**A class that stores and retrieving various country information.*/
+/**A class that stores and retrieves various country information.*/
 public class Countries {
     /**
      * Stores the country ID.
