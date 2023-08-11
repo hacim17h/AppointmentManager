@@ -11,6 +11,10 @@ import javafx.stage.Stage;
 import model.Countries;
 import model.Divisions;
 
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 public class Main extends Application {
 
     @Override
@@ -36,6 +40,12 @@ public class Main extends Application {
         for (Divisions division : unitedStates.getDivisions()){
             System.out.println(division.getName());
         }
+
+        //Locale.setDefault(new Locale("fr","FR"));
+        ResourceBundle rb = ResourceBundle.getBundle("helper/Lang", Locale.getDefault());
+        System.out.println("The username is: " + rb.getString("Username"));
+        System.out.println("The password is: " + rb.getString("Password"));
+        System.out.println("The default locale is: " + Locale.getDefault());
         launch(args);
         JDBC.closeConnection();
     }
