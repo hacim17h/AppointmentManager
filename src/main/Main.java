@@ -19,8 +19,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        ResourceBundle rb = ResourceBundle.getBundle("helper/Lang", Locale.getDefault());
         Parent root = FXMLLoader.load(getClass().getResource("/view/LoginForm.fxml"));
-        primaryStage.setTitle("Appointment Manager");
+        primaryStage.setTitle(rb.getString("Appointment Manager"));
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -48,8 +49,8 @@ public class Main extends Application {
         System.out.println("The password is: " + rb.getString("Password"));
         System.out.println("The Login is: " + rb.getString("Login"));
         System.out.println("The Exit is: " + rb.getString("Exit"));
-        System.out.println("The Application Manager is: " + rb.getString("Application Manager"));
-        System.out.println("The Application Manager Login is: " + rb.getString("Application Manager Login"));
+        System.out.println("The Appointment Manager is: " + rb.getString("Appointment Manager"));
+        System.out.println("The Appointment Manager Login is: " + rb.getString("Appointment Manager Login"));
         System.out.println("The Locale is: " + rb.getString("Locale"));
         System.out.println("The error message is: " + rb.getString("The username and/or password do not match."));
         //default locale test
