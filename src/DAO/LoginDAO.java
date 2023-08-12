@@ -32,7 +32,7 @@ public abstract class LoginDAO {
         }
         catch (SQLException e){
             e.getStackTrace();
+            return false;
         }
-        return false;
     }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.LoginDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +29,7 @@ public class LoginController {
      */
     Parent scene;
     @FXML
-    private HBox loginErrorLbl;
+    private Label loginErrorLbl;
 
     @FXML
     private Button loginExitButton;
@@ -58,7 +59,7 @@ public class LoginController {
 
     /**
      * Switches to the main menu form. When the button is pressed,the scene is properly shifted to the main menu
-     * form if the user credentials are correct. If not an error is displayed and they are forced to try again.
+     * form if the user credentials are correct. If not an error is displayed, and they are forced to try again.
      * Upon successful or unsuccessful logins, data is stored to the login_activity.txt file. This includes the
      * attempts, dates, and time stamps, and if the attempt was successful or not.
      * @param event helps get the window that caused the event
@@ -66,10 +67,21 @@ public class LoginController {
      */
     @FXML
     public void onActionLogin(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/MainMenuForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        String username = loginUsernameText.getText();
+        String password = loginPasswordText.getText();
+        ResourceBundle rb = ResourceBundle.getBundle("helper/Lang", Locale.getDefault());
+
+        if(LoginDAO.isValidUser(username,password)){
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/MainMenuForm.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
+        else
+        {
+            loginErrorLbl.setText(rb.getString("The username and/or password do not match."));
+        }
+
     }
 
     /**
