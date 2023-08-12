@@ -79,7 +79,7 @@ public class LoginController {
         }
         else
         {
-            loginErrorLbl.setText(rb.getString("The username and/or password do not match."));
+            loginErrorLbl.setText(rb.getString("The username and/or password is incorrect."));
         }
 
     }
