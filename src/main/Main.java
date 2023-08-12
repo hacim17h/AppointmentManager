@@ -51,8 +51,9 @@ public class Main extends Application {
         System.out.println("The Exit is: " + rb.getString("Exit"));
         System.out.println("The Appointment Manager is: " + rb.getString("Appointment Manager"));
         System.out.println("The Appointment Manager Login is: " + rb.getString("Appointment Manager Login"));
-        System.out.println("The Locale is: " + rb.getString("Locale"));
+        System.out.println("The Location is: " + rb.getString("Location"));
         System.out.println("The error message is: " + rb.getString("The username and/or password do not match."));
+
         //default locale test
         System.out.println("The default locale is: " + Locale.getDefault());
 

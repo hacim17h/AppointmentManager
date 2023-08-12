@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -20,10 +21,10 @@ public class LoginController {
     private Button loginExitButton;
 
     @FXML
-    private Label loginLocaleTitleLbl;
+    private Label loginLocationTitleLbl;
 
     @FXML
-    private Label loginLocaleLbl;
+    private Label loginLocationLbl;
 
     @FXML
     private Label loginTitleLbl;
@@ -50,8 +51,8 @@ public class LoginController {
         loginLoginButton.setText(rb.getString("Login"));
         loginExitButton.setText(rb.getString("Exit"));
         loginTitleLbl.setText(rb.getString("Appointment Manager Login"));
-        loginLocaleTitleLbl.setText(rb.getString("Locale") + ":");
-        loginLocaleLbl.setText(Locale.getDefault().toString());
+        loginLocationTitleLbl.setText(rb.getString("Location") + ":");
+        loginLocationLbl.setText(ZoneId.systemDefault().toString());
 
 
     }
