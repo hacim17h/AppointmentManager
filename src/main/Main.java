@@ -1,6 +1,7 @@
 package main;
 
 import DAO.JDBC;
+import DAO.LoginDAO;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Countries;
 import model.Divisions;
+import model.Users;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -65,6 +67,20 @@ public class Main extends Application {
         else {
             System.out.println("The row has failed to be added.");
         }*/
+
+        //users test
+        Users user = new Users(1, "smokeybone", "420f");
+        Users user2 = new Users(1, "test", "test");
+
+        Boolean result = LoginDAO.isValidUser(user.getUsername(), user.getPassword());
+        Boolean result2 = LoginDAO.isValidUser(user2.getUsername(), user2.getPassword());
+        if (result2){
+            System.out.println("The user is valid!");
+        }
+        else {
+            System.out.println("The user is not valid!");
+        }
+
 
         launch(args);
         JDBC.closeConnection();

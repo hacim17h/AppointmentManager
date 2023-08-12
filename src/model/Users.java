@@ -10,7 +10,7 @@ public class Users {
     /**
      * Stores the username.
      */
-    private String name;
+    private String username;
 
     /**
      * Stores the password.
@@ -20,12 +20,12 @@ public class Users {
     /**
      * A class constructor that initializes the id, name, and email for the contact.
      * @param id user id
-     * @param name username
+     * @param username username
      * @param password user password
      */
-    public Users(int id, String name, String password){
+    public Users(int id, String username, String password){
         setId(id);
-        setName(name);
+        setUsername(username);
         setPassword(password);
     }
 
@@ -46,19 +46,19 @@ public class Users {
     }
 
     /**
-     * Gets the name. A getter method that returns the username.
+     * Gets the username. A getter method that returns the username.
      * @return username
      */
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * Sets the name. A setter method that sets the username.
-     * @param name username
+     * Sets the username. A setter method that sets the username.
+     * @param username username
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
