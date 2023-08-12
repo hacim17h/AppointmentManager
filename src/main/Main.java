@@ -12,7 +12,6 @@ import model.Countries;
 import model.Divisions;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
@@ -56,6 +55,16 @@ public class Main extends Application {
 
         //default locale test
         System.out.println("The default locale is: " + Locale.getDefault());
+
+        //sql insert test
+/*        int success = 0;
+
+        if (success > 0){
+            System.out.println("The row has been added successfully.");
+        }
+        else {
+            System.out.println("The row has failed to be added.");
+        }*/
 
         launch(args);
         JDBC.closeConnection();
