@@ -57,7 +57,7 @@
                               <Insets right="40.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="customerRemoveButton" mnemonicParsing="false" onAction="#onActionRemoveCustomer" prefHeight="40.0" prefWidth="140.0" text="Remove Customer">
+                        <Button fx:id="customerDeleteButton" mnemonicParsing="false" onAction="#onActionDeleteCustomer" prefHeight="40.0" prefWidth="140.0" text="Delete Customer">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>

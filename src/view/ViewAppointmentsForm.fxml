@@ -94,17 +94,17 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="1200.0">
                      <children>
-                        <Button fx:id="appointmentAddButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Add Appointment">
+                        <Button fx:id="appointmentAddButton" mnemonicParsing="false" onAction="#onActionAddAppointment" prefHeight="40.0" prefWidth="140.0" text="Add Appointment">
                            <HBox.margin>
                               <Insets right="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="appointmentEditButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Edit Appointment">
+                        <Button fx:id="appointmentEditButton" mnemonicParsing="false" onAction="#onActionEditAppointment" prefHeight="40.0" prefWidth="140.0" text="Edit Appointment">
                            <HBox.margin>
                               <Insets right="40.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="appointmentDeleteButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Delete Appointment">
+                        <Button fx:id="appointmentDeleteButton" mnemonicParsing="false" onAction="#onActionDeleteAppointment" prefHeight="40.0" prefWidth="140.0" text="Delete Appointment">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -116,7 +116,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="290.0">
                      <children>
-                        <Button fx:id="appointmentMainMenu" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Return to Main Menu" />
+                        <Button fx:id="appointmentMainMenu" mnemonicParsing="false" onAction="#onActionMainMenu" prefHeight="40.0" prefWidth="140.0" text="Return to Main Menu" />
                      </children>
                      <padding>
                         <Insets right="10.0" />

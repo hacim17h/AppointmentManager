@@ -262,12 +262,12 @@
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="addAppointmentSaveBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Save">
+                  <Button fx:id="addAppointmentSaveBtn" mnemonicParsing="false" onAction="#onActionSave" prefHeight="40.0" prefWidth="140.0" text="Save">
                      <HBox.margin>
                         <Insets right="80.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="addAppointmentCancelBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Cancel" />
+                  <Button fx:id="addAppointmentCancelBtn" mnemonicParsing="false" onAction="#onActionCancel" prefHeight="40.0" prefWidth="140.0" text="Cancel" />
                </children>
                <padding>
                   <Insets top="20.0" />

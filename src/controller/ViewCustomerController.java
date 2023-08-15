@@ -51,7 +51,7 @@ public class ViewCustomerController {
     private TableColumn<?, ?> customerPostalCodeCol;
 
     @FXML
-    private Button customerRemoveButton;
+    private Button customerDeleteButton;
 
     @FXML
     private TableView<?> customerTableView;
@@ -93,7 +93,7 @@ public class ViewCustomerController {
      * @throws IOException for handling any input output exceptions
      */
     @FXML
-    void onActionRemoveCustomer(ActionEvent event) {
+    void onActionDeleteCustomer(ActionEvent event) {
 
     }
 
