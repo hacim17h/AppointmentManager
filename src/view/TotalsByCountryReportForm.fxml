@@ -87,12 +87,12 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="byCountryGenerateBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Generate Report">
+                  <Button fx:id="byCountryGenerateBtn" mnemonicParsing="false" onAction="#onActionGenerateReport" prefHeight="40.0" prefWidth="140.0" text="Generate Report">
                      <HBox.margin>
                         <Insets right="80.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="byCountryMainMenuBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Return to Main Menu" />
+                  <Button fx:id="byCountryMainMenuBtn" mnemonicParsing="false" onAction="#onActionMainMenu" prefHeight="40.0" prefWidth="140.0" text="Return to Main Menu" />
                </children>
             </HBox>
          </children>
