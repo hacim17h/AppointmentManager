@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddCustomerController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="700.0" prefWidth="650.0">
          <children>
@@ -168,12 +168,12 @@
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="addCustomerSaveBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Save">
+                  <Button fx:id="addCustomerSaveBtn" mnemonicParsing="false" onAction="#onActionSave" prefHeight="40.0" prefWidth="140.0" text="Save">
                      <HBox.margin>
                         <Insets right="80.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="addCustomerCancelBtn" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Cancel" />
+                  <Button fx:id="addCustomerCancelBtn" mnemonicParsing="false" onAction="#onActionCancel" prefHeight="40.0" prefWidth="140.0" text="Cancel" />
                </children>
                <padding>
                   <Insets top="20.0" />
