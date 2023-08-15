@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ViewCustomerController">
    <children>
       <VBox prefHeight="700.0" prefWidth="1100.0">
          <children>
@@ -47,17 +47,17 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="800.0">
                      <children>
-                        <Button fx:id="customerAddButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Add Customer">
+                        <Button fx:id="customerAddButton" mnemonicParsing="false" onAction="#onActionAddCustomer" prefHeight="40.0" prefWidth="140.0" text="Add Customer">
                            <HBox.margin>
                               <Insets right="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="customerEditButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Edit Customer">
+                        <Button fx:id="customerEditButton" mnemonicParsing="false" onAction="#onActionEditCustomer" prefHeight="40.0" prefWidth="140.0" text="Edit Customer">
                            <HBox.margin>
                               <Insets right="40.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="customerRemoveButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Remove Customer">
+                        <Button fx:id="customerRemoveButton" mnemonicParsing="false" onAction="#onActionRemoveCustomer" prefHeight="40.0" prefWidth="140.0" text="Remove Customer">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -69,7 +69,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="290.0">
                      <children>
-                        <Button fx:id="customerMainMenu" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" text="Return to Main Menu" />
+                        <Button fx:id="customerMainMenu" mnemonicParsing="false" onAction="#onActionMainMenu" prefHeight="40.0" prefWidth="140.0" text="Return to Main Menu" />
                      </children>
                      <padding>
                         <Insets right="10.0" />

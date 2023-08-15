@@ -77,7 +77,7 @@ public class ReportController {
     }
 
     /**
-     * Returns to the main menu. When the button, is pressed the returns to the previous main menu.
+     * Returns to the main menu. When the button is pressed, the form returns to the previous main menu.
      * @param event helps get the window that caused the event
      * @throws IOException for handling any input output exception
      */
