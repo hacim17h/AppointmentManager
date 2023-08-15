@@ -114,6 +114,10 @@ public class ViewCustomerController {
     }
 
     /*id name address postal code phone number division id*/
+    /**
+     * A special method that displays the initial values. The table views are populated with the customer information
+     * from the database and the columns values are set properly.
+     */
     public void initialize(){
         customerTableView.setItems(CustomersDAO.selectAll());
         customerCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));

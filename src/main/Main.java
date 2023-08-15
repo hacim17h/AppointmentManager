@@ -90,6 +90,15 @@ public class Main extends Application {
                                customer.getPostalCode() + " " + customer.getPhoneNum() + " Division ID: " +
                                customer.getDivisionId());
         }
+        //test adding a customer in CustomersDAO
+        int rowsAdded = CustomersDAO.insert("Wendell Skonch", "641 Scootersville Lane",
+                        "84219", "347-985-4333",16);
+        if(rowsAdded > 0){
+            System.out.println("The customer has been added to the database correctly!");
+        }
+        else{
+            System.out.println("The customer has failed to be added to the database!");
+        }
 
 
         launch(args);

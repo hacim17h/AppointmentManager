@@ -10,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Countries;
 
 import java.io.IOException;
 
@@ -31,7 +32,7 @@ public class AddCustomerController {
     private Button addCustomerCancelBtn;
 
     @FXML
-    private ComboBox<?> addCustomerCountryCombo;
+    private ComboBox<Countries> addCustomerCountryCombo;
 
     @FXML
     private ComboBox<?> addCustomerDivisionCombo;
@@ -80,6 +81,14 @@ public class AddCustomerController {
         scene = FXMLLoader.load(getClass().getResource("/view/ViewCustomerForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
+    }
+
+    /**
+     * A special method that displays the initial values. The table views are populated with the customer information
+     * from the database and the columns values are set properly.
+     */
+    public void initialize(){
+
     }
 
 }
