@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.CustomersDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Customers;
 
 import java.io.IOException;
 
@@ -27,16 +30,25 @@ public class ViewCustomerController {
     private Button customerAddButton;
 
     @FXML
-    private TableColumn<?, ?> customerAddressCol;
+    private TableView<Customers> customerTableView;
 
     @FXML
-    private TableColumn<?, ?> customerCustomerIDCol;
+    private TableColumn<Customers, String> customerAddressCol;
 
     @FXML
-    private TableColumn<?, ?> customerCustomerNameCol;
+    private TableColumn<Customers, Integer> customerCustomerIDCol;
 
     @FXML
-    private TableColumn<?, ?> customerDivisionCol;
+    private TableColumn<Customers, String> customerCustomerNameCol;
+
+    @FXML
+    private TableColumn<Customers, Integer> customerDivisionCol;
+
+    @FXML
+    private TableColumn<Customers, String> customerPhoneCol;
+
+    @FXML
+    private TableColumn<Customers, String> customerPostalCodeCol;
 
     @FXML
     private Button customerEditButton;
@@ -45,16 +57,7 @@ public class ViewCustomerController {
     private Button customerMainMenu;
 
     @FXML
-    private TableColumn<?, ?> customerPhoneCol;
-
-    @FXML
-    private TableColumn<?, ?> customerPostalCodeCol;
-
-    @FXML
     private Button customerDeleteButton;
-
-    @FXML
-    private TableView<?> customerTableView;
 
     /**
      * Displays the add customer form. When the button is pressed, the scene is changed to the
@@ -108,6 +111,17 @@ public class ViewCustomerController {
         scene = FXMLLoader.load(getClass().getResource("/view/MainMenuForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
+    }
+
+    /*id name address postal code phone number division id*/
+    public void initialize(){
+        customerTableView.setItems(CustomersDAO.selectAll());
+        customerCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        customerCustomerNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customerPostalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phoneNum"));
+        customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
     }
 }
 

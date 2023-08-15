@@ -2,8 +2,6 @@ package DAO;
 
 import helper.LogMessage;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,10 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**A class that handles authenticating the user by checking the database to see if they exist while tracking
@@ -48,11 +43,6 @@ public abstract class LoginDAO {
             return false;
         }
     }
-
-    /*Write code that provides the ability to track user activity by recording all user
-    log-in attempts, dates, and time stamps and whether each attempt was successful in
-    a file named login_activity.txt. Append each new record to the existing file, and
-    save to the root folder of the application.*/
 
     /**
      * Records information about the user login. The method creates a new login file if one isn't present and records

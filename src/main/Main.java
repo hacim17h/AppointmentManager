@@ -1,5 +1,6 @@
 package main;
 
+import DAO.CustomersDAO;
 import DAO.JDBC;
 import DAO.LoginDAO;
 import javafx.application.Application;
@@ -10,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Countries;
+import model.Customers;
 import model.Divisions;
 import model.Users;
 
@@ -79,6 +81,14 @@ public class Main extends Application {
         }
         else {
             System.out.println("The user is not valid!");
+        }
+        //test select all in CustomersDAO
+        ObservableList<Customers> customers = FXCollections.observableArrayList();
+        customers.addAll(CustomersDAO.selectAll());
+        for (Customers customer : customers){
+            System.out.println(customer.getId() + ": " + customer.getName() + " " + customer.getAddress() + " " +
+                               customer.getPostalCode() + " " + customer.getPhoneNum() + " Division ID: " +
+                               customer.getDivisionId());
         }
 
 

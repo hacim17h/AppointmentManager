@@ -33,11 +33,6 @@ public class Customers {
     private int divisionId;
 
     /**
-     * Gets the id. A getter method that returns the customer id.
-     * @return customer id
-     */
-
-    /**
      * A class constructor that initializes the id, name, address, postal code, phone number
      * and first-level divisions for the country.
      * @param id customer ID
@@ -55,6 +50,11 @@ public class Customers {
         setPhoneNum(phoneNum);
         setDivisionId(divisionId);
     }
+
+    /**
+     * Gets the id. A getter method that returns the customer id.
+     * @return customer id
+     */
     public int getId() {
         return id;
     }

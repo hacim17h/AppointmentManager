@@ -28,11 +28,11 @@
                   <TableView fx:id="customerTableView" prefHeight="200.0" prefWidth="1050.0">
                     <columns>
                       <TableColumn fx:id="customerCustomerIDCol" prefWidth="98.0" text="Customer ID" />
-                      <TableColumn fx:id="customerCustomerNameCol" prefWidth="217.0" text="Customer Name" />
-                        <TableColumn fx:id="customerAddressCol" prefWidth="197.0" text="Address" />
-                        <TableColumn fx:id="customerPostalCodeCol" prefWidth="135.0" text="Postal Code" />
-                        <TableColumn fx:id="customerPhoneCol" prefWidth="178.0" text="Phone" />
-                        <TableColumn fx:id="customerDivisionCol" prefWidth="224.0" text="Division" />
+                      <TableColumn fx:id="customerCustomerNameCol" prefWidth="210.0" text="Customer Name" />
+                        <TableColumn fx:id="customerAddressCol" prefWidth="298.0" text="Address" />
+                        <TableColumn fx:id="customerPostalCodeCol" prefWidth="129.0" text="Postal Code" />
+                        <TableColumn fx:id="customerPhoneCol" prefWidth="224.0" text="Phone" />
+                        <TableColumn fx:id="customerDivisionCol" prefWidth="90.0" text="Division" />
                     </columns>
                      <HBox.margin>
                         <Insets bottom="10.0" top="10.0" />
