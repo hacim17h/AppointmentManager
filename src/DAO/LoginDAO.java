@@ -1,8 +1,21 @@
 package DAO;
 
+import helper.LogMessage;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**A class that handles authenticating the user by checking the database to see if they exist while tracking
  * attempts.*/
@@ -34,5 +47,58 @@ public abstract class LoginDAO {
             e.getStackTrace();
             return false;
         }
+    }
+
+    /*Write code that provides the ability to track user activity by recording all user
+    log-in attempts, dates, and time stamps and whether each attempt was successful in
+    a file named login_activity.txt. Append each new record to the existing file, and
+    save to the root folder of the application.*/
+
+    /**
+     * Records information about the user login. The method creates a new login file if one isn't present and records
+     * whether the user has successfully logged in as well as the timestamp of the attempt. If there is already
+     * a log file present, it updates the file and adds to it. The lambda successfulMessage and unsuccessfulMessage
+     * were used to simplify the redundancy of the message text. Due to having repeat the text for the condition of
+     * the file already existing, it was helpful in cutting it down and gives added readability and clarity on the
+     * success states.
+     * @param success whether the login was successful or not
+     */
+    public static void recordLogins (Boolean success){
+        try{
+            Path path = Paths.get("login_activity.txt");
+
+            LocalDateTime dateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm:ss");
+            String timestamp = dateTime.format(formatter);
+            LogMessage successfulMessage = () -> "Login attempt on " + timestamp + " was successful.";
+            LogMessage unsuccessfulMessage = () -> "Login attempt on " + timestamp + " was unsuccessful.";
+            if(Files.notExists(path)){
+                Files.createFile(path);
+                String logEntry;
+                if (success){
+                    logEntry = successfulMessage.getMessage();
+                }
+                else{
+                    logEntry = unsuccessfulMessage.getMessage();
+                }
+                Files.write(path, logEntry.getBytes());
+
+            }
+            else {
+                String logEntry;
+                if (success){
+                    logEntry = successfulMessage.getMessage();
+                }
+                else{
+                    logEntry = unsuccessfulMessage.getMessage();
+                }
+                Files.write(path, ("\n" + logEntry).getBytes(), StandardOpenOption.APPEND);
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }

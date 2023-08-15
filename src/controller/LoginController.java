@@ -70,16 +70,18 @@ public class LoginController {
         String username = loginUsernameText.getText();
         String password = loginPasswordText.getText();
         ResourceBundle rb = ResourceBundle.getBundle("helper/Lang", Locale.getDefault());
-
-        if(LoginDAO.isValidUser(username,password)){
+        Boolean success = LoginDAO.isValidUser(username,password);
+        if(success){
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/MainMenuForm.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
+            LoginDAO.recordLogins(success);
         }
         else
         {
             loginErrorLbl.setText(rb.getString("The username and/or password is incorrect."));
+            LoginDAO.recordLogins(success);
         }
 
     }
