@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenuController">
    <children>
       <VBox prefHeight="400.0" prefWidth="500.0">
          <children>
@@ -25,22 +25,22 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="mainViewCustomers" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="View / Manage Customers" />
+                        <Button fx:id="mainViewCustomers" mnemonicParsing="false" onAction="#onActionViewCustomers" prefHeight="40.0" prefWidth="200.0" text="View / Manage Customers" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="mainViewAppointments" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="View / Manage Appointments" />
+                        <Button fx:id="mainViewAppointments" mnemonicParsing="false" onAction="#onActionViewAppointments" prefHeight="40.0" prefWidth="200.0" text="View / Manage Appointments" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="mainGenerateReports" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Generate Reports" />
+                        <Button fx:id="mainGenerateReports" mnemonicParsing="false" onAction="#onActionGenerateReports" prefHeight="40.0" prefWidth="200.0" text="Generate Reports" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="mainExit" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Exit" />
+                        <Button fx:id="mainExit" mnemonicParsing="false" onAction="#onActionExit" prefHeight="40.0" prefWidth="100.0" text="Exit" />
                      </children>
                   </HBox>
                </children>
