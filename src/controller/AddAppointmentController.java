@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Time;
-import java.time.LocalTime;
+import java.time.*;
 
 public class AddAppointmentController {
     /**
@@ -118,6 +118,8 @@ public class AddAppointmentController {
      */
     //8:00 a.m. to 10:00 p.m. ET
     public void initialize(){
+        addAppointmentDate.setValue(LocalDate.now());
+        LocalDate date = addAppointmentDate.getValue();
         ObservableList<LocalTime> appointmentHours = FXCollections.observableArrayList();
         LocalTime start = LocalTime.of(8,0);
         LocalTime end = LocalTime.of(22,0);
@@ -126,6 +128,13 @@ public class AddAppointmentController {
             start = start.plusMinutes(30);
         }
         appointmentHours.add(end);
+        LocalDateTime dateTime = LocalDateTime.of(date, start);
+        ZoneId local = ZoneId.systemDefault();
+        ZoneId utc = ZoneId.of("UTC");
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(dateTime, local);
+        ZonedDateTime localTime = ZonedDateTime.ofInstant(zonedDateTime.toInstant(), local);
+        System.out.println("This is utc: " + localTime);
+        System.out.println("This is the original time: " + zonedDateTime);
         addAppointmentStartCombo.setItems(appointmentHours);
         addAppointmentEndCombo.setItems(appointmentHours);
     }
