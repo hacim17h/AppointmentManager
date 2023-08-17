@@ -124,14 +124,17 @@ public class AddAppointmentController {
         ZoneId local = ZoneId.systemDefault();
         ZoneId utc = ZoneId.of("UTC");
         ZoneId eastern = ZoneId.of("America/New_York");
-        LocalTime start = LocalTime.of(8,0);
-        LocalTime end = LocalTime.of(22,0);
+        LocalTime start = LocalTime.of(4,0);
+        LocalTime end = LocalTime.of(18,0);
         LocalDateTime startTime = LocalDateTime.of(date, start);
         LocalDateTime endTime = LocalDateTime.of(date, end);
-        ZonedDateTime localStartTime = ZonedDateTime.of(startTime, utc);
-        ZonedDateTime localEndTime = ZonedDateTime.of(endTime, utc);
+        ZonedDateTime localStartTime = ZonedDateTime.of(startTime, local);
+        ZonedDateTime localEndTime = ZonedDateTime.of(endTime, local);
         ZonedDateTime convertedStartTime = ZonedDateTime.ofInstant(localStartTime.toInstant(), utc);
         ZonedDateTime convertedEndTime = ZonedDateTime.ofInstant(localEndTime.toInstant(), utc);
+        System.out.println("My local time: " + localStartTime);
+        System.out.println("My utc time: " + convertedStartTime);
+        System.out.println("My local time: " + convertedStartTime.toLocalTime());
         /*while (start.isBefore(end)){
             appointmentHours.add(start);
             start = start.plusMinutes(30);
