@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.CustomersDAO;
 import DAO.LocationDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -90,15 +91,31 @@ public class EditCustomerController {
     /**
      * Returns to the view customer form after saving input. When the button is pressed, the form returns to the
      * previous view customer form and saves the input data to the database as well as displaying it to the tableview.
+     * If it is invalid data, it will not save and instead not leave the screen until valid data is entered.
      * @param event helps get the window that caused the event
      * @throws IOException for handling any input output exception
      */
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/ViewCustomerForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        if(isValidInput()){
+            int rowsAdded = CustomersDAO.update(Integer.parseInt(editCustomerIDTxt.getText()),
+                    editCustomerNameTxt.getText(), editCustomerAddressTxt.getText(),
+                    editCustomerPostalTxt.getText(),editCustomerPhoneTxt.getText(),
+                    divisionIds.get(editCustomerDivisionCombo.getSelectionModel().getSelectedIndex()));
+            if (rowsAdded > 0){
+                stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/view/ViewCustomerForm.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
+            else{
+                editCustomerErrorLbl.setText("The customer has failed to be added. Please try again.");
+            }
+
+        }
+        else {
+            editCustomerErrorLbl.setText("One or more of the fields have been left blank.");
+        }
     }
 
     /**
@@ -136,6 +153,7 @@ public class EditCustomerController {
     @FXML
     void onActionSelectCountry() {
         String comboValue = editCustomerCountryCombo.getValue();
+        divisionIds.clear();
         for (Countries country : countries){
             if(country.getName().equals(comboValue)){
                 editCustomerDivisionCombo.setDisable(false);
@@ -147,15 +165,17 @@ public class EditCustomerController {
     }
 
     /**
-     * Returns the division id of the selected division. When the combo box choice is selected, it stores the division
-     * keeps track of which division id was selected.
+     * Checks for valid input in the fields of the add customer form. If the fields of the add customer form are blank,
+     * the method return false which indicates the input is invalid. If everything is filled in however it will return
+     * true.
+     * @return true if valid and false if not
      */
     @FXML
-    void onActionSelectDivision() {
-
+    Boolean isValidInput(){
+        return !editCustomerAddressTxt.getText().isBlank() && !editCustomerNameTxt.getText().isBlank() &&
+                !editCustomerPhoneTxt.getText().isBlank() && !editCustomerPostalTxt.getText().isBlank() &&
+                !(editCustomerCountryCombo.getValue() == null) && !(editCustomerDivisionCombo.getValue() == null);
     }
-
-
 
     /**
      * A special method that displays the initial values. The combo boxes are appropriately set with the proper
@@ -168,6 +188,5 @@ public class EditCustomerController {
             countryNames.add(country.getName());
         }
         editCustomerCountryCombo.setItems(countryNames);
-
     }
 }

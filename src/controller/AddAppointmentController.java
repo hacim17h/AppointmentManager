@@ -62,7 +62,7 @@ public class AddAppointmentController {
     private TextField addAppointmentTitleTxt;
 
     @FXML
-    private ComboBox<?> addAppointmentTypeCombo;
+    private TextField addAppointmentTypeTxt;
 
     @FXML
     private ComboBox<?> addAppointmentUserIDCombo;

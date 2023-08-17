@@ -90,7 +90,7 @@ public class AddCustomerController {
     /**
      * Returns to the view customer form after saving input. When the button is pressed, the form returns to the
      * previous view customer form and saves the updated input data to the database as well as displaying it to the
-     * tableview.
+     * tableview. If it is invalid data, it will not save and instead not leave the screen until valid data is entered.
      * @param event helps get the window that caused the event
      * @throws IOException for handling any input output exception
      */
@@ -125,6 +125,7 @@ public class AddCustomerController {
     @FXML
     void onActionSelectCountry() {
         String comboValue = addCustomerCountryCombo.getValue();
+        divisionIds.clear();
         for (Countries country : countries){
             if(country.getName().equals(comboValue)){
                 addCustomerDivisionCombo.setDisable(false);
@@ -133,15 +134,6 @@ public class AddCustomerController {
                 break;
             }
         }
-    }
-
-    /**
-     * Returns the division id of the selected division. When the combo box choice is selected, it stores the division
-     * keeps track of which division id was selected.
-     */
-    @FXML
-    void onActionSelectDivision() {
-
     }
 
     /**
