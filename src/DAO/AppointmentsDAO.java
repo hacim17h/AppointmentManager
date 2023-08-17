@@ -39,4 +39,47 @@ public class AppointmentsDAO {
         }
         return appointments;
     }
+
+    /**
+     * Inserts an appointment to the appointments table. The method takes the title, description, location, appointment
+     * type, the appointment start time, the appointment end time, the customer's id, the user's id, and the contact's
+     * id and adds a new appointment to the appointment table.If the add is successful the number of rows that have been
+     * inserted are returned.
+     * @param title appointment title
+     * @param description appointment description
+     * @param location appointment location
+     * @param type appointment type
+     * @param start appointment start time
+     * @param end appointment end time
+     * @param customerId the customer id associated with the appointment
+     * @param userId the user id associated with the appointment
+     * @param contactId the contact id associated with the appointment
+     * @return the number of rows added to the database
+     */
+    public static int insert(String title, String description, String location, String type, Timestamp start,
+                              Timestamp end, int customerId, int userId, int contactId){
+        String query = "INSERT INTO client_schedule.appointments " +
+                "(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) " +
+                "VALUES (?,?,?,?,?,?,?,?,?)";
+        int rowsAdded = 0;
+        try{
+
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setString(1, title);
+            statement.setString(2, description);
+            statement.setString(3, location);
+            statement.setString(4, type );
+            statement.setTimestamp(5, start);
+            statement.setTimestamp(6, end);
+            statement.setInt(7, customerId);
+            statement.setInt(8, userId);
+            statement.setInt(9, contactId);
+            rowsAdded = statement.executeUpdate();
+            return rowsAdded;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return rowsAdded;
+    }
 }

@@ -1,9 +1,6 @@
 package main;
 
-import DAO.CustomersDAO;
-import DAO.JDBC;
-import DAO.LocationDAO;
-import DAO.LoginDAO;
+import DAO.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +13,9 @@ import model.Customers;
 import model.Divisions;
 import model.Users;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -118,7 +118,17 @@ public class Main extends Application {
                     customer.getPostalCode() + " " + customer.getPhoneNum() + " Division ID: " +
                     customer.getDivisionId());
         }
-
+        //test insert in AppointmentsDAO
+        /*int rowsAdded = AppointmentsDAO.insert("A very important meeting",
+                "I get tea while drawing my cat doing various poses.", "In my room",
+                "Art and Tea", Timestamp.valueOf("2023-08-17 14:00:00"),
+                Timestamp.valueOf("2023-08-17 15:00:00"), 12, 1, 2);
+        if (rowsAdded > 0){
+            System.out.println("The add was a success");
+        }
+        else{
+            System.out.println("The add was a failure");
+        }*/
         launch(args);
         JDBC.closeConnection();
     }

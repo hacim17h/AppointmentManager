@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalTime;
 
 public class AddAppointmentController {
     /**
@@ -26,25 +28,31 @@ public class AddAppointmentController {
     Parent scene;
 
     @FXML
+    private Button addAppointmentSaveBtn;
+
+    @FXML
     private Button addAppointmentCancelBtn;
-
-    @FXML
-    private ComboBox<?> addAppointmentContactCombo;
-
-    @FXML
-    private ComboBox<?> addAppointmentCustomerIDCombo;
-
-    @FXML
-    private DatePicker addAppointmentDate;
 
     @FXML
     private TextField addAppointmentDescriptionTxt;
 
     @FXML
-    private ComboBox<?> addAppointmentEndCombo;
+    private DatePicker addAppointmentDate;
 
     @FXML
-    private Label addAppointmentErrorLbl;
+    private ComboBox<LocalTime> addAppointmentStartCombo;
+
+    @FXML
+    private ComboBox<LocalTime> addAppointmentEndCombo;
+
+    @FXML
+    private ComboBox<String> addAppointmentContactCombo;
+
+    @FXML
+    private ComboBox<Integer> addAppointmentCustomerIDCombo;
+
+    @FXML
+    private ComboBox<Integer> addAppointmentUserIDCombo;
 
     @FXML
     private TextField addAppointmentIDTxt;
@@ -53,19 +61,13 @@ public class AddAppointmentController {
     private TextField addAppointmentLocationTxt;
 
     @FXML
-    private Button addAppointmentSaveBtn;
-
-    @FXML
-    private ComboBox<?> addAppointmentStartCombo;
-
-    @FXML
     private TextField addAppointmentTitleTxt;
 
     @FXML
     private TextField addAppointmentTypeTxt;
 
     @FXML
-    private ComboBox<?> addAppointmentUserIDCombo;
+    private Label addAppointmentErrorLbl;
 
     /**
      * Returns to the view customer form. When the button, is pressed the returns to the previous view appointment form.
@@ -101,6 +103,7 @@ public class AddAppointmentController {
      */
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
+
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
         stage.setScene(new Scene(scene));
