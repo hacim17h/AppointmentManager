@@ -83,14 +83,7 @@ public class Main extends Application {
         else {
             System.out.println("The user is not valid!");
         }
-        //test select all in CustomersDAO
-        ObservableList<Customers> customers = FXCollections.observableArrayList();
-        customers.addAll(CustomersDAO.selectAll());
-        for (Customers customer : customers){
-            System.out.println(customer.getId() + ": " + customer.getName() + " " + customer.getAddress() + " " +
-                               customer.getPostalCode() + " " + customer.getPhoneNum() + " Division ID: " +
-                               customer.getDivisionId());
-        }
+
         //test adding a customer in CustomersDAO
         /*int rowsAdded = CustomersDAO.insert("Wendell Skonch", "641 Scootersville Lane",
                         "84219", "347-985-4333",16);
@@ -113,7 +106,18 @@ public class Main extends Application {
             }
             System.out.println();
         }
+        //test update in CustomersDao
+        /*int rowsUpdated = CustomersDAO.update(12, "Really Happy Guy", "Really Happy Place",
+                                            "12345","1212-111-2222", 3);*/
 
+        //test select all in CustomersDAO
+        ObservableList<Customers> customers = FXCollections.observableArrayList();
+        customers.addAll(CustomersDAO.selectAll());
+        for (Customers customer : customers){
+            System.out.println(customer.getId() + ": " + customer.getName() + " " + customer.getAddress() + " " +
+                    customer.getPostalCode() + " " + customer.getPhoneNum() + " Division ID: " +
+                    customer.getDivisionId());
+        }
 
         launch(args);
         JDBC.closeConnection();

@@ -29,10 +29,10 @@ public abstract class CustomersDAO {
 
             PreparedStatement statement = JDBC.connection.prepareStatement(query);
             statement.setString(1, name);
-            statement.setString(2,address);
-            statement.setString(3,postalCode);
-            statement.setString(4,phone);
-            statement.setInt(5,divisionId);
+            statement.setString(2, address);
+            statement.setString(3, postalCode);
+            statement.setString(4, phone);
+            statement.setInt(5, divisionId);
             rowsAdded = statement.executeUpdate();
             return rowsAdded;
 
@@ -41,6 +41,37 @@ public abstract class CustomersDAO {
             e.printStackTrace();
         }
         return rowsAdded;
+    }
+
+    /**
+     * Updates a customer in the customers table. The method takes the name, address, phone number, and division ID
+     * and updates the previously existing customer data in the customer table. If the update is successful the number
+     * of rows that have been updated are returned.
+     * @param name name of the customer
+     * @param address address of the customer
+     * @param postalCode postal code of the customer
+     * @param phone phone number of the customer
+     * @param divisionId division ID of the customer
+     * @return number of rows updated in the customer table
+     */
+    public static int update(int customerId, String name, String address, String postalCode, String phone,
+                             int divisionId ){
+        int rowsUpdated = 0;
+        String query = "UPDATE client_schedule.customers SET Customer_Name = ?, Address = ?, " +
+                "Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
+        try {
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setString(1, name);
+            statement.setString(2, address);
+            statement.setString(3, postalCode);
+            statement.setString(4, phone);
+            statement.setInt(5, divisionId);
+            statement.setInt(6, customerId);
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowsUpdated;
     }
 
     /**
