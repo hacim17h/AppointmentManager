@@ -121,20 +121,29 @@ public class AddAppointmentController {
         addAppointmentDate.setValue(LocalDate.now());
         LocalDate date = addAppointmentDate.getValue();
         ObservableList<LocalTime> appointmentHours = FXCollections.observableArrayList();
+        ZoneId local = ZoneId.systemDefault();
+        ZoneId utc = ZoneId.of("UTC");
+        ZoneId eastern = ZoneId.of("America/New_York");
         LocalTime start = LocalTime.of(8,0);
         LocalTime end = LocalTime.of(22,0);
-        while (start.isBefore(end)){
+        LocalDateTime startTime = LocalDateTime.of(date, start);
+        LocalDateTime endTime = LocalDateTime.of(date, end);
+        ZonedDateTime localStartTime = ZonedDateTime.of(startTime, utc);
+        ZonedDateTime localEndTime = ZonedDateTime.of(endTime, utc);
+        ZonedDateTime convertedStartTime = ZonedDateTime.ofInstant(localStartTime.toInstant(), utc);
+        ZonedDateTime convertedEndTime = ZonedDateTime.ofInstant(localEndTime.toInstant(), utc);
+        /*while (start.isBefore(end)){
             appointmentHours.add(start);
             start = start.plusMinutes(30);
         }
-        appointmentHours.add(end);
-        LocalDateTime dateTime = LocalDateTime.of(date, start);
-        ZoneId local = ZoneId.systemDefault();
-        ZoneId utc = ZoneId.of("UTC");
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(dateTime, local);
-        ZonedDateTime localTime = ZonedDateTime.ofInstant(zonedDateTime.toInstant(), local);
-        System.out.println("This is utc: " + localTime);
-        System.out.println("This is the original time: " + zonedDateTime);
+        appointmentHours.add(end);*/
+
+        while (convertedStartTime.isBefore(convertedEndTime)){
+            appointmentHours.add(convertedStartTime.toLocalTime());
+            convertedStartTime = convertedStartTime.plusMinutes(30);
+        }
+        appointmentHours.add(convertedEndTime.toLocalTime());
+
         addAppointmentStartCombo.setItems(appointmentHours);
         addAppointmentEndCombo.setItems(appointmentHours);
     }
