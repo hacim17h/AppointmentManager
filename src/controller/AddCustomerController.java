@@ -1,5 +1,8 @@
 package controller;
 
+import DAO.LocationDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Countries;
+import model.Divisions;
 
 import java.io.IOException;
 
@@ -25,6 +29,18 @@ public class AddCustomerController {
      */
     Parent scene;
 
+    /**
+     * Stores the country data from the database.
+     */
+    ObservableList<Countries>  countries = FXCollections.observableArrayList();
+
+    /**
+     * Stores a list of the country names.
+     */
+    ObservableList<String> countryNames = FXCollections.observableArrayList();
+
+
+
     @FXML
     private TextField addCustomerAddressTxt;
 
@@ -32,10 +48,10 @@ public class AddCustomerController {
     private Button addCustomerCancelBtn;
 
     @FXML
-    private ComboBox<Countries> addCustomerCountryCombo;
+    private ComboBox<String> addCustomerCountryCombo;
 
     @FXML
-    private ComboBox<?> addCustomerDivisionCombo;
+    private ComboBox<String> addCustomerDivisionCombo;
 
     @FXML
     private Label addCustomerErrorLbl;
@@ -84,11 +100,34 @@ public class AddCustomerController {
     }
 
     /**
-     * A special method that displays the initial values. The table views are populated with the customer information
-     * from the database and the columns values are set properly.
+     * Enables the first-level division combo box upon selecting the country. When the country is selected, the
+     * first-level division combo box is enabled and the list is populated with the names of all the divisions
+     * tied to the country selected.
+     * @param event helps get the window that caused the event
+     */
+    @FXML
+    void onActionSelectCountry(ActionEvent event) {
+        String comboValue = addCustomerCountryCombo.getValue();
+        for (Countries country : countries){
+            if(country.getName().equals(comboValue)){
+                addCustomerDivisionCombo.setDisable(false);
+                addCustomerDivisionCombo.setItems(country.getDivisionNames());
+                break;
+            }
+        }
+    }
+
+    /**
+     * A special method that displays the initial values. The combo boxes are appropriately set with the proper
+     * country and first-level division data from the database upon selection.
      */
     public void initialize(){
-
+        countries = FXCollections.observableArrayList();
+        countries.addAll(LocationDAO.selectAll());
+        for (Countries country : countries){
+            countryNames.add(country.getName());
+        }
+        addCustomerCountryCombo.setItems(countryNames);
     }
 
 }

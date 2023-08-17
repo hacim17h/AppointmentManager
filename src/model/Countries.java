@@ -74,6 +74,17 @@ public class Countries {
     }
 
     /**
+     * Gets the division names. A getter method that returns the first-level division names.
+     * @return a list of the division names
+     */
+    public ObservableList<String> getDivisionNames(){
+        ObservableList<String> divisionNames = FXCollections.observableArrayList();
+        for (Divisions division : getDivisions()){
+            divisionNames.add(division.getName());
+        }
+        return divisionNames;
+    }
+    /**
      * Sets the divisions. A setter method that returns the first-level divisions.
      * @param divisions  first-level divisions
      */
