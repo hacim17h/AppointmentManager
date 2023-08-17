@@ -83,10 +83,19 @@ public class ViewCustomerController {
      */
     @FXML
     void onActionEditCustomer(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/EditCustomerForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+
+        Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+
+        if(selectedCustomer != null){
+            FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/view/EditCustomerForm.fxml"));
+            scene = sceneLoader.load();
+            EditCustomerController editController = sceneLoader.getController();
+            editController.prefillData(selectedCustomer);
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
+
     }
 
     /**
@@ -118,7 +127,7 @@ public class ViewCustomerController {
      * A special method that displays the initial values. The table views are populated with the customer information
      * from the database and the columns values are set properly.
      */
-    public void initialize(){
+        public void initialize(){
         customerTableView.setItems(CustomersDAO.selectAll());
         customerCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         customerCustomerNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));

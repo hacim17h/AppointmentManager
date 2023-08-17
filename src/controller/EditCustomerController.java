@@ -10,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Customers;
 
 import java.io.IOException;
 
@@ -79,5 +80,13 @@ public class EditCustomerController {
         scene = FXMLLoader.load(getClass().getResource("/view/ViewCustomerForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
+    }
+
+    void prefillData(Customers selectedCustomer){
+        editCustomerIDTxt.setText(String.valueOf(selectedCustomer.getId()));
+        editCustomerNameTxt.setText(selectedCustomer.getName());
+        editCustomerAddressTxt.setText(selectedCustomer.getAddress());
+        editCustomerPostalTxt.setText(selectedCustomer.getPostalCode());
+        editCustomerPhoneTxt.setText(selectedCustomer.getPhoneNum());
     }
 }

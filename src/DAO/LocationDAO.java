@@ -17,7 +17,7 @@ public class LocationDAO {
      * inside of them.
      * @return a list of all the countries in the database
      */
-    public static ObservableList<Countries> selectAll(){
+    public static ObservableList<Countries> selectAllCountries(){
         ObservableList<Countries> countries = FXCollections.observableArrayList();
         String query = "SELECT * FROM client_schedule.countries";
         String fldQuery = "SELECT * FROM client_schedule.first_level_divisions WHERE Country_ID = ?";
@@ -45,4 +45,27 @@ public class LocationDAO {
         }
         return countries;
     }
+
+    /**
+     * Returns the division name from a given id. The method accepts a division ID and then checks the database to see
+     * if there are any matches. If there is a match it will return the division name that corresponds with the
+     * selected id.
+     * @param divisionId division id
+     * @return division name
+     */
+    public static String getDivisionName(int divisionId){
+        String query = "SELECT Division FROM client_schedule.first_level_divisions WHERE Division_ID = ?";
+        String divisionName = null;
+        try{
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setInt(1, divisionId);
+            ResultSet results = statement.executeQuery();
+             divisionName =  results.getString("Division");
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return divisionName;
+    }
+
 }

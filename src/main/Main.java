@@ -103,7 +103,7 @@ public class Main extends Application {
 
         //test select all in LocationDAO
         ObservableList<Countries> countries = FXCollections.observableArrayList();
-        countries.addAll(LocationDAO.selectAll());
+        countries.addAll(LocationDAO.selectAllCountries());
         for (Countries country : countries){
             System.out.println("Country: " + country.getName());
             System.out.println("================================");

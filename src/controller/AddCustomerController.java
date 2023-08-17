@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.CustomersDAO;
 import DAO.LocationDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Countries;
-import model.Divisions;
 
 import java.io.IOException;
 
@@ -39,7 +39,10 @@ public class AddCustomerController {
      */
     ObservableList<String> countryNames = FXCollections.observableArrayList();
 
-
+    /**
+     * Stores a list of the first-level division ids.
+     */
+    ObservableList<Integer> divisionIds = FXCollections.observableArrayList();
 
     @FXML
     private TextField addCustomerAddressTxt;
@@ -93,28 +96,65 @@ public class AddCustomerController {
      */
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/ViewCustomerForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        if(isValidInput()){
+            int rowsAdded = CustomersDAO.insert(addCustomerNameTxt.getText(), addCustomerAddressTxt.getText(),
+                    addCustomerPostalTxt.getText(),addCustomerPhoneTxt.getText(),
+                    divisionIds.get(addCustomerDivisionCombo.getSelectionModel().getSelectedIndex()));
+            if (rowsAdded > 0){
+                stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/view/ViewCustomerForm.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
+            else{
+                addCustomerErrorLbl.setText("The customer has failed to be added. Please try again.");
+            }
+
+        }
+        else {
+            addCustomerErrorLbl.setText("One or more of the fields have been left blank.");
+        }
+
     }
 
     /**
      * Enables the first-level division combo box upon selecting the country. When the country is selected, the
      * first-level division combo box is enabled and the list is populated with the names of all the divisions
      * tied to the country selected.
-     * @param event helps get the window that caused the event
      */
     @FXML
-    void onActionSelectCountry(ActionEvent event) {
+    void onActionSelectCountry() {
         String comboValue = addCustomerCountryCombo.getValue();
         for (Countries country : countries){
             if(country.getName().equals(comboValue)){
                 addCustomerDivisionCombo.setDisable(false);
                 addCustomerDivisionCombo.setItems(country.getDivisionNames());
+                divisionIds.addAll(country.getDivisionIds());
                 break;
             }
         }
+    }
+
+    /**
+     * Returns the division id of the selected division. When the combo box choice is selected, it stores the division
+     * keeps track of which division id was selected.
+     */
+    @FXML
+    void onActionSelectDivision() {
+
+    }
+
+    /**
+     * Checks for valid input in the fields of the add customer form. If the fields of the add customer form are blank,
+     * the method return false which indicates the input is invalid. If everything is filled in however it will return
+     * true.
+     * @return true if valid and false if not
+     */
+    @FXML
+    Boolean isValidInput(){
+        return !addCustomerAddressTxt.getText().isBlank() && !addCustomerNameTxt.getText().isBlank() &&
+                !addCustomerPhoneTxt.getText().isBlank() && !addCustomerPostalTxt.getText().isBlank() &&
+                !(addCustomerCountryCombo.getValue() == null) && !(addCustomerDivisionCombo.getValue() == null);
     }
 
     /**
@@ -123,7 +163,7 @@ public class AddCustomerController {
      */
     public void initialize(){
         countries = FXCollections.observableArrayList();
-        countries.addAll(LocationDAO.selectAll());
+        countries.addAll(LocationDAO.selectAllCountries());
         for (Countries country : countries){
             countryNames.add(country.getName());
         }
