@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.AppointmentsDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,10 +9,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointments;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 public class ViewAppointmentsController {
     /**
@@ -25,59 +30,61 @@ public class ViewAppointmentsController {
     Parent scene;
 
     @FXML
-    private Button appointmentAddButton;
+    private TableView<Appointments> appointmentTableView;
 
     @FXML
-    private RadioButton appointmentAllRButton;
+    private TableColumn<Appointments, String> appointmentContactCol;
 
     @FXML
-    private TableColumn<?, ?> appointmentContactCol;
+    private TableColumn<Appointments, Integer> appointmentCustomerIDCol;
 
     @FXML
-    private TableColumn<?, ?> appointmentCustomerIDCol;
+    private TableColumn<Appointments, String> appointmentDescriptionCol;
 
     @FXML
-    private Button appointmentDeleteButton;
+    private TableColumn<Appointments, Timestamp> appointmentEndCol;
 
     @FXML
-    private TableColumn<?, ?> appointmentDescriptionCol;
+    private TableColumn<Appointments, Integer> appointmentIDCol;
 
     @FXML
-    private Button appointmentEditButton;
+    private TableColumn<Appointments, String> appointmentLocationCol;
 
     @FXML
-    private TableColumn<?, ?> appointmentEndCol;
+    private TableColumn<Appointments, Timestamp> appointmentStartCol;
+
+    @FXML
+    private TableColumn<Appointments, String> appointmentTitleCol;
+
+    @FXML
+    private TableColumn<Appointments, String> appointmentTypeCol;
+
+    @FXML
+    private TableColumn<Appointments, Integer> appointmentUserIDCol;
 
     @FXML
     private ToggleGroup appointmentGroup;
 
     @FXML
-    private TableColumn<?, ?> appointmentIDCol;
+    private RadioButton appointmentAllRButton;
 
     @FXML
-    private TableColumn<?, ?> appointmentLocationCol;
-
-    @FXML
-    private Button appointmentMainMenu;
+    private RadioButton appointmentWeekRButton;
 
     @FXML
     private RadioButton appointmentMonthRButton;
 
     @FXML
-    private TableColumn<?, ?> appointmentStartCol;
+    private Button appointmentDeleteButton;
 
     @FXML
-    private TableColumn<?, ?> appointmentTitleCol;
+    private Button appointmentEditButton;
 
     @FXML
-    private TableColumn<?, ?> appointmentTypeCol;
+    private Button appointmentMainMenu;
 
     @FXML
-    private TableColumn<?, ?> appointmentUserIDCol;
-
-    @FXML
-    private RadioButton appointmentWeekRButton;
-
+    private Button appointmentAddButton;
 
     /**
      * Displays the add appointment form. When the button is pressed, the scene is changed to the
@@ -133,4 +140,32 @@ public class ViewAppointmentsController {
         stage.show();
     }
 
+    /*
+     * @param id appointment id
+     * @param title appointment title
+     * @param description appointment description
+     * @param type appointment type
+     * @param location appointment location
+     * @param startTime appointment start time
+     * @param endTime appointment end time
+     * @param customerId customer id associated with the appointment
+     * @param userId user id associated with the appointment
+     * @param contactId contact id associated with the appointment*/
+    /**
+     * A special method that displays the initial values. The table views are populated with the appointment information
+     * from the database and the columns values are set properly.
+     */
+    public void initialize(){
+        appointmentTableView.setItems(AppointmentsDAO.selectAll());
+        appointmentIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        appointmentTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        appointmentDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        appointmentTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        appointmentLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        appointmentStartCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        appointmentEndCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        appointmentCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        appointmentUserIDCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        appointmentContactCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+    }
 }

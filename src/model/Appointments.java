@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**A class that stores and retrieves various appointment information.*/
 public class Appointments {
@@ -32,12 +32,12 @@ public class Appointments {
     /**
      * Stores the appointment start time.
      */
-    private Date startTime;
+    private Timestamp startTime;
 
     /**
      * Stores the appointment end time.
      */
-    private Date endTime;
+    private Timestamp endTime;
 
     /**
      * Stores the customer ID.
@@ -68,8 +68,8 @@ public class Appointments {
      * @param userId user id associated with the appointment
      * @param contactId contact id associated with the appointment
      */
-    public Appointments(int id, String title, String description, String type, String location,
-                        Date startTime, Date endTime, int customerId, int userId, int contactId){
+    public Appointments(int id, String title, String description, String location, String type,
+                        Timestamp startTime, Timestamp endTime, int customerId, int userId, int contactId){
         setId(id);
         setTitle(title);
         setDescription(description);
@@ -166,7 +166,7 @@ public class Appointments {
      * Gets the start time. A getter method that returns the appointment start time.
      * @return appointment start time
      */
-    public Date getStartTime() {
+    public Timestamp getStartTime() {
         return startTime;
     }
 
@@ -174,7 +174,7 @@ public class Appointments {
      * Sets the start time. A setter method that sets the appointment start time.
      * @param startTime appointment start time
      */
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
     }
 
@@ -182,7 +182,7 @@ public class Appointments {
      * Gets the end time. A getter method that returns the appointment end time.
      * @return appointment end time
      */
-    public Date getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
@@ -190,7 +190,7 @@ public class Appointments {
      * Sets the end time. A setter method that sets the appointment end time.
      * @param endTime appointment end time
      */
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
 

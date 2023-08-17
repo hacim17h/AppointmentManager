@@ -80,6 +80,18 @@ public class AddAppointmentController {
         stage.show();
     }
 
+    /* d.  Write code to implement input validation and logical error checks to prevent each of the following changes
+           when adding or updating information; display a custom message specific for each error check in the user
+           interface:
+       •  scheduling an appointment outside business hours defined as 8:00 a.m. to 10:00 p.m. ET, including weekends
+       •  scheduling overlapping appointments for customers
+       •  entering an incorrect username and password*/
+
+    /*Note: There are up to three time zones in effect. Coordinated Universal Time (UTC) is used for storing the time
+     in the database, the user’s local time is used for display purposes, and Eastern Time (ET) is used for the
+     company’s office hours. Local time will be checked against ET business hours before they are stored in the
+     database as UTC.*/
+
     /**
      * Returns to the view appointment form after saving input. When the button is pressed, the form returns to the
      * previous view appointment form and saves the updated input data to the database as well as displaying it to the

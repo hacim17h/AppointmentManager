@@ -68,7 +68,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-radius: 5px;">
                <children>
-                  <TableView prefHeight="200.0" prefWidth="1450.0">
+                  <TableView fx:id="appointmentTableView" prefHeight="200.0" prefWidth="1450.0">
                     <columns>
                       <TableColumn fx:id="appointmentIDCol" prefWidth="108.0" text="Appointment ID" />
                       <TableColumn fx:id="appointmentTitleCol" prefWidth="197.0" text="Title" />
