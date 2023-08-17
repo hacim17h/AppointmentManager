@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -108,6 +110,24 @@ public class AddAppointmentController {
         scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
+    }
+
+    /**
+     * A special method that displays the initial values. Time combo boxes are populated with valid times that adjust
+     * based upon the local time of the users computer to stay within business hours.
+     */
+    //8:00 a.m. to 10:00 p.m. ET
+    public void initialize(){
+        ObservableList<LocalTime> appointmentHours = FXCollections.observableArrayList();
+        LocalTime start = LocalTime.of(8,0);
+        LocalTime end = LocalTime.of(22,0);
+        while (start.isBefore(end)){
+            appointmentHours.add(start);
+            start = start.plusMinutes(30);
+        }
+        appointmentHours.add(end);
+        addAppointmentStartCombo.setItems(appointmentHours);
+        addAppointmentEndCombo.setItems(appointmentHours);
     }
 
 }
