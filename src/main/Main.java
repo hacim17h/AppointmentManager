@@ -2,6 +2,7 @@ package main;
 
 import DAO.CustomersDAO;
 import DAO.JDBC;
+import DAO.LocationDAO;
 import DAO.LoginDAO;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -91,13 +92,26 @@ public class Main extends Application {
                                customer.getDivisionId());
         }
         //test adding a customer in CustomersDAO
-        int rowsAdded = CustomersDAO.insert("Wendell Skonch", "641 Scootersville Lane",
+        /*int rowsAdded = CustomersDAO.insert("Wendell Skonch", "641 Scootersville Lane",
                         "84219", "347-985-4333",16);
         if(rowsAdded > 0){
             System.out.println("The customer has been added to the database correctly!");
         }
         else{
             System.out.println("The customer has failed to be added to the database!");
+        }*/
+
+        //test select all in LocationDAO
+        ObservableList<Countries> countries = FXCollections.observableArrayList();
+        countries.addAll(LocationDAO.selectAll());
+        for (Countries country : countries){
+            System.out.println("Country: " + country.getName());
+            System.out.println("================================");
+            System.out.println("Divisions:");
+            for (Divisions division : country.getDivisions()){
+                System.out.println(division.getName());
+            }
+            System.out.println();
         }
 
 
