@@ -127,7 +127,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="editCustomerCountryCombo" prefWidth="180.0" />
+                        <ComboBox fx:id="editCustomerCountryCombo" onAction="#onActionSelectCountry" prefWidth="180.0" />
                      </children>
                      <HBox.margin>
                         <Insets />
@@ -146,7 +146,7 @@
                               <Insets right="20.0" />
                            </HBox.margin>
                         </Label>
-                        <ComboBox fx:id="editCustomerDivisionCombo" disable="true" prefWidth="180.0" />
+                        <ComboBox fx:id="editCustomerDivisionCombo" disable="true" onAction="#onActionSelectDivision" prefWidth="180.0" />
                      </children>
                      <HBox.margin>
                         <Insets />
