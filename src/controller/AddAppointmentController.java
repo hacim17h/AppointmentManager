@@ -1,5 +1,8 @@
 package controller;
 
+import DAO.ContactsDAO;
+import DAO.CustomersDAO;
+import DAO.UsersDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +16,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Contacts;
+import model.Customers;
+import model.Users;
 
 import java.io.IOException;
 import java.sql.Time;
@@ -185,11 +191,36 @@ public class AddAppointmentController {
 
     /**
      * A special method that displays the initial values. Time combo boxes are populated with valid times that adjust
-     * based upon the local time of the users computer to stay within business hours.
+     * based upon the local time of the users computer to stay within business hours. The contact name combo box is
+     * also populated with the names of the contacts and the user ID and customer IDs are also populated.
      */
     public void initialize() {
         addAppointmentDate.setValue(LocalDate.now());
         onActionSelectDate();
+        ObservableList<Contacts> contacts = FXCollections.observableArrayList();
+        ObservableList<Users> users = FXCollections.observableArrayList();
+        ObservableList<Customers> customers = FXCollections.observableArrayList();
+        contacts.addAll(ContactsDAO.selectAllContacts());
+        users.addAll(UsersDAO.selectAllUsers());
+        customers.addAll(CustomersDAO.selectAll());
+        ObservableList<Integer> userIds = FXCollections.observableArrayList();
+        ObservableList<String> contactNames = FXCollections.observableArrayList();
+        ObservableList<Integer> customerIds = FXCollections.observableArrayList();
+
+        for (Users user : users){
+            userIds.add(user.getId());
+        }
+        for (Contacts contact : contacts){
+            contactNames.add(contact.getName());
+        }
+        for (Customers customer : customers){
+            customerIds.add(customer.getId());
+        }
+
+        addAppointmentUserIDCombo.setItems(userIds);
+        addAppointmentContactCombo.setItems(contactNames);
+        addAppointmentCustomerIDCombo.setItems(customerIds);
+
     }
 }
 
