@@ -10,7 +10,7 @@ import java.sql.*;
 public class AppointmentsDAO {
     /**
      * Returns all the appointments in the database. The method creates a query that selects all appointments in the
-     * appointments database and returns all relevant customer data as an ObservableList<Appointments>.
+     * appointments database and returns all relevant appointment data as an ObservableList<Appointments>.
      * @return a list containing all appointments
      */
     public static ObservableList<Appointments> selectAll(){
@@ -32,6 +32,41 @@ public class AppointmentsDAO {
                 int contactId = result.getInt("Contact_ID");
                 appointments.add(new Appointments(id, title, description, location, type, start, end, customerId,
                                     userId, contactId));
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return appointments;
+    }
+
+    /**
+     * Returns all the appointments in the database that match the selected customer id. The method creates a query that
+     * selects all appointments in the appointments database that match the customer id the user enters. It then
+     * returns all relevant appointment data as an ObservableList<Appointments>.
+     * @param customerId the id of the customer
+     * @return a list containing all appointments
+     */
+    public static ObservableList<Appointments> selectById(int customerId){
+        String query = "SELECT * FROM client_schedule.appointments WHERE Customer_ID = ?";
+        ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+        try{
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setInt(1, customerId);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                int id = result.getInt("Appointment_ID");
+                String title = result.getString("Title");
+                String description = result.getString("Description");
+                String location = result.getString("Location");
+                String type = result.getString("Type");
+                Timestamp start = result.getTimestamp("Start");
+                Timestamp end = result.getTimestamp("End");
+                int storedCustomerId = result.getInt("Customer_ID");
+                int userId = result.getInt("User_ID");
+                int contactId = result.getInt("Contact_ID");
+                appointments.add(new Appointments(id, title, description, location, type, start, end, storedCustomerId,
+                        userId, contactId));
             }
         }
         catch (SQLException e){
