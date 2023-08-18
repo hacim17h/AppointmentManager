@@ -8,10 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.Countries;
-import model.Customers;
-import model.Divisions;
-import model.Users;
+import model.*;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -138,6 +135,24 @@ public class Main extends Application {
         ZoneId paris = ZoneId.of("Europe/Paris");
         ZoneId etc = ZoneId.of("Etc/GMT-14");
         ZoneId tokyo = ZoneId.of("Asia/Tokyo");
+
+        //test select all for users and contacts
+        ObservableList<Contacts> contacts = FXCollections.observableArrayList();
+        ObservableList<Users> users = FXCollections.observableArrayList();
+
+        contacts.addAll(ContactsDAO.selectAllContacts());
+        users.addAll(UsersDAO.selectAllUsers());
+
+        for (Contacts contact : contacts){
+            System.out.println("Contact ID: " + contact.getId());
+            System.out.println("Contact Name: " + contact.getName());
+            System.out.println("Contact Email: " + contact.getEmail());
+        }
+        for (Users userGroup : users){
+            System.out.println("User ID: " + userGroup.getId());
+            System.out.println("Username: " + userGroup.getUsername());
+            System.out.println("Password: " + userGroup.getPassword());
+        }
 
         //TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
         launch(args);
