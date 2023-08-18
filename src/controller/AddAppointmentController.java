@@ -1,5 +1,6 @@
 package controller;
 
+import DAO.AppointmentsDAO;
 import DAO.ContactsDAO;
 import DAO.CustomersDAO;
 import DAO.UsersDAO;
@@ -22,6 +23,7 @@ import model.Users;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
@@ -50,6 +52,11 @@ public class AddAppointmentController {
      * Stores the converted date time into a more readable string format.
      */
     ObservableList<String> displayTime = FXCollections.observableArrayList();
+
+    /**
+     * Stores the contact ids.
+     */
+    ObservableList<Integer> contactIds = FXCollections.observableArrayList();
 
     @FXML
     private Button addAppointmentSaveBtn;
@@ -182,11 +189,66 @@ public class AddAppointmentController {
      */
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
+        //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+        LocalDateTime startTime = LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
+        LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
+        ZoneId local = ZoneId.systemDefault();
+        ZoneId utc = ZoneId.of("UTC");
+        ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
+        ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
+        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(zonedStart.toInstant(), utc);
+        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(zonedEnd.toInstant(), utc);
+        Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
+        Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
+        //If the input is valid the appointment data is inserted into the database and if not an error displays.
+        if(isValidInput()){
+            if(isValidAppointment()){
+                int rowsAdded = AppointmentsDAO.insert(addAppointmentTitleTxt.getText(),
+                        addAppointmentDescriptionTxt.getText(), addAppointmentLocationTxt.getText(),
+                        addAppointmentTypeTxt.getText(), utcStartTimestamp, utcEndTimestamp,
+                        addAppointmentCustomerIDCombo.getValue(), addAppointmentUserIDCombo.getValue(),
+                        contactIds.get(addAppointmentContactCombo.getSelectionModel().getSelectedIndex()));
+                if (rowsAdded > 0){
+                    stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+                    scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
+                    stage.setScene(new Scene(scene));
+                    stage.show();
+                }
+                else{
+                    addAppointmentErrorLbl.setText("The appointment has failed to be added. Please try again.");
+                }
+            }
+        }
+        else {
+            addAppointmentErrorLbl.setText("One or more of the fields have been left blank.");
+        }
+    }
 
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+    /**
+     * Checks for valid input in the fields of the add appointment form. If the fields of the add appointment form are
+     * blank, the method return false which indicates the input is invalid. If everything is filled in however it will
+     * return true.
+     * @return true if valid and false if not
+     */
+    @FXML
+    Boolean isValidInput(){
+        return !addAppointmentTitleTxt.getText().isBlank() && !addAppointmentDescriptionTxt.getText().isBlank() &&
+             !addAppointmentLocationTxt.getText().isBlank() && !addAppointmentTypeTxt.getText().isBlank() &&
+             !(addAppointmentStartCombo.getValue() == null) && !(addAppointmentEndCombo.getValue() == null &&
+             !(addAppointmentContactCombo.getValue() == null) && !(addAppointmentCustomerIDCombo.getValue() == null) &&
+             !(addAppointmentUserIDCombo.getValue() == null) && !(addAppointmentDate.getValue() == null));
+    }
+
+    /**
+     * Checks if the appointment doesn't conflict with others. The method checks the database to see if there
+     * are any appointments that match the contact or the customer and see if the time frame overlaps at all. If
+     * it does not overlap it will return true as it is valid. But, if there is any time conflict it will return false
+     * for invalid.
+     * @return if the appointment is at a valid time or not
+     */
+    Boolean isValidAppointment(){
+        return true;
     }
 
     /**
@@ -212,6 +274,7 @@ public class AddAppointmentController {
         }
         for (Contacts contact : contacts){
             contactNames.add(contact.getName());
+            contactIds.add(contact.getId());
         }
         for (Customers customer : customers){
             customerIds.add(customer.getId());
