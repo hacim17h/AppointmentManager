@@ -17,6 +17,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Appointments;
 import model.Contacts;
 import model.Customers;
 import model.Users;
@@ -248,6 +249,8 @@ public class AddAppointmentController {
      * @return if the appointment is at a valid time or not
      */
     Boolean isValidAppointment(){
+        ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
+        customerAppointments.addAll(AppointmentsDAO.selectById(addAppointmentCustomerIDCombo.getValue()));
         return true;
     }
 

@@ -1,6 +1,7 @@
 package main;
 
 import DAO.*;
+import helper.TimeHelper;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import model.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -155,6 +157,26 @@ public class Main extends Application {
         }
 
         //TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
+        LocalDateTime dateTime = LocalDateTime.of(2023,8,18,8,0);
+        LocalDateTime dateTime2 = LocalDateTime.of(2023,8,18,13,0);
+        LocalDateTime dateTime3 = LocalDateTime.of(2023,8,19,10,0);
+        LocalDateTime dateTime4 = LocalDateTime.of(2023,8,19,12,0);
+
+        Timestamp startTime = Timestamp.valueOf(dateTime);
+        Timestamp endTime = Timestamp.valueOf(dateTime2);
+
+        Timestamp otherStartTime = Timestamp.valueOf(dateTime3);
+        Timestamp otherEndTime = Timestamp.valueOf(dateTime4);
+
+        if(TimeHelper.isOverlapping(startTime,endTime,otherStartTime,otherEndTime)){
+            System.out.println("The times " + startTime + " - " + endTime + " and " + otherStartTime + " - " +
+                                otherEndTime + " are overlapping.");
+        }
+        else{
+            System.out.println("The times " + startTime + " - " + endTime + " and " + otherStartTime + " - " +
+                    otherEndTime + " are not overlapping.");
+        }
+
         launch(args);
         JDBC.closeConnection();
     }
