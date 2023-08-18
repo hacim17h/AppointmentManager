@@ -17,6 +17,7 @@ import model.Appointments;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class ViewAppointmentsController {
     /**
@@ -42,6 +43,9 @@ public class ViewAppointmentsController {
     private TableColumn<Appointments, String> appointmentDescriptionCol;
 
     @FXML
+    private TableColumn<Appointments, Timestamp> appointmentStartCol;
+
+    @FXML
     private TableColumn<Appointments, Timestamp> appointmentEndCol;
 
     @FXML
@@ -49,9 +53,6 @@ public class ViewAppointmentsController {
 
     @FXML
     private TableColumn<Appointments, String> appointmentLocationCol;
-
-    @FXML
-    private TableColumn<Appointments, Timestamp> appointmentStartCol;
 
     @FXML
     private TableColumn<Appointments, String> appointmentTitleCol;
@@ -156,14 +157,15 @@ public class ViewAppointmentsController {
      * from the database and the columns values are set properly.
      */
     public void initialize(){
+
         appointmentTableView.setItems(AppointmentsDAO.selectAll());
         appointmentIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         appointmentTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         appointmentTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appointmentStartCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-        appointmentEndCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        appointmentStartCol.setCellValueFactory(new PropertyValueFactory<>("localStartTime"));
+        appointmentEndCol.setCellValueFactory(new PropertyValueFactory<>("localEndTime"));
         appointmentCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         appointmentUserIDCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
         appointmentContactCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));

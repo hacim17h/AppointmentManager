@@ -1,6 +1,11 @@
 package model;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 /**A class that stores and retrieves various appointment information.*/
 public class Appointments {
@@ -38,6 +43,17 @@ public class Appointments {
      * Stores the appointment end time.
      */
     private Timestamp endTime;
+
+    /**
+     * Stores the appointment start time in local time.
+     */
+    private Timestamp localStartTime;
+
+
+    /**
+     * Stores the appointment end time in local time.
+     */
+    private Timestamp localEndTime;
 
     /**
      * Stores the customer ID.
@@ -80,6 +96,16 @@ public class Appointments {
         setCustomerId(customerId);
         setUserId(userId);
         setContactId(contactId);
+
+        //Converts the timestamps to local time to store them.
+        ZoneId local = ZoneId.systemDefault();
+        ZoneId utc = ZoneId.of("UTC");
+        ZonedDateTime zonedStart = ZonedDateTime.of(startTime.toLocalDateTime(), utc);
+        ZonedDateTime zonedEnd = ZonedDateTime.of(endTime.toLocalDateTime(), utc);
+
+        localStartTime = Timestamp.valueOf(ZonedDateTime.ofInstant(zonedStart.toInstant(), local).toLocalDateTime());
+        localEndTime = Timestamp.valueOf(ZonedDateTime.ofInstant(zonedEnd.toInstant(), local).toLocalDateTime());
+
     }
 
     /**
@@ -240,5 +266,21 @@ public class Appointments {
      */
     public void setContactId(int contactId) {
         this.contactId = contactId;
+    }
+
+    /**
+     * Gets the local start time. A getter method that gets the local start time of the appointment
+     * @return the appointment start time relative to the users local time.
+     */
+    public Timestamp getLocalStartTime() {
+        return localStartTime;
+    }
+
+    /**
+     * Gets the local end time. A getter method that gets the local end time of the appointment
+     * @return the appointment end time relative to the users local time.
+     */
+    public Timestamp getLocalEndTime() {
+        return localEndTime;
     }
 }

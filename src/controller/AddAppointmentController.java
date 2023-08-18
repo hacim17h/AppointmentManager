@@ -4,6 +4,7 @@ import DAO.AppointmentsDAO;
 import DAO.ContactsDAO;
 import DAO.CustomersDAO;
 import DAO.UsersDAO;
+import helper.TimeHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -248,10 +249,31 @@ public class AddAppointmentController {
      * for invalid.
      * @return if the appointment is at a valid time or not
      */
-    Boolean isValidAppointment(){
+    boolean isValidAppointment(){
         ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
         customerAppointments.addAll(AppointmentsDAO.selectById(addAppointmentCustomerIDCombo.getValue()));
-        return true;
+        boolean isValid = true;
+
+        //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+        LocalDateTime startTime = LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
+        LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
+        ZoneId local = ZoneId.systemDefault();
+        ZoneId utc = ZoneId.of("UTC");
+        ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
+        ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
+        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(zonedStart.toInstant(), utc);
+        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(zonedEnd.toInstant(), utc);
+        Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
+        Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
+
+        for (Appointments appointment : customerAppointments){
+            if(TimeHelper.isOverlapping(appointment.getStartTime(), appointment.getEndTime(),
+                    utcStartTimestamp, utcEndTimestamp)){
+                isValid = false;
+            }
+        }
+        return isValid;
     }
 
     /**
