@@ -16,8 +16,10 @@ import model.Users;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class Main extends Application {
 
@@ -129,6 +131,15 @@ public class Main extends Application {
         else{
             System.out.println("The add was a failure");
         }*/
+        //ZoneId test
+        ZoneId denver = ZoneId.of("America/Denver");
+        ZoneId la = ZoneId.of("America/Los_Angeles");
+        ZoneId buenosAires = ZoneId.of("America/Buenos_Aires");
+        ZoneId paris = ZoneId.of("Europe/Paris");
+        ZoneId etc = ZoneId.of("Etc/GMT-14");
+        ZoneId tokyo = ZoneId.of("Asia/Tokyo");
+
+        //TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
         launch(args);
         JDBC.closeConnection();
     }

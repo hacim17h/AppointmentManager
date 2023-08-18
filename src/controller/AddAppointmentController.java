@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.Time;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class AddAppointmentController {
     /**
@@ -28,6 +29,21 @@ public class AddAppointmentController {
      * Stores the scene.
      */
     Parent scene;
+
+    /**
+     * Stores the date currently on the date picker.
+     */
+    LocalDate date;
+
+    /**
+     * Stores the hours of operation for the business in local time.
+     */
+    ObservableList<LocalDateTime> appointmentHours = FXCollections.observableArrayList();
+
+    /**
+     * Stores the converted date time into a more readable string format.
+     */
+    ObservableList<String> displayTime = FXCollections.observableArrayList();
 
     @FXML
     private Button addAppointmentSaveBtn;
@@ -42,10 +58,10 @@ public class AddAppointmentController {
     private DatePicker addAppointmentDate;
 
     @FXML
-    private ComboBox<LocalTime> addAppointmentStartCombo;
+    private ComboBox<String> addAppointmentStartCombo;
 
     @FXML
-    private ComboBox<LocalTime> addAppointmentEndCombo;
+    private ComboBox<String> addAppointmentEndCombo;
 
     @FXML
     private ComboBox<String> addAppointmentContactCombo;
@@ -70,6 +86,69 @@ public class AddAppointmentController {
 
     @FXML
     private Label addAppointmentErrorLbl;
+
+    /**
+     * Sets the appointment start and end times properly. When a date is selected, the appointment start and end
+     * combo boxes are populated with correct times and dates based upon the buisness hours and the users local time
+     * zone.
+     */
+    @FXML
+    void onActionSelectDate() {
+        date = addAppointmentDate.getValue();
+        appointmentHours = FXCollections.observableArrayList();
+        displayTime = FXCollections.observableArrayList();
+        ZoneId local = ZoneId.systemDefault();
+        ZoneId utc = ZoneId.of("UTC");
+        ZoneId eastern = ZoneId.of("America/New_York");
+        LocalTime start = LocalTime.of(8,0);
+        LocalTime end = LocalTime.of(22,0);
+        LocalDateTime startTime = LocalDateTime.of(date, start);
+        LocalDateTime endTime = LocalDateTime.of(date, end);
+        ZonedDateTime estStartTime = ZonedDateTime.of(startTime, eastern);
+        ZonedDateTime estEndTime = ZonedDateTime.of(endTime, eastern);
+        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(estStartTime.toInstant(), utc);
+        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(estEndTime.toInstant(), utc);
+        ZonedDateTime convertedStartTime = ZonedDateTime.ofInstant(utcStartTime.toInstant(), local);
+        ZonedDateTime convertedEndTime = ZonedDateTime.ofInstant(utcEndTime.toInstant(), local);
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+
+
+        while (convertedStartTime.isBefore(convertedEndTime)){
+            displayTime.add(convertedStartTime.toLocalDateTime().format(format));
+            appointmentHours.add(convertedStartTime.toLocalDateTime());
+            convertedStartTime = convertedStartTime.plusHours(1);
+        }
+        displayTime.add(convertedEndTime.toLocalDateTime().format(format));
+        appointmentHours.add(convertedEndTime.toLocalDateTime());
+        addAppointmentEndCombo.setItems(displayTime);
+
+        //Removes the last element for the start time since the appointment cant start at business close.
+        ObservableList<String> startTimes = FXCollections.observableArrayList(
+                                            displayTime.subList(0, displayTime.size()-1));
+        addAppointmentStartCombo.setItems(startTimes);
+    }
+
+    /**
+     * Sets the appointment end time based upon the start time. When the start time is selected, the end time
+     * dynamically changes to ensure the user cannot choose an appointment time in the past. This serves as input
+     * validation to also ensure the appointments are within business hours.
+     */
+    @FXML
+    void onActionSelectStart() {
+        int startIndex = addAppointmentStartCombo.getSelectionModel().getSelectedIndex() + 1;
+        addAppointmentEndCombo.setDisable(false);
+        ObservableList<String> endTimes = FXCollections.observableArrayList(
+                        displayTime.subList(startIndex, displayTime.size()));
+        addAppointmentEndCombo.setItems(endTimes);
+    }
+
+    @FXML
+    void onActionSelectEnd(ActionEvent event) {
+
+    }
+
+
+
 
     /**
      * Returns to the view customer form. When the button, is pressed the returns to the previous view appointment form.
@@ -117,39 +196,111 @@ public class AddAppointmentController {
      * based upon the local time of the users computer to stay within business hours.
      */
     //8:00 a.m. to 10:00 p.m. ET
-    public void initialize(){
-        addAppointmentDate.setValue(LocalDate.now());
+    public void initialize() {
+       /* addAppointmentDate.setValue(LocalDate.now());
         LocalDate date = addAppointmentDate.getValue();
         ObservableList<LocalTime> appointmentHours = FXCollections.observableArrayList();
         ZoneId local = ZoneId.systemDefault();
         ZoneId utc = ZoneId.of("UTC");
         ZoneId eastern = ZoneId.of("America/New_York");
-        LocalTime start = LocalTime.of(4,0);
-        LocalTime end = LocalTime.of(18,0);
+        LocalTime start = LocalTime.of(8,0);
+        LocalTime end = LocalTime.of(22,0);
         LocalDateTime startTime = LocalDateTime.of(date, start);
         LocalDateTime endTime = LocalDateTime.of(date, end);
-        ZonedDateTime localStartTime = ZonedDateTime.of(startTime, local);
-        ZonedDateTime localEndTime = ZonedDateTime.of(endTime, local);
-        ZonedDateTime convertedStartTime = ZonedDateTime.ofInstant(localStartTime.toInstant(), utc);
-        ZonedDateTime convertedEndTime = ZonedDateTime.ofInstant(localEndTime.toInstant(), utc);
-        System.out.println("My local time: " + localStartTime);
-        System.out.println("My utc time: " + convertedStartTime);
+        ZonedDateTime estStartTime = ZonedDateTime.of(startTime, eastern);
+        ZonedDateTime estEndTime = ZonedDateTime.of(endTime, eastern);
+        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(estStartTime.toInstant(), utc);
+        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(estEndTime.toInstant(), utc);
+        ZonedDateTime convertedStartTime = ZonedDateTime.ofInstant(utcStartTime.toInstant(), local);
+        ZonedDateTime convertedEndTime = ZonedDateTime.ofInstant(utcEndTime.toInstant(), local);
+        System.out.println("My eastern time: " + estStartTime);
+        System.out.println("My utc time: " + utcStartTime);
         System.out.println("My local time: " + convertedStartTime.toLocalTime());
-        /*while (start.isBefore(end)){
+        *//*while (start.isBefore(end)){
             appointmentHours.add(start);
             start = start.plusMinutes(30);
         }
-        appointmentHours.add(end);*/
+        appointmentHours.add(end);*//*
+        ObservableList<LocalTime> testHours  = FXCollections.observableArrayList();
+        ZonedDateTime testStartTime = ZonedDateTime.ofInstant(utcStartTime.toInstant(), local);
+        ZonedDateTime testEndTime = ZonedDateTime.ofInstant(utcEndTime.toInstant(), local);
+        while (testStartTime.isBefore(testEndTime)){
+            testHours.add(testStartTime.toLocalTime());
+            testStartTime = testStartTime.plusHours(1);
+        }
+        testHours.add(testEndTime.toLocalTime());
+        FXCollections.sort(testHours);
+        int testIndex = 1;
+        for (LocalTime hours : testHours){
+            if (hours.getHour() == testEndTime.toLocalTime().getHour()){
+                break;
+            }
+            testIndex++;
+        }
+        System.out.println("The size of testHours is: " +testHours.size());
+        ObservableList<LocalTime> group1 = FXCollections.observableArrayList(testHours.subList(0,testIndex));
+        System.out.println("The size of testHours is after sublist is: " +testHours.size());
+        System.out.println("Test index is: " +testIndex);
+        ObservableList<LocalTime> group2 = FXCollections.observableArrayList(testHours.subList(testIndex, testHours.size()));
+
 
         while (convertedStartTime.isBefore(convertedEndTime)){
             appointmentHours.add(convertedStartTime.toLocalTime());
-            convertedStartTime = convertedStartTime.plusMinutes(30);
+            convertedStartTime = convertedStartTime.plusHours(1);
         }
         appointmentHours.add(convertedEndTime.toLocalTime());
+        FXCollections.sort(appointmentHours);
+        ObservableList<LocalTime> endHours  = FXCollections.observableArrayList();
+        endHours.addAll(appointmentHours);
 
-        addAppointmentStartCombo.setItems(appointmentHours);
-        addAppointmentEndCombo.setItems(appointmentHours);
+        int index = 0;
+        for (LocalTime timeSlot : endHours){
+            if (timeSlot.getHour() == convertedEndTime.getHour()){
+                break;
+            }
+            index++;
+        }
+        endHours = FXCollections.observableArrayList(endHours.subList(0,index));
+
+        addAppointmentStartCombo.setItems(group1);
+        addAppointmentEndCombo.setItems(appointmentHours);*/
+
+/*
+        addAppointmentDate.setValue(LocalDate.now());
+        LocalDate date = addAppointmentDate.getValue();
+        ObservableList<LocalDateTime> appointmentHours = FXCollections.observableArrayList();
+        ObservableList<String> displayTime = FXCollections.observableArrayList();
+        ZoneId local = ZoneId.systemDefault();
+        ZoneId utc = ZoneId.of("UTC");
+        ZoneId eastern = ZoneId.of("America/New_York");
+        LocalTime start = LocalTime.of(8,0);
+        LocalTime end = LocalTime.of(22,0);
+        LocalDateTime startTime = LocalDateTime.of(date, start);
+        LocalDateTime endTime = LocalDateTime.of(date, end);
+        ZonedDateTime estStartTime = ZonedDateTime.of(startTime, eastern);
+        ZonedDateTime estEndTime = ZonedDateTime.of(endTime, eastern);
+        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(estStartTime.toInstant(), utc);
+        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(estEndTime.toInstant(), utc);
+        ZonedDateTime convertedStartTime = ZonedDateTime.ofInstant(utcStartTime.toInstant(), local);
+        ZonedDateTime convertedEndTime = ZonedDateTime.ofInstant(utcEndTime.toInstant(), local);
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+
+
+        while (convertedStartTime.isBefore(convertedEndTime)){
+            displayTime.add(convertedStartTime.toLocalDateTime().format(format));
+            appointmentHours.add(convertedStartTime.toLocalDateTime());
+            convertedStartTime = convertedStartTime.plusHours(1);
+        }
+
+        displayTime.add(convertedEndTime.toLocalDateTime().format(format));
+        appointmentHours.add(convertedEndTime.toLocalDateTime());
+
+        addAppointmentStartCombo.setItems(displayTime);
+        addAppointmentEndCombo.setItems(displayTime);
+
+*/
+        addAppointmentDate.setValue(LocalDate.now());
+        onActionSelectDate();
     }
-
 }
 
