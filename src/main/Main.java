@@ -14,8 +14,10 @@ import model.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -176,6 +178,23 @@ public class Main extends Application {
             System.out.println("The times " + startTime + " - " + endTime + " and " + otherStartTime + " - " +
                     otherEndTime + " are not overlapping.");
         }
+
+        LocalDate today = LocalDate.now();
+        LocalDate monthStart = today.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate monthEnd = today.with(TemporalAdjusters.lastDayOfMonth());
+        LocalDate date = LocalDate.of(2023,8,17);
+        LocalDate otherDate = LocalDate.of(2023, 8, 17);
+
+        if(date.isAfter(otherDate)){
+            System.out.println("This date is after the other one");
+        }
+        else {
+            System.out.println("This date is not after the other one");
+        }
+
+        System.out.println("The First day of this month is " + today.with(TemporalAdjusters.firstDayOfMonth()));
+
+
 
         launch(args);
         JDBC.closeConnection();

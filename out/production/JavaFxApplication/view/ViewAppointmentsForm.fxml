@@ -35,7 +35,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="500.0">
                      <children>
-                        <RadioButton fx:id="appointmentAllRButton" mnemonicParsing="false" prefWidth="70.0" selected="true" text="All">
+                        <RadioButton fx:id="appointmentAllRButton" mnemonicParsing="false" onAction="#onActionSelectAll" prefWidth="70.0" selected="true" text="All">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -46,7 +46,7 @@
                               <ToggleGroup fx:id="appointmentGroup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="appointmentWeekRButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="This Week" toggleGroup="$appointmentGroup">
+                        <RadioButton fx:id="appointmentWeekRButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onActionSelectThisWeek" prefWidth="100.0" text="This Week" toggleGroup="$appointmentGroup">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -54,7 +54,7 @@
                               <Insets right="20.0" />
                            </HBox.margin>
                         </RadioButton>
-                        <RadioButton fx:id="appointmentMonthRButton" layoutX="97.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="This Month" toggleGroup="$appointmentGroup">
+                        <RadioButton fx:id="appointmentMonthRButton" layoutX="97.0" layoutY="10.0" mnemonicParsing="false" onAction="#onActionSelectThisMonth" prefWidth="100.0" text="This Month" toggleGroup="$appointmentGroup">
                            <font>
                               <Font size="14.0" />
                            </font>

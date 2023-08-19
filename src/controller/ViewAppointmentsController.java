@@ -1,6 +1,8 @@
 package controller;
 
 import DAO.AppointmentsDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +15,9 @@ import model.Appointments;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 
 public class ViewAppointmentsController {
     /**
@@ -151,6 +155,61 @@ public class ViewAppointmentsController {
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
+    /**
+     * Displays all appointments. When the "All" radio button is pressed, the table updates to display all appointments.
+     */
+    @FXML
+    void onActionSelectAll() {
+        appointmentTableView.setItems(AppointmentsDAO.selectAll());
+        appointmentTableView.refresh();
+    }
+
+    /**
+     * Displays all appointments of the current week. When the "This Week" radio button is pressed,
+     * the table updates to display the appointments of the current week.
+     */
+    @FXML
+    void onActionSelectThisWeek() {
+        ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+        appointments.addAll(AppointmentsDAO.selectAll());
+        ObservableList<Appointments> appointmentsThisWeek = FXCollections.observableArrayList();
+        LocalDate today = LocalDate.now();
+        LocalDate weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate weekEnd = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        for (Appointments appointment : appointments){
+            if(appointment.getStartTime().toLocalDateTime().isAfter(weekStart.atStartOfDay().minusNanos(1)) &&
+               appointment.getStartTime().toLocalDateTime().isBefore(weekEnd.atStartOfDay())){
+                appointmentsThisWeek.add(appointment);
+            }
+        }
+        appointmentTableView.setItems(appointmentsThisWeek);
+        appointmentTableView.refresh();
+    }
+
+    /**
+     * Displays all appointments of the current month. When the "This Month" radio button is pressed,
+     * the table updates to display the appointments of the current month.
+     */
+    @FXML
+    void onActionSelectThisMonth() {
+        ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+        appointments.addAll(AppointmentsDAO.selectAll());
+        ObservableList<Appointments> appointmentsThisWeek = FXCollections.observableArrayList();
+        LocalDate today = LocalDate.now();
+        LocalDate monthStart = today.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate monthEnd = today.with(TemporalAdjusters.lastDayOfMonth());
+        for (Appointments appointment : appointments){
+            if(appointment.getStartTime().toLocalDateTime().isAfter(monthStart.atStartOfDay().minusNanos(1)) &&
+                    appointment.getStartTime().toLocalDateTime().isBefore(monthEnd.atStartOfDay().plusDays(1))){
+                appointmentsThisWeek.add(appointment);
+            }
+        }
+        appointmentTableView.setItems(appointmentsThisWeek);
+        appointmentTableView.refresh();
+    }
+
+
 
     /*
      * @param id appointment id
