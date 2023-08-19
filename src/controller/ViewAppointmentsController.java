@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointments;
+import model.Customers;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -111,10 +112,18 @@ public class ViewAppointmentsController {
      */
     @FXML
     void onActionEditAppointment(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/EditAppointmentForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+
+        Appointments selectedAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
+
+        if(selectedAppointment != null){
+            FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/view/EditAppointmentForm.fxml"));
+            scene = sceneLoader.load();
+            EditAppointmentController editController = sceneLoader.getController();
+            editController.prefillData(selectedAppointment);
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
     }
 
     /**
@@ -227,15 +236,14 @@ public class ViewAppointmentsController {
      * from the database and the columns values are set properly.
      */
     public void initialize(){
-
         appointmentTableView.setItems(AppointmentsDAO.selectAll());
         appointmentIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         appointmentTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         appointmentTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         appointmentLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appointmentStartCol.setCellValueFactory(new PropertyValueFactory<>("localStartTime"));
-        appointmentEndCol.setCellValueFactory(new PropertyValueFactory<>("localEndTime"));
+        appointmentStartCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        appointmentEndCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         appointmentCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         appointmentUserIDCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
         appointmentContactCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));

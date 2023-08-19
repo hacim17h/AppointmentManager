@@ -47,6 +47,7 @@ public class Appointments {
     private Timestamp localStartTime;
 
 
+
     /**
      * Stores the appointment end time in local time.
      */
@@ -95,14 +96,13 @@ public class Appointments {
         setContactId(contactId);
 
         //Converts the timestamps to local time to store them.
-        ZoneId local = ZoneId.systemDefault();
+/*        ZoneId local = ZoneId.systemDefault();
         ZoneId utc = ZoneId.of("UTC");
         ZonedDateTime zonedStart = ZonedDateTime.of(startTime.toLocalDateTime(), utc);
         ZonedDateTime zonedEnd = ZonedDateTime.of(endTime.toLocalDateTime(), utc);
-
         localStartTime = Timestamp.valueOf(ZonedDateTime.ofInstant(zonedStart.toInstant(), local).toLocalDateTime());
         localEndTime = Timestamp.valueOf(ZonedDateTime.ofInstant(zonedEnd.toInstant(), local).toLocalDateTime());
-
+        */
     }
 
     /**
@@ -279,5 +279,13 @@ public class Appointments {
      */
     public Timestamp getLocalEndTime() {
         return localEndTime;
+    }
+
+    public void setLocalStartTime(Timestamp localStartTime) {
+        this.localStartTime = localStartTime;
+    }
+
+    public void setLocalEndTime(Timestamp localEndTime) {
+        this.localEndTime = localEndTime;
     }
 }

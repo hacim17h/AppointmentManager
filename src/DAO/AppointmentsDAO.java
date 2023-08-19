@@ -5,6 +5,10 @@ import javafx.collections.ObservableList;
 import model.Appointments;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 /** A class that handles basic CRUD functionality for the appointments table.*/
 public class AppointmentsDAO {

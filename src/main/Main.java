@@ -13,10 +13,7 @@ import model.*;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -158,7 +155,6 @@ public class Main extends Application {
             System.out.println("Password: " + userGroup.getPassword());
         }
 
-        //TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
         LocalDateTime dateTime = LocalDateTime.of(2023,8,18,8,0);
         LocalDateTime dateTime2 = LocalDateTime.of(2023,8,18,13,0);
         LocalDateTime dateTime3 = LocalDateTime.of(2023,8,19,10,0);
@@ -182,8 +178,8 @@ public class Main extends Application {
         LocalDate today = LocalDate.now();
         LocalDate monthStart = today.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate monthEnd = today.with(TemporalAdjusters.lastDayOfMonth());
-        LocalDate date = LocalDate.of(2023,8,17);
-        LocalDate otherDate = LocalDate.of(2023, 8, 17);
+        LocalDateTime date = LocalDateTime.of(2023,8,17,0,0);
+        LocalDateTime otherDate = LocalDateTime.of(2023, 8, 17,0,0).minusNanos(1);
 
         if(date.isAfter(otherDate)){
             System.out.println("This date is after the other one");
@@ -195,6 +191,17 @@ public class Main extends Application {
         System.out.println("The First day of this month is " + today.with(TemporalAdjusters.firstDayOfMonth()));
 
 
+        TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
+
+        ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+        appointments.addAll(AppointmentsDAO.selectAll());
+        Timestamp start = appointments.get(0).getStartTime();
+        ZonedDateTime normalized = start.toInstant().atZone(ZoneId.of("America/New_York"));
+        LocalDateTime testTime =  LocalDateTime.of(normalized.getYear(), normalized.getMonth(), normalized.getDayOfMonth(), normalized.getHour(), normalized.getMinute());
+        ZonedDateTime utc = ZonedDateTime.ofInstant(normalized.toInstant(), ZoneId.of("UTC"));
+        System.out.println("This is the start timestamp " + normalized);
+        System.out.println("This is the start utc timestamp " + utc);
+        System.out.println("This is the start testtime timestamp " + testTime);
 
         launch(args);
         JDBC.closeConnection();
