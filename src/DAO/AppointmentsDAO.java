@@ -117,4 +117,23 @@ public class AppointmentsDAO {
         }
         return rowsAdded;
     }
+
+    /**
+     * Deletes an appointment. The method takes an appointment ID and then compares it against the database. If the
+     * appointment ID exists, the appointment is deleted.
+     * @param appointmentId appointment ID
+     * @return the number of rows deleted
+     */
+    public static int delete(int appointmentId ){
+        int rowsDeleted = 0;
+        String query = "DELETE FROM client_schedule.appointments WHERE Appointment_ID = ?";
+        try {
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setInt(1, appointmentId);
+            rowsDeleted = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowsDeleted;
+    }
 }

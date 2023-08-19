@@ -12,11 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointments;
 import model.Contacts;
@@ -191,20 +187,21 @@ public class AddAppointmentController {
      */
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
-        //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-        LocalDateTime startTime = LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
-        LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
-        ZoneId local = ZoneId.systemDefault();
-        ZoneId utc = ZoneId.of("UTC");
-        ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
-        ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
-        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(zonedStart.toInstant(), utc);
-        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(zonedEnd.toInstant(), utc);
-        Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
-        Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
         //If the input is valid the appointment data is inserted into the database and if not an error displays.
         if(isValidInput()){
+            //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+            LocalDateTime startTime = LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
+            LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
+            ZoneId local = ZoneId.systemDefault();
+            ZoneId utc = ZoneId.of("UTC");
+            ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
+            ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
+            ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(zonedStart.toInstant(), utc);
+            ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(zonedEnd.toInstant(), utc);
+            Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
+            Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
+
             if(isValidAppointment()){
                 int rowsAdded = AppointmentsDAO.insert(addAppointmentTitleTxt.getText(),
                         addAppointmentDescriptionTxt.getText(), addAppointmentLocationTxt.getText(),
@@ -220,6 +217,17 @@ public class AddAppointmentController {
                 else{
                     addAppointmentErrorLbl.setText("The appointment has failed to be added. Please try again.");
                 }
+            }
+            else{
+                addAppointmentErrorLbl.setText("");
+                Alert failWarning = new Alert(Alert.AlertType.WARNING);
+                failWarning.setTitle("Unable to schedule appointment");
+                failWarning.setHeaderText(null);
+                failWarning.setContentText("The appointment time you've selected is unavailable. Please select " +
+                                            "a different date or time.");
+                failWarning.showAndWait();
+
+
             }
         }
         else {
@@ -237,9 +245,9 @@ public class AddAppointmentController {
     Boolean isValidInput(){
         return !addAppointmentTitleTxt.getText().isBlank() && !addAppointmentDescriptionTxt.getText().isBlank() &&
              !addAppointmentLocationTxt.getText().isBlank() && !addAppointmentTypeTxt.getText().isBlank() &&
-             !(addAppointmentStartCombo.getValue() == null) && !(addAppointmentEndCombo.getValue() == null &&
+             !(addAppointmentStartCombo.getValue() == null) && !(addAppointmentEndCombo.getValue() == null) &&
              !(addAppointmentContactCombo.getValue() == null) && !(addAppointmentCustomerIDCombo.getValue() == null) &&
-             !(addAppointmentUserIDCombo.getValue() == null) && !(addAppointmentDate.getValue() == null));
+             !(addAppointmentUserIDCombo.getValue() == null) && !(addAppointmentDate.getValue() == null);
     }
 
     /**

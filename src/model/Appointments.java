@@ -1,11 +1,8 @@
 package model;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
+
 
 /**A class that stores and retrieves various appointment information.*/
 public class Appointments {

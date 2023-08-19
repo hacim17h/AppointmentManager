@@ -6,11 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointments;
@@ -125,7 +121,22 @@ public class ViewAppointmentsController {
      */
     @FXML
     void onActionDeleteAppointment(ActionEvent event) {
-
+        if (appointmentTableView.getSelectionModel().getSelectedItem() != null){
+            Alert deleteWarning = new Alert(Alert.AlertType.WARNING);
+            deleteWarning.setTitle("Confirmation");
+            deleteWarning.setHeaderText(null);
+            deleteWarning.setContentText("Are you sure you want to delete the appointment?");
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+            deleteWarning.getButtonTypes().setAll(yesButton, noButton);
+            deleteWarning.showAndWait();
+            if (deleteWarning.getResult() == yesButton){
+                Appointments selectedAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
+                AppointmentsDAO.delete(selectedAppointment.getId());
+                appointmentTableView.setItems(AppointmentsDAO.selectAll());
+                appointmentTableView.refresh();
+            }
+        }
     }
 
     /**
