@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointments;
+import model.Contacts;
 import model.Customers;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class ViewAppointmentsController {
     private TableView<Appointments> appointmentTableView;
 
     @FXML
-    private TableColumn<Appointments, String> appointmentContactCol;
+    private TableColumn<Appointments, Contacts> appointmentContactCol;
 
     @FXML
     private TableColumn<Appointments, Integer> appointmentCustomerIDCol;
@@ -246,6 +247,6 @@ public class ViewAppointmentsController {
         appointmentEndCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         appointmentCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         appointmentUserIDCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
-        appointmentContactCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+        appointmentContactCol.setCellValueFactory(new PropertyValueFactory<>("contactDisplay"));
     }
 }

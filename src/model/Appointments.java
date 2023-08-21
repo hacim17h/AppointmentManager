@@ -1,5 +1,7 @@
 package model;
 
+import DAO.ContactsDAO;
+
 import java.sql.Timestamp;
 import java.time.*;
 
@@ -57,6 +59,13 @@ public class Appointments {
     private int contactId;
 
     /**
+     * Stores the contact name for display.
+     */
+    private String contactDisplay;
+
+
+
+    /**
      * A class constructor that initializes the id, title, description, type, location, start time, and
      * end time. It also initializes the customer id, user id, and contact id associated with the appointment.
      * @param id appointment id
@@ -82,6 +91,8 @@ public class Appointments {
         setCustomerId(customerId);
         setUserId(userId);
         setContactId(contactId);
+        contactDisplay =  ContactsDAO.selectContactsById(contactId).getName();
+
 
         //Converts the timestamps to local time to store them.
 /*        ZoneId local = ZoneId.systemDefault();
@@ -253,4 +264,12 @@ public class Appointments {
         this.contactId = contactId;
     }
 
+    /**
+     * Gets the contact display. A getter method that returns the contact name associated with the appointment for
+     * display purposes.
+     * @return appointment contact name
+     */
+    public String getContactDisplay() {
+        return contactDisplay;
+    }
 }
