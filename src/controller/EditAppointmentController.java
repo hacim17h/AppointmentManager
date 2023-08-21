@@ -1,5 +1,9 @@
 package controller;
 
+import DAO.AppointmentsDAO;
+import DAO.ContactsDAO;
+import DAO.CustomersDAO;
+import DAO.UsersDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +18,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Appointments;
+import model.Contacts;
 import model.Customers;
+import model.Users;
 
 import java.io.IOException;
 import java.time.*;
@@ -63,10 +69,13 @@ public class EditAppointmentController {
     private Button editAppointmentCancelBtn;
 
     @FXML
-    private ComboBox<String> editAppointmentContactCombo;
+    private ComboBox<Contacts> editAppointmentContactCombo;
 
     @FXML
-    private ComboBox<Integer> editAppointmentCustomerIDCombo;
+    private ComboBox<Customers> editAppointmentCustomerIDCombo;
+
+    @FXML
+    private ComboBox<Users> editAppointmentUserIDCombo;
 
     @FXML
     private DatePicker editAppointmentDate;
@@ -97,8 +106,7 @@ public class EditAppointmentController {
     @FXML
     private TextField editAppointmentTypeTxt;
 
-    @FXML
-    private ComboBox<Integer> editAppointmentUserIDCombo;
+
 
     /**
      * Sets the appointment start and end times properly. When a date is selected, the appointment start and end
@@ -110,29 +118,19 @@ public class EditAppointmentController {
         date = editAppointmentDate.getValue();
         appointmentHours = FXCollections.observableArrayList();
         displayTime = FXCollections.observableArrayList();
-        ZoneId local = ZoneId.systemDefault();
-        ZoneId utc = ZoneId.of("UTC");
-        ZoneId eastern = ZoneId.of("America/New_York");
-        LocalTime start = LocalTime.of(8,0);
-        LocalTime end = LocalTime.of(22,0);
+        LocalTime start = LocalTime.of(0,0);
         LocalDateTime startTime = LocalDateTime.of(date, start);
-        LocalDateTime endTime = LocalDateTime.of(date, end);
-        ZonedDateTime estStartTime = ZonedDateTime.of(startTime, eastern);
-        ZonedDateTime estEndTime = ZonedDateTime.of(endTime, eastern);
-        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(estStartTime.toInstant(), utc);
-        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(estEndTime.toInstant(), utc);
-        ZonedDateTime convertedStartTime = ZonedDateTime.ofInstant(utcStartTime.toInstant(), local);
-        ZonedDateTime convertedEndTime = ZonedDateTime.ofInstant(utcEndTime.toInstant(), local);
+        LocalDateTime endTime = LocalDateTime.of(date, start).plusDays(1);
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
 
-
-        while (convertedStartTime.isBefore(convertedEndTime)){
-            displayTime.add(convertedStartTime.toLocalDateTime().format(format));
-            appointmentHours.add(convertedStartTime.toLocalDateTime());
-            convertedStartTime = convertedStartTime.plusHours(1);
+        //Populates the combo boxes with start times incremented by one hour.
+        while (startTime.isBefore(endTime)){
+            appointmentHours.add(startTime);
+            displayTime.add(startTime.format(format));
+            startTime = startTime.plusHours(1);
         }
-        displayTime.add(convertedEndTime.toLocalDateTime().format(format));
-        appointmentHours.add(convertedEndTime.toLocalDateTime());
+        appointmentHours.add(endTime);
+        displayTime.add(endTime.format(format));
         editAppointmentEndCombo.setItems(displayTime);
 
         //Removes the last element for the start time since the appointment cant start at business close.
@@ -152,9 +150,6 @@ public class EditAppointmentController {
         editAppointmentEndCombo.setDisable(false);
         ObservableList<String> endTimes = FXCollections.observableArrayList(
                 displayTime.subList(startIndex, displayTime.size()));
-        //Creates a sublist of times which allows the proper time to be selected in the combo box when editing.
-        appointmentEndHours = FXCollections.observableArrayList(
-                appointmentHours.subList(startIndex, appointmentHours.size()));
         editAppointmentEndCombo.setItems(endTimes);
     }
 
@@ -193,12 +188,15 @@ public class EditAppointmentController {
      * @param selectedAppointment the appointment that was selected in the view appointments table
      */
     void prefillData(Appointments selectedAppointment){
+        //Initializes text fields.
         editAppointmentIDTxt.setText(String.valueOf(selectedAppointment.getId()));
         editAppointmentTitleTxt.setText(selectedAppointment.getTitle());
         editAppointmentDescriptionTxt.setText(selectedAppointment.getDescription());
         editAppointmentLocationTxt.setText(selectedAppointment.getLocation());
         editAppointmentTypeTxt.setText(selectedAppointment.getType());
         editAppointmentDate.setValue(selectedAppointment.getStartTime().toLocalDateTime().toLocalDate());
+
+        //Populates time combo boxes.
         onActionSelectDate();
         int startIndex = 0;
         for(LocalDateTime hours : appointmentHours){
@@ -213,16 +211,22 @@ public class EditAppointmentController {
         int endIndex = 0;
         for(LocalDateTime hours : appointmentEndHours){
             if(hours.isEqual(selectedAppointment.getEndTime().toLocalDateTime())){
-                System.out.println("Hours is: " + hours);
-                System.out.println("Selected appointment time is: " + selectedAppointment.getEndTime().toLocalDateTime());
-                System.out.println("I made it to the if statement and endIndex is: " + endIndex);
                 break;
             }
-            System.out.println("I made it here and endIndex is: " + endIndex);
             endIndex++;
         }
         editAppointmentEndCombo.getSelectionModel().select(endIndex);
 
+        //Populates and selects the remaining combo boxes.
+        editAppointmentUserIDCombo.setItems(UsersDAO.selectAllUsers());
+        editAppointmentUserIDCombo.getSelectionModel().select(
+                UsersDAO.selectUsersById(selectedAppointment.getUserId()));
+        editAppointmentCustomerIDCombo.setItems(CustomersDAO.selectAll());
+        editAppointmentCustomerIDCombo.getSelectionModel().select(
+                CustomersDAO.selectCustomersById(selectedAppointment.getCustomerId()));
+        editAppointmentContactCombo.setItems(ContactsDAO.selectAllContacts());
+        editAppointmentContactCombo.getSelectionModel().select(
+                ContactsDAO.selectContactsById(selectedAppointment.getContactId()));
     }
 }
 

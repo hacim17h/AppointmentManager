@@ -2,6 +2,7 @@ package DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Contacts;
 import model.Customers;
 import model.Users;
 
@@ -33,5 +34,31 @@ public class UsersDAO {
             e.printStackTrace();
         }
         return users;
+    }
+
+    /**
+     * Returns a specific user by id in the database. The method creates a query that selects a user in the
+     * users database that matches the given user id. It then returns all relevant user data as a
+     * Users object.
+     * @return the user that matches the specific user id
+     */
+    public static Users selectUsersById(int userId){
+        String query = "SELECT * FROM client_schedule.users WHERE User_ID = ?";
+        ObservableList<Users> users = FXCollections.observableArrayList();
+        try{
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setInt(1, userId);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                int id = result.getInt("User_ID");
+                String name = result.getString("User_Name");
+                String password = result.getString("Password");
+                users.add(new Users(id, name, password));
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return users.get(0);
     }
 }

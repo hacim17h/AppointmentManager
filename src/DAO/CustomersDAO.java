@@ -2,6 +2,7 @@ package DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Contacts;
 import model.Customers;
 
 import java.sql.PreparedStatement;
@@ -99,5 +100,34 @@ public abstract class CustomersDAO {
             e.printStackTrace();
         }
     return customers;
+    }
+
+    /**
+     * Returns a specific customer by id in the database. The method creates a query that selects a customer in the
+     * customers database that matches the given customer id. It then returns all relevant customer data as a
+     * customers object.
+     * @return the customer that matches the specific customer id
+     */
+    public static Customers selectCustomersById(int customerId){
+        String query = "SELECT * FROM client_schedule.customers WHERE Customer_ID = ?";
+        ObservableList<Customers> customers = FXCollections.observableArrayList();
+        try{
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setInt(1, customerId);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                int id = result.getInt("Customer_ID");
+                String name = result.getString("Customer_Name");
+                String address = result.getString("Address");
+                String postalCode = result.getString("Postal_Code");
+                String phone = result.getString("Phone");
+                int divisionId = result.getInt("Division_ID");
+                customers.add(new Customers(id, name, address, postalCode, phone, divisionId));
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return customers.get(0);
     }
 }
