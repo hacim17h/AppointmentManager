@@ -76,4 +76,14 @@ public class Contacts {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    /**
+     * Returns the contact name for display. A method override that displays the contact name to be displayed when
+     * printing out or displaying a contact object.
+     * @return the contact name
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
 }

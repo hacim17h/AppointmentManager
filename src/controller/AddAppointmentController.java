@@ -75,7 +75,7 @@ public class AddAppointmentController {
     private ComboBox<String> addAppointmentEndCombo;
 
     @FXML
-    private ComboBox<String> addAppointmentContactCombo;
+    private ComboBox<Contacts> addAppointmentContactCombo;
 
     @FXML
     private ComboBox<Integer> addAppointmentCustomerIDCombo;
@@ -202,7 +202,7 @@ public class AddAppointmentController {
                         addAppointmentDescriptionTxt.getText(), addAppointmentLocationTxt.getText(),
                         addAppointmentTypeTxt.getText(), utcStartTimestamp, utcEndTimestamp,
                         addAppointmentCustomerIDCombo.getValue(), addAppointmentUserIDCombo.getValue(),
-                        contactIds.get(addAppointmentContactCombo.getSelectionModel().getSelectedIndex()));
+                        addAppointmentContactCombo.getValue().getId());
                 if (rowsAdded > 0){
                     stage = (Stage)((Button)event.getSource()).getScene().getWindow();
                     scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
@@ -294,22 +294,17 @@ public class AddAppointmentController {
         users.addAll(UsersDAO.selectAllUsers());
         customers.addAll(CustomersDAO.selectAll());
         ObservableList<Integer> userIds = FXCollections.observableArrayList();
-        ObservableList<String> contactNames = FXCollections.observableArrayList();
         ObservableList<Integer> customerIds = FXCollections.observableArrayList();
 
         for (Users user : users){
             userIds.add(user.getId());
-        }
-        for (Contacts contact : contacts){
-            contactNames.add(contact.getName());
-            contactIds.add(contact.getId());
         }
         for (Customers customer : customers){
             customerIds.add(customer.getId());
         }
 
         addAppointmentUserIDCombo.setItems(userIds);
-        addAppointmentContactCombo.setItems(contactNames);
+        addAppointmentContactCombo.setItems(contacts);
         addAppointmentCustomerIDCombo.setItems(customerIds);
 
     }
