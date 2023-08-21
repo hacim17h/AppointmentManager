@@ -1,6 +1,5 @@
 package helper;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.*;
 
@@ -40,17 +39,17 @@ public abstract class TimeHelper {
         LocalDateTime closeTime = LocalDateTime.of(date, end);
         ZonedDateTime estOpenTime = ZonedDateTime.of(openTime, eastern);
         ZonedDateTime estCloseTime = ZonedDateTime.of(closeTime, eastern);
-        Timestamp openTimestamp = Timestamp.from(ZonedDateTime.ofInstant(estOpenTime.toInstant(), utc).toInstant());
-        Timestamp closedTimestamp = Timestamp.from(ZonedDateTime.ofInstant(estCloseTime.toInstant(), utc).toInstant());
+        Timestamp openTimestamp = Timestamp.from(estOpenTime.toInstant());
+        Timestamp closedTimestamp = Timestamp.from(estCloseTime.toInstant());
+
 
         System.out.println("In Time helper the business open time is: " +openTimestamp);
         System.out.println("In Time helper the business close time is: " +closedTimestamp);
+        System.out.println("In Time helper the open time instant is: " +estOpenTime.toInstant());
+        System.out.println("In Time helper the close time instant is: " +estCloseTime.toInstant());
+        System.out.println("In Time helper the really long zoned time instant is: +" + ZonedDateTime.ofInstant(estOpenTime.toInstant(), utc).toInstant());
         System.out.println("In time helper the start time is: " +startTime);
         System.out.println("In time helper the end time is: " +endTime);
-        /*ZonedDateTime utcOpenTime = ZonedDateTime.ofInstant(estOpenTime.toInstant(), utc);
-        ZonedDateTime utcCloseTime = ZonedDateTime.ofInstant(estCloseTime.toInstant(), utc);*/
-        //ZonedDateTime convertedOpenTime = ZonedDateTime.ofInstant(utcOpenTime.toInstant(), local);
-        //ZonedDateTime convertedCloseTime = ZonedDateTime.ofInstant(utcCloseTime.toInstant(), local);
 
         boolean duringSameDay = false;
         boolean duringPreviousDay = false;
@@ -77,15 +76,6 @@ public abstract class TimeHelper {
         System.out.println("During the next day was: " + duringNextDay);
 
         return duringSameDay || duringPreviousDay || duringNextDay;
-
-
-
-
-        /*return (startTime.after(openTimestamp) || startTime.equals(openTimestamp)) &&
-                (endTime.before(closedTimestamp) || endTime.equals(closedTimestamp));*/
-
-
-        //return utcStartTime.isAfter(utcOpenTime.minusNanos(1)) && utcEndTime.isBefore(utcCloseTime.plusNanos(1));
 
     }
 

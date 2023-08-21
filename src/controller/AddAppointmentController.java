@@ -113,9 +113,7 @@ public class AddAppointmentController {
         LocalDateTime endTime = LocalDateTime.of(date, start).plusDays(1);
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
 
-        System.out.println("The start time is: " + startTime);
-        System.out.println("The end time is: " + endTime);
-
+        //Populates the combo boxes with start times incremented by one hour.
         while (startTime.isBefore(endTime)){
             appointmentHours.add(startTime);
             displayTime.add(startTime.format(format));
@@ -123,10 +121,6 @@ public class AddAppointmentController {
         }
         appointmentHours.add(endTime);
         displayTime.add(endTime.format(format));
-        for (LocalDateTime hours : appointmentHours){
-            System.out.println("The hours are: " + hours);
-        }
-
         addAppointmentEndCombo.setItems(displayTime);
 
         //Removes the last element for the start time since the appointment cant start at business close.
@@ -162,18 +156,6 @@ public class AddAppointmentController {
         stage.show();
     }
 
-    /* d.  Write code to implement input validation and logical error checks to prevent each of the following changes
-           when adding or updating information; display a custom message specific for each error check in the user
-           interface:
-       •  scheduling an appointment outside business hours defined as 8:00 a.m. to 10:00 p.m. ET, including weekends
-       •  scheduling overlapping appointments for customers
-       •  entering an incorrect username and password*/
-
-    /*Note: There are up to three time zones in effect. Coordinated Universal Time (UTC) is used for storing the time
-     in the database, the user’s local time is used for display purposes, and Eastern Time (ET) is used for the
-     company’s office hours. Local time will be checked against ET business hours before they are stored in the
-     database as UTC.*/
-
     /**
      * Returns to the view appointment form after saving input. When the button is pressed, the form returns to the
      * previous view appointment form and saves the updated input data to the database as well as displaying it to the
@@ -187,25 +169,6 @@ public class AddAppointmentController {
 
         if(isValidInput()){
             //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
-/*            DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-            LocalDateTime startTime =  LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
-            LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
-            ZoneId local = ZoneId.systemDefault();
-            ZoneId utc = ZoneId.of("UTC");
-            ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
-            ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
-            ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(zonedStart.toInstant(), utc);
-            ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(zonedEnd.toInstant(), utc);
-            Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
-            Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
-
-            if (TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
-                System.out.println("These are during business hours");
-            }
-            else{
-                System.out.println("These are not during business hours.");
-            }*/
-            //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
             DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
             LocalDateTime startTime =  LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
             LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
@@ -216,19 +179,6 @@ public class AddAppointmentController {
             Timestamp utcStartTimestamp = Timestamp.from(zonedStart.toInstant());
             Timestamp utcEndTimestamp = Timestamp.from(zonedEnd.toInstant());
 
-            System.out.println("Start time of on action save: " + startTime);
-            System.out.println("Start time of on action save: " + endTime);
-            System.out.println("Zoned Start time to instant of on action save: " + zonedStart.toInstant());
-            System.out.println("Zoned End time to instant of on action save: " + zonedEnd.toInstant());
-            System.out.println("UTC start timestamp of on action save: " + utcStartTimestamp);
-            System.out.println("UTC end timestamp of on action save: " + utcEndTimestamp);
-
-            if (TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
-                System.out.println("These are during business hours");
-            }
-            else{
-                System.out.println("These are not during business hours.");
-            }
             //Checks to see if the time is within business hours. If true, then the appointment is added.
             //if not an error is displayed.
             if(TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
@@ -253,11 +203,9 @@ public class AddAppointmentController {
                     Alert failWarning = new Alert(Alert.AlertType.WARNING);
                     failWarning.setTitle("Unable to schedule appointment");
                     failWarning.setHeaderText(null);
-                    failWarning.setContentText("The appointment time selected overlaps with an existing appointment." +
+                    failWarning.setContentText("The appointment time selected overlaps with an existing appointment. " +
                             "Please select a different date or time.");
                     failWarning.showAndWait();
-
-
                 }
             }
             else {

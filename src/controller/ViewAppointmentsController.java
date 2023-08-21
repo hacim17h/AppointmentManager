@@ -149,6 +149,13 @@ public class ViewAppointmentsController {
                 AppointmentsDAO.delete(selectedAppointment.getId());
                 appointmentTableView.setItems(AppointmentsDAO.selectAll());
                 appointmentTableView.refresh();
+                //Displays information pertaining to the deleted appointment upon success.
+                Alert notification = new Alert(Alert.AlertType.INFORMATION);
+                notification.setTitle("Delete successful");
+                notification.setHeaderText(null);
+                notification.setContentText("The Appointment with the ID " + selectedAppointment.getId() +
+                        " of type " + selectedAppointment.getType() + " has been deleted.");
+                notification.showAndWait();
             }
         }
     }
