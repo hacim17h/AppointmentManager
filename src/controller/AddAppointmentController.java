@@ -78,10 +78,10 @@ public class AddAppointmentController {
     private ComboBox<Contacts> addAppointmentContactCombo;
 
     @FXML
-    private ComboBox<Integer> addAppointmentCustomerIDCombo;
+    private ComboBox<Customers> addAppointmentCustomerIDCombo;
 
     @FXML
-    private ComboBox<Integer> addAppointmentUserIDCombo;
+    private ComboBox<Users> addAppointmentUserIDCombo;
 
     @FXML
     private TextField addAppointmentIDTxt;
@@ -100,13 +100,14 @@ public class AddAppointmentController {
 
     /**
      * Sets the appointment start and end times properly. When a date is selected, the appointment start and end
-     * combo boxes are populated with correct times and dates based upon the buisness hours and the users local time
+     * combo boxes are populated with correct times and dates based upon the business hours and the users local time
      * zone.
      */
     @FXML
     void onActionSelectDate() {
         date = addAppointmentDate.getValue();
         appointmentHours = FXCollections.observableArrayList();
+        displayTime = FXCollections.observableArrayList();
         LocalTime start = LocalTime.of(0,0);
         LocalDateTime startTime = LocalDateTime.of(date, start);
         LocalDateTime endTime = LocalDateTime.of(date, start).plusDays(1);
@@ -183,9 +184,29 @@ public class AddAppointmentController {
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
         //If the input is valid the appointment data is inserted into the database and if not an error displays.
+        //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+        LocalDateTime startTime =  LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
+        LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
+        ZoneId local = ZoneId.systemDefault();
+        ZoneId utc = ZoneId.of("UTC");
+        ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
+        ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
+        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(zonedStart.toInstant(), utc);
+        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(zonedEnd.toInstant(), utc);
+        Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
+        Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
+
+        if (TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
+            System.out.println("These are during business hours");
+        }
+        else{
+            System.out.println("These are not during business hours.");
+        }
+
         if(isValidInput()){
             //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+/*            DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
             LocalDateTime startTime =  LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
             LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
             ZoneId local = ZoneId.systemDefault();
@@ -197,11 +218,18 @@ public class AddAppointmentController {
             Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
             Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
 
+            if (TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
+                System.out.println("These are during business hours");
+            }
+            else{
+                System.out.println("These are not during business hours.");
+            }*/
+
             if(isValidAppointment()){
                 int rowsAdded = AppointmentsDAO.insert(addAppointmentTitleTxt.getText(),
                         addAppointmentDescriptionTxt.getText(), addAppointmentLocationTxt.getText(),
                         addAppointmentTypeTxt.getText(), utcStartTimestamp, utcEndTimestamp,
-                        addAppointmentCustomerIDCombo.getValue(), addAppointmentUserIDCombo.getValue(),
+                        addAppointmentCustomerIDCombo.getValue().getId(), addAppointmentUserIDCombo.getValue().getId(),
                         addAppointmentContactCombo.getValue().getId());
                 if (rowsAdded > 0){
                     stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -254,7 +282,7 @@ public class AddAppointmentController {
      */
     boolean isValidAppointment(){
         ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
-        customerAppointments.addAll(AppointmentsDAO.selectById(addAppointmentCustomerIDCombo.getValue()));
+        customerAppointments.addAll(AppointmentsDAO.selectById(addAppointmentCustomerIDCombo.getValue().getId()));
         boolean isValid = true;
 
         //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
@@ -293,19 +321,10 @@ public class AddAppointmentController {
         contacts.addAll(ContactsDAO.selectAllContacts());
         users.addAll(UsersDAO.selectAllUsers());
         customers.addAll(CustomersDAO.selectAll());
-        ObservableList<Integer> userIds = FXCollections.observableArrayList();
-        ObservableList<Integer> customerIds = FXCollections.observableArrayList();
 
-        for (Users user : users){
-            userIds.add(user.getId());
-        }
-        for (Customers customer : customers){
-            customerIds.add(customer.getId());
-        }
-
-        addAppointmentUserIDCombo.setItems(userIds);
+        addAppointmentUserIDCombo.setItems(users);
         addAppointmentContactCombo.setItems(contacts);
-        addAppointmentCustomerIDCombo.setItems(customerIds);
+        addAppointmentCustomerIDCombo.setItems(customers);
 
     }
 }

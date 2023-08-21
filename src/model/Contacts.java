@@ -79,11 +79,11 @@ public class Contacts {
 
     /**
      * Returns the contact name for display. A method override that displays the contact name to be displayed when
-     * printing out or displaying a contact object.
+     * printing out or displaying a Contacts object.
      * @return the contact name
      */
     @Override
     public String toString() {
-        return name;
+        return "[ID: " + id + "]" + " " + name;
     }
 }

@@ -214,6 +214,18 @@ public class Main extends Application {
         System.out.println("The raw timestamp is " + start);
         System.out.println("The local time is " + start.toLocalDateTime());
         System.out.println("The time now is " + LocalDateTime.now());
+
+        //Test during business hours method
+        Timestamp testStart = Timestamp.valueOf("2023-08-21 8:00:00");
+        Timestamp testEnd = Timestamp.valueOf("2023-08-21 22:00:00");
+        System.out.println("Start time: " + testStart);
+        System.out.println("End time: " + testEnd);
+        if (TimeHelper.duringBusinessHours(testStart, testEnd)){
+            System.out.println("These are during business hours");
+        }
+        else{
+            System.out.println("These are not during business hours.");
+        }
         launch(args);
         JDBC.closeConnection();
     }

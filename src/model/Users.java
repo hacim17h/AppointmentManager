@@ -77,4 +77,13 @@ public class Users {
         this.password = password;
     }
 
+    /**
+     * Returns the username for display. A method override that displays the username to be displayed when
+     * printing out or displaying a users object.
+     * @return the username
+     */
+    @Override
+    public String toString() {
+        return "[ID: " + id + "]" + " " + username;
+    }
 }

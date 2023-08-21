@@ -146,4 +146,14 @@ public class Customers {
     public void setDivisionId(int divisionId) {
         this.divisionId = divisionId;
     }
+
+    /**
+     * Returns the customer name for display. A method override that displays the customer name to be displayed when
+     * printing out or displaying a Customers object.
+     * @return the customer name
+     */
+    @Override
+    public String toString() {
+        return "[ID: " + id + "]" + " " + name;
+    }
 }

@@ -73,13 +73,13 @@
                       <TableColumn fx:id="appointmentIDCol" prefWidth="108.0" text="Appointment ID" />
                       <TableColumn fx:id="appointmentTitleCol" prefWidth="197.0" text="Title" />
                         <TableColumn fx:id="appointmentDescriptionCol" prefWidth="207.0" text="Description" />
-                        <TableColumn fx:id="appointmentLocationCol" prefWidth="153.0" text="Location" />
-                        <TableColumn fx:id="appointmentTypeCol" prefWidth="140.0" text="Type" />
-                        <TableColumn fx:id="appointmentStartCol" prefWidth="145.0" text="Appointment Start" />
-                        <TableColumn fx:id="appointmentEndCol" prefWidth="169.0" text="Appointment End" />
-                        <TableColumn fx:id="appointmentCustomerIDCol" prefWidth="106.0" text="Customer ID" />
-                        <TableColumn fx:id="appointmentUserIDCol" prefWidth="108.0" text="User ID" />
-                        <TableColumn fx:id="appointmentContactCol" prefWidth="116.0" text="Contact ID" />
+                        <TableColumn fx:id="appointmentLocationCol" prefWidth="156.0" text="Location" />
+                        <TableColumn fx:id="appointmentContactCol" prefWidth="142.0" text="Contact" />
+                        <TableColumn fx:id="appointmentTypeCol" prefWidth="166.0" text="Type" />
+                        <TableColumn fx:id="appointmentStartCol" prefWidth="150.0" text="Appointment Start" />
+                        <TableColumn fx:id="appointmentEndCol" prefWidth="150.0" text="Appointment End" />
+                        <TableColumn fx:id="appointmentCustomerIDCol" prefWidth="93.0" text="Customer ID" />
+                        <TableColumn fx:id="appointmentUserIDCol" prefWidth="86.0" text="User ID" />
                     </columns>
                      <HBox.margin>
                         <Insets bottom="10.0" top="10.0" />
