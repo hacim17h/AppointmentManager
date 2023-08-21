@@ -42,18 +42,6 @@ public class Appointments {
     private Timestamp endTime;
 
     /**
-     * Stores the appointment start time in local time.
-     */
-    private Timestamp localStartTime;
-
-
-
-    /**
-     * Stores the appointment end time in local time.
-     */
-    private Timestamp localEndTime;
-
-    /**
      * Stores the customer ID.
      */
     private int customerId;
@@ -265,27 +253,4 @@ public class Appointments {
         this.contactId = contactId;
     }
 
-    /**
-     * Gets the local start time. A getter method that gets the local start time of the appointment
-     * @return the appointment start time relative to the users local time.
-     */
-    public Timestamp getLocalStartTime() {
-        return localStartTime;
-    }
-
-    /**
-     * Gets the local end time. A getter method that gets the local end time of the appointment
-     * @return the appointment end time relative to the users local time.
-     */
-    public Timestamp getLocalEndTime() {
-        return localEndTime;
-    }
-
-    public void setLocalStartTime(Timestamp localStartTime) {
-        this.localStartTime = localStartTime;
-    }
-
-    public void setLocalEndTime(Timestamp localEndTime) {
-        this.localEndTime = localEndTime;
-    }
 }

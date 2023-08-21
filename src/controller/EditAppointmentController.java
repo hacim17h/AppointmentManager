@@ -187,9 +187,9 @@ public class EditAppointmentController {
     }
 
     /**
-     * Prefills the edit appointment form. The method takes passed appointment information from the previous form. Depending
-     * upon which appointment was selected, the options are prefilled and all text fields and combo boxes are set
-     * appropriately.
+     * Prefills the edit appointment form. The method takes passed appointment information from the previous form.
+     * Depending upon which appointment was selected, the options are prefilled and all text fields and combo boxes are
+     * set appropriately.
      * @param selectedAppointment the appointment that was selected in the view appointments table
      */
     void prefillData(Appointments selectedAppointment){
@@ -198,11 +198,11 @@ public class EditAppointmentController {
         editAppointmentDescriptionTxt.setText(selectedAppointment.getDescription());
         editAppointmentLocationTxt.setText(selectedAppointment.getLocation());
         editAppointmentTypeTxt.setText(selectedAppointment.getType());
-        editAppointmentDate.setValue(selectedAppointment.getLocalStartTime().toLocalDateTime().toLocalDate());
+        editAppointmentDate.setValue(selectedAppointment.getStartTime().toLocalDateTime().toLocalDate());
         onActionSelectDate();
         int startIndex = 0;
         for(LocalDateTime hours : appointmentHours){
-            if(hours.isEqual(selectedAppointment.getLocalStartTime().toLocalDateTime())){
+            if(hours.isEqual(selectedAppointment.getStartTime().toLocalDateTime())){
                 break;
             }
             startIndex++;
@@ -212,9 +212,9 @@ public class EditAppointmentController {
 
         int endIndex = 0;
         for(LocalDateTime hours : appointmentEndHours){
-            if(hours.isEqual(selectedAppointment.getLocalEndTime().toLocalDateTime())){
+            if(hours.isEqual(selectedAppointment.getEndTime().toLocalDateTime())){
                 System.out.println("Hours is: " + hours);
-                System.out.println("Selected appointment time is: " + selectedAppointment.getLocalEndTime().toLocalDateTime());
+                System.out.println("Selected appointment time is: " + selectedAppointment.getEndTime().toLocalDateTime());
                 System.out.println("I made it to the if statement and endIndex is: " + endIndex);
                 break;
             }

@@ -107,30 +107,25 @@ public class AddAppointmentController {
     void onActionSelectDate() {
         date = addAppointmentDate.getValue();
         appointmentHours = FXCollections.observableArrayList();
-        displayTime = FXCollections.observableArrayList();
-        ZoneId local = ZoneId.systemDefault();
-        ZoneId utc = ZoneId.of("UTC");
-        ZoneId eastern = ZoneId.of("America/New_York");
-        LocalTime start = LocalTime.of(8,0);
-        LocalTime end = LocalTime.of(22,0);
+        LocalTime start = LocalTime.of(0,0);
         LocalDateTime startTime = LocalDateTime.of(date, start);
-        LocalDateTime endTime = LocalDateTime.of(date, end);
-        ZonedDateTime estStartTime = ZonedDateTime.of(startTime, eastern);
-        ZonedDateTime estEndTime = ZonedDateTime.of(endTime, eastern);
-        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(estStartTime.toInstant(), utc);
-        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(estEndTime.toInstant(), utc);
-        ZonedDateTime convertedStartTime = ZonedDateTime.ofInstant(utcStartTime.toInstant(), local);
-        ZonedDateTime convertedEndTime = ZonedDateTime.ofInstant(utcEndTime.toInstant(), local);
+        LocalDateTime endTime = LocalDateTime.of(date, start).plusDays(1);
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
 
+        System.out.println("The start time is: " + startTime);
+        System.out.println("The end time is: " + endTime);
 
-        while (convertedStartTime.isBefore(convertedEndTime)){
-            displayTime.add(convertedStartTime.toLocalDateTime().format(format));
-            appointmentHours.add(convertedStartTime.toLocalDateTime());
-            convertedStartTime = convertedStartTime.plusHours(1);
+        while (startTime.isBefore(endTime)){
+            appointmentHours.add(startTime);
+            displayTime.add(startTime.format(format));
+            startTime = startTime.plusHours(1);
         }
-        displayTime.add(convertedEndTime.toLocalDateTime().format(format));
-        appointmentHours.add(convertedEndTime.toLocalDateTime());
+        appointmentHours.add(endTime);
+        displayTime.add(endTime.format(format));
+        for (LocalDateTime hours : appointmentHours){
+            System.out.println("The hours are: " + hours);
+        }
+
         addAppointmentEndCombo.setItems(displayTime);
 
         //Removes the last element for the start time since the appointment cant start at business close.
@@ -191,7 +186,7 @@ public class AddAppointmentController {
         if(isValidInput()){
             //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
             DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-            LocalDateTime startTime = LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
+            LocalDateTime startTime =  LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
             LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
             ZoneId local = ZoneId.systemDefault();
             ZoneId utc = ZoneId.of("UTC");

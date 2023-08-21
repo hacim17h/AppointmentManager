@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.*;
 
+import java.sql.SQLOutput;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.*;
@@ -191,18 +192,28 @@ public class Main extends Application {
         System.out.println("The First day of this month is " + today.with(TemporalAdjusters.firstDayOfMonth()));
 
 
-        TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
+        //TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
 
         ObservableList<Appointments> appointments = FXCollections.observableArrayList();
         appointments.addAll(AppointmentsDAO.selectAll());
         Timestamp start = appointments.get(0).getStartTime();
+        ZoneId local = ZoneId.systemDefault();
+        ZonedDateTime localTime = ZonedDateTime.of(start.toLocalDateTime(),local);
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZonedDateTime newUTC = ZonedDateTime.ofInstant(localTime.toInstant(), utcZone);
+        ZonedDateTime estTime = ZonedDateTime.ofInstant(newUTC.toInstant(), local);
         ZonedDateTime normalized = start.toInstant().atZone(ZoneId.of("America/New_York"));
         LocalDateTime testTime =  LocalDateTime.of(normalized.getYear(), normalized.getMonth(), normalized.getDayOfMonth(), normalized.getHour(), normalized.getMinute());
         ZonedDateTime utc = ZonedDateTime.ofInstant(normalized.toInstant(), ZoneId.of("UTC"));
         System.out.println("This is the start timestamp " + normalized);
         System.out.println("This is the start utc timestamp " + utc);
         System.out.println("This is the start testtime timestamp " + testTime);
-
+        System.out.println("This is the start localtime " + localTime);
+        System.out.println("This is the start newUTC " + newUTC);
+        System.out.println("This is the start esttime " + estTime);
+        System.out.println("The raw timestamp is " + start);
+        System.out.println("The local time is " + start.toLocalDateTime());
+        System.out.println("The time now is " + LocalDateTime.now());
         launch(args);
         JDBC.closeConnection();
     }
