@@ -20,30 +20,72 @@ public abstract class TimeHelper {
         return startTime.before(otherEndTime) && endTime.after(otherStartTime);
     }
 
-
+    /**
+     * Determines if times are within business hours. The method takes a start time and time and compares
+     * it to the business hours that are based upon EST. The time is compared in UTC and if the given times are within
+     * the business hours it will return true.
+     * @param startTime when the appointment starts
+     * @param endTime when the appointment ends
+     * @return if the times are within business hours or not
+     */
     public static boolean duringBusinessHours (Timestamp startTime, Timestamp endTime){
+
 
         ZoneId utc = ZoneId.of("UTC");
         ZoneId eastern = ZoneId.of("America/New_York");
-        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(startTime.toInstant(), utc);
-        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(endTime.toInstant(), utc);
-
-        LocalDate date = utcStartTime.toLocalDate();
+        LocalDate date = startTime.toLocalDateTime().toLocalDate();
         LocalTime start = LocalTime.of(8,0);
         LocalTime end = LocalTime.of(22,0);
         LocalDateTime openTime = LocalDateTime.of(date, start);
         LocalDateTime closeTime = LocalDateTime.of(date, end);
         ZonedDateTime estOpenTime = ZonedDateTime.of(openTime, eastern);
         ZonedDateTime estCloseTime = ZonedDateTime.of(closeTime, eastern);
-        ZonedDateTime utcOpenTime = ZonedDateTime.ofInstant(estOpenTime.toInstant(), utc);
-        ZonedDateTime utcCloseTime = ZonedDateTime.ofInstant(estCloseTime.toInstant(), utc);
+        Timestamp openTimestamp = Timestamp.from(ZonedDateTime.ofInstant(estOpenTime.toInstant(), utc).toInstant());
+        Timestamp closedTimestamp = Timestamp.from(ZonedDateTime.ofInstant(estCloseTime.toInstant(), utc).toInstant());
+
+        System.out.println("In Time helper the business open time is: " +openTimestamp);
+        System.out.println("In Time helper the business close time is: " +closedTimestamp);
+        System.out.println("In time helper the start time is: " +startTime);
+        System.out.println("In time helper the end time is: " +endTime);
+        /*ZonedDateTime utcOpenTime = ZonedDateTime.ofInstant(estOpenTime.toInstant(), utc);
+        ZonedDateTime utcCloseTime = ZonedDateTime.ofInstant(estCloseTime.toInstant(), utc);*/
         //ZonedDateTime convertedOpenTime = ZonedDateTime.ofInstant(utcOpenTime.toInstant(), local);
         //ZonedDateTime convertedCloseTime = ZonedDateTime.ofInstant(utcCloseTime.toInstant(), local);
-        System.out.println("The utc start time is: " +utcStartTime);
-        System.out.println("The utc end time is: " +utcEndTime);
-        System.out.println("The business open time is: " + utcOpenTime);
-        System.out.println("The business close time is: " + utcCloseTime);
-        return utcStartTime.isAfter(utcOpenTime.minusNanos(1)) && utcEndTime.isBefore(utcCloseTime.plusNanos(1));
+
+        boolean duringSameDay = false;
+        boolean duringPreviousDay = false;
+        boolean duringNextDay = false;
+        //Does comparisons for time zones that have extreme time differences where certain times go beyond a single day.
+        if ((startTime.after(openTimestamp) || startTime.equals(openTimestamp)) &&
+        (endTime.before(closedTimestamp) || endTime.equals(closedTimestamp))){
+            duringSameDay = true;
+        }
+        if ((startTime.after(Timestamp.valueOf(openTimestamp.toLocalDateTime().minusDays(1))) ||
+                startTime.equals(Timestamp.valueOf(openTimestamp.toLocalDateTime().minusDays(1)))) &&
+                (endTime.before(Timestamp.valueOf(closedTimestamp.toLocalDateTime().minusDays(1))) ||
+                        endTime.equals(Timestamp.valueOf(closedTimestamp.toLocalDateTime().minusDays(1))))){
+            duringPreviousDay = true;
+        }
+        if ((startTime.after(Timestamp.valueOf(openTimestamp.toLocalDateTime().plusDays(1))) ||
+                startTime.equals(Timestamp.valueOf(openTimestamp.toLocalDateTime().plusDays(1)))) &&
+                (endTime.before(Timestamp.valueOf(closedTimestamp.toLocalDateTime().plusDays(1))) ||
+                        endTime.equals(Timestamp.valueOf(closedTimestamp.toLocalDateTime().plusDays(1))))){
+            duringNextDay = true;
+        }
+        System.out.println("During the same day was: " + duringSameDay);
+        System.out.println("During the previous day was: " + duringPreviousDay);
+        System.out.println("During the next day was: " + duringNextDay);
+
+        return duringSameDay || duringPreviousDay || duringNextDay;
+
+
+
+
+        /*return (startTime.after(openTimestamp) || startTime.equals(openTimestamp)) &&
+                (endTime.before(closedTimestamp) || endTime.equals(closedTimestamp));*/
+
+
+        //return utcStartTime.isAfter(utcOpenTime.minusNanos(1)) && utcEndTime.isBefore(utcCloseTime.plusNanos(1));
 
     }
 

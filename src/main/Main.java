@@ -192,8 +192,6 @@ public class Main extends Application {
         System.out.println("The First day of this month is " + today.with(TemporalAdjusters.firstDayOfMonth()));
 
 
-        //TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
-
         ObservableList<Appointments> appointments = FXCollections.observableArrayList();
         appointments.addAll(AppointmentsDAO.selectAll());
         Timestamp start = appointments.get(0).getStartTime();
@@ -226,6 +224,8 @@ public class Main extends Application {
         else{
             System.out.println("These are not during business hours.");
         }
+
+        TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
         launch(args);
         JDBC.closeConnection();
     }

@@ -184,25 +184,6 @@ public class AddAppointmentController {
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
         //If the input is valid the appointment data is inserted into the database and if not an error displays.
-        //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-        LocalDateTime startTime =  LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
-        LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
-        ZoneId local = ZoneId.systemDefault();
-        ZoneId utc = ZoneId.of("UTC");
-        ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
-        ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
-        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(zonedStart.toInstant(), utc);
-        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(zonedEnd.toInstant(), utc);
-        Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
-        Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
-
-        if (TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
-            System.out.println("These are during business hours");
-        }
-        else{
-            System.out.println("These are not during business hours.");
-        }
 
         if(isValidInput()){
             //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
@@ -224,33 +205,69 @@ public class AddAppointmentController {
             else{
                 System.out.println("These are not during business hours.");
             }*/
+            //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+            LocalDateTime startTime =  LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
+            LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
 
-            if(isValidAppointment()){
-                int rowsAdded = AppointmentsDAO.insert(addAppointmentTitleTxt.getText(),
+            ZoneId local = ZoneId.systemDefault();
+            ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
+            ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
+            Timestamp utcStartTimestamp = Timestamp.from(zonedStart.toInstant());
+            Timestamp utcEndTimestamp = Timestamp.from(zonedEnd.toInstant());
+
+            System.out.println("Start time of on action save: " + startTime);
+            System.out.println("Start time of on action save: " + endTime);
+            System.out.println("Zoned Start time to instant of on action save: " + zonedStart.toInstant());
+            System.out.println("Zoned End time to instant of on action save: " + zonedEnd.toInstant());
+            System.out.println("UTC start timestamp of on action save: " + utcStartTimestamp);
+            System.out.println("UTC end timestamp of on action save: " + utcEndTimestamp);
+
+            if (TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
+                System.out.println("These are during business hours");
+            }
+            else{
+                System.out.println("These are not during business hours.");
+            }
+            //Checks to see if the time is within business hours. If true, then the appointment is added.
+            //if not an error is displayed.
+            if(TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
+                if(isValidAppointment()){
+                    int rowsAdded = AppointmentsDAO.insert(addAppointmentTitleTxt.getText(),
                         addAppointmentDescriptionTxt.getText(), addAppointmentLocationTxt.getText(),
                         addAppointmentTypeTxt.getText(), utcStartTimestamp, utcEndTimestamp,
                         addAppointmentCustomerIDCombo.getValue().getId(), addAppointmentUserIDCombo.getValue().getId(),
                         addAppointmentContactCombo.getValue().getId());
-                if (rowsAdded > 0){
-                    stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-                    scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
-                    stage.setScene(new Scene(scene));
-                    stage.show();
+                    if (rowsAdded > 0){
+                        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+                        scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
+                        stage.setScene(new Scene(scene));
+                        stage.show();
+                    }
+                    else{
+                        addAppointmentErrorLbl.setText("The appointment has failed to be added. Please try again.");
+                    }
                 }
                 else{
-                    addAppointmentErrorLbl.setText("The appointment has failed to be added. Please try again.");
+                    addAppointmentErrorLbl.setText("");
+                    Alert failWarning = new Alert(Alert.AlertType.WARNING);
+                    failWarning.setTitle("Unable to schedule appointment");
+                    failWarning.setHeaderText(null);
+                    failWarning.setContentText("The appointment time selected overlaps with an existing appointment." +
+                            "Please select a different date or time.");
+                    failWarning.showAndWait();
+
+
                 }
             }
-            else{
+            else {
                 addAppointmentErrorLbl.setText("");
                 Alert failWarning = new Alert(Alert.AlertType.WARNING);
                 failWarning.setTitle("Unable to schedule appointment");
                 failWarning.setHeaderText(null);
-                failWarning.setContentText("The appointment time you've selected is unavailable. Please select " +
-                                            "a different date or time.");
+                failWarning.setContentText("The appointment time you've selected is not during business hours. " +
+                        "Please select a different time between the hours of 8:00AM ET and 10:00PM ET.");
                 failWarning.showAndWait();
-
-
             }
         }
         else {
@@ -287,16 +304,14 @@ public class AddAppointmentController {
 
         //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-        LocalDateTime startTime = LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
+        LocalDateTime startTime =  LocalDateTime.parse(addAppointmentStartCombo.getValue(), format);
         LocalDateTime endTime = LocalDateTime.parse(addAppointmentEndCombo.getValue(), format);
+
         ZoneId local = ZoneId.systemDefault();
-        ZoneId utc = ZoneId.of("UTC");
         ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
         ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
-        ZonedDateTime utcStartTime = ZonedDateTime.ofInstant(zonedStart.toInstant(), utc);
-        ZonedDateTime utcEndTime = ZonedDateTime.ofInstant(zonedEnd.toInstant(), utc);
-        Timestamp utcStartTimestamp = Timestamp.valueOf(utcStartTime.toLocalDateTime());
-        Timestamp utcEndTimestamp = Timestamp.valueOf(utcEndTime.toLocalDateTime());
+        Timestamp utcStartTimestamp = Timestamp.from(zonedStart.toInstant());
+        Timestamp utcEndTimestamp = Timestamp.from(zonedEnd.toInstant());
 
         for (Appointments appointment : customerAppointments){
             if(TimeHelper.isOverlapping(appointment.getStartTime(), appointment.getEndTime(),
