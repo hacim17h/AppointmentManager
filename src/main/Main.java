@@ -225,7 +225,7 @@ public class Main extends Application {
             System.out.println("These are not during business hours.");
         }
 
-        TimeZone.setDefault(TimeZone.getTimeZone(tokyo));
+        TimeZone.setDefault(TimeZone.getTimeZone(denver));
         launch(args);
         JDBC.closeConnection();
     }

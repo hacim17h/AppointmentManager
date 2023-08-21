@@ -4,6 +4,7 @@ import DAO.AppointmentsDAO;
 import DAO.ContactsDAO;
 import DAO.CustomersDAO;
 import DAO.UsersDAO;
+import helper.TimeHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,11 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointments;
 import model.Contacts;
@@ -23,6 +20,7 @@ import model.Customers;
 import model.Users;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
@@ -63,7 +61,7 @@ public class EditAppointmentController {
     ObservableList<LocalDateTime> appointmentEndHours = FXCollections.observableArrayList();
 
     @FXML
-    private Label addAppointmentErrorLbl;
+    private Label editAppointmentErrorLbl;
 
     @FXML
     private Button editAppointmentCancelBtn;
@@ -175,10 +173,64 @@ public class EditAppointmentController {
      */
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        //If the input is valid the appointment data is inserted into the database and if not an error displays.
+
+        if(isValidInput()){
+            //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+            LocalDateTime startTime =  LocalDateTime.parse(editAppointmentStartCombo.getValue(), format);
+            LocalDateTime endTime = LocalDateTime.parse(editAppointmentEndCombo.getValue(), format);
+
+            ZoneId local = ZoneId.systemDefault();
+            ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
+            ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
+            Timestamp utcStartTimestamp = Timestamp.from(zonedStart.toInstant());
+            Timestamp utcEndTimestamp = Timestamp.from(zonedEnd.toInstant());
+
+            //Checks to see if the time is within business hours. If true, then the appointment is added.
+            //if not an error is displayed.
+            if(TimeHelper.duringBusinessHours(utcStartTimestamp, utcEndTimestamp)){
+                if(isValidAppointment()){
+                    int rowsUpdated = AppointmentsDAO.update(editAppointmentTitleTxt.getText(),
+                        editAppointmentDescriptionTxt.getText(), editAppointmentLocationTxt.getText(),
+                        editAppointmentTypeTxt.getText(), utcStartTimestamp, utcEndTimestamp,
+                        editAppointmentCustomerIDCombo.getValue().getId(),
+                        editAppointmentUserIDCombo.getValue().getId(),
+                        editAppointmentContactCombo.getValue().getId(),
+                        Integer.parseInt(editAppointmentIDTxt.getText()));
+                    if (rowsUpdated > 0){
+                        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+                        scene = FXMLLoader.load(getClass().getResource("/view/ViewAppointmentsForm.fxml"));
+                        stage.setScene(new Scene(scene));
+                        stage.show();
+                    }
+                    else{
+                        editAppointmentErrorLbl.setText("The appointment has failed to be updated. Please try again.");
+                    }
+                }
+                else{
+                    editAppointmentErrorLbl.setText("");
+                    Alert failWarning = new Alert(Alert.AlertType.WARNING);
+                    failWarning.setTitle("Unable to schedule appointment");
+                    failWarning.setHeaderText(null);
+                    failWarning.setContentText("The appointment time selected overlaps with an existing appointment. " +
+                            "Please select a different date or time.");
+                    failWarning.showAndWait();
+                }
+            }
+            else {
+                editAppointmentErrorLbl.setText("");
+                Alert failWarning = new Alert(Alert.AlertType.WARNING);
+                failWarning.setTitle("Unable to schedule appointment");
+                failWarning.setHeaderText(null);
+                failWarning.setContentText("The appointment time you've selected is not during business hours. " +
+                        "Please select a different time between the hours of 8:00AM ET and 10:00PM ET.");
+                failWarning.showAndWait();
+            }
+        }
+        else {
+            editAppointmentErrorLbl.setText("One or more of the fields have been left blank.");
+        }
     }
 
     /**
@@ -227,6 +279,67 @@ public class EditAppointmentController {
         editAppointmentContactCombo.setItems(ContactsDAO.selectAllContacts());
         editAppointmentContactCombo.getSelectionModel().select(
                 ContactsDAO.selectContactsById(selectedAppointment.getContactId()));
+    }
+
+    /**
+     * Checks for valid input in the fields of the add appointment form. If the fields of the add appointment form are
+     * blank, the method return false which indicates the input is invalid. If everything is filled in however it will
+     * return true.
+     * @return true if valid and false if not
+     */
+    @FXML
+    Boolean isValidInput(){
+        return !editAppointmentTitleTxt.getText().isBlank() && !editAppointmentDescriptionTxt.getText().isBlank() &&
+            !editAppointmentLocationTxt.getText().isBlank() && !editAppointmentTypeTxt.getText().isBlank() &&
+            !(editAppointmentStartCombo.getValue() == null) && !(editAppointmentEndCombo.getValue() == null) &&
+            !(editAppointmentContactCombo.getValue() == null) && !(editAppointmentCustomerIDCombo.getValue() == null) &&
+            !(editAppointmentUserIDCombo.getValue() == null) && !(editAppointmentDate.getValue() == null);
+    }
+
+    /**
+     * Checks if the appointment doesn't conflict with others. The method checks the database to see if there
+     * are any appointments that match the contact or the customer and see if the time frame overlaps at all. If
+     * it does not overlap it will return true as it is valid. But, if there is any time conflict it will return false
+     * for invalid.
+     * @return if the appointment is at a valid time or not
+     */
+    boolean isValidAppointment(){
+        ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
+        customerAppointments.addAll(AppointmentsDAO.selectById(editAppointmentCustomerIDCombo.getValue().getId()));
+        boolean isValid = true;
+        boolean sameTime = false;
+        //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+        LocalDateTime startTime =  LocalDateTime.parse(editAppointmentStartCombo.getValue(), format);
+        LocalDateTime endTime = LocalDateTime.parse(editAppointmentEndCombo.getValue(), format);
+
+        ZoneId local = ZoneId.systemDefault();
+        ZonedDateTime zonedStart = ZonedDateTime.of(startTime, local);
+        ZonedDateTime zonedEnd = ZonedDateTime.of(endTime, local);
+        Timestamp utcStartTimestamp = Timestamp.from(zonedStart.toInstant());
+        Timestamp utcEndTimestamp = Timestamp.from(zonedEnd.toInstant());
+
+        //Checks to see if there are any appointments for the specific customer that overlap.
+        for (Appointments appointment : customerAppointments){
+            if(TimeHelper.isOverlapping(appointment.getStartTime(), appointment.getEndTime(),
+                    utcStartTimestamp, utcEndTimestamp)){
+                isValid = false;
+            }
+        }
+
+        //Checks to see if the appointment is at the same time as it was previously and if so returns true.
+        Appointments selectedAppointment = AppointmentsDAO.selectByAppointmentId(
+                Integer.parseInt(editAppointmentIDTxt.getText()));
+
+        if ((utcStartTimestamp.equals(selectedAppointment.getStartTime()) &&
+                utcEndTimestamp.equals(selectedAppointment.getEndTime())) &&
+                (selectedAppointment.getCustomerId() == editAppointmentCustomerIDCombo.getValue().getId())){
+            sameTime = true;
+        }
+
+        System.out.println("The value for same time was: " +sameTime);
+        System.out.println("The value for is valid was: " +isValid);
+        return isValid || sameTime;
     }
 }
 

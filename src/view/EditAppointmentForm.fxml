@@ -253,7 +253,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="addAppointmentErrorLbl" textFill="RED">
+                  <Label fx:id="editAppointmentErrorLbl" textFill="RED">
                      <font>
                         <Font size="14.0" />
                      </font>

@@ -146,17 +146,28 @@ public class ViewAppointmentsController {
             deleteWarning.showAndWait();
             if (deleteWarning.getResult() == yesButton){
                 Appointments selectedAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
-                AppointmentsDAO.delete(selectedAppointment.getId());
+                int rowsDeleted = AppointmentsDAO.delete(selectedAppointment.getId());
                 appointmentTableView.setItems(AppointmentsDAO.selectAll());
                 appointmentTableView.refresh();
 
-                //Displays information pertaining to the deleted appointment upon success.
-                Alert notification = new Alert(Alert.AlertType.INFORMATION);
-                notification.setTitle("Delete successful");
-                notification.setHeaderText(null);
-                notification.setContentText("The Appointment with the ID " + selectedAppointment.getId() +
-                        " of type " + selectedAppointment.getType() + " has been deleted.");
-                notification.showAndWait();
+                if(rowsDeleted > 0){
+                    //Displays information pertaining to the deleted appointment upon success.
+                    Alert notification = new Alert(Alert.AlertType.INFORMATION);
+                    notification.setTitle("Delete successful");
+                    notification.setHeaderText(null);
+                    notification.setContentText("The Appointment with the ID " + selectedAppointment.getId() +
+                            " of type " + selectedAppointment.getType() + " has been deleted.");
+                    notification.showAndWait();
+                }
+                else {
+                    //Displays information pertaining to the failed deletion of the appointment.
+                    Alert notification = new Alert(Alert.AlertType.WARNING);
+                    notification.setTitle("Delete unsuccessful");
+                    notification.setHeaderText(null);
+                    notification.setContentText("The Appointment with the ID " + selectedAppointment.getId() +
+                            " of type " + selectedAppointment.getType() + " has not been deleted.");
+                    notification.showAndWait();
+                }
             }
         }
     }
