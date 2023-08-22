@@ -1,5 +1,7 @@
 package model;
 
+import DAO.DivisionsDAO;
+
 /**A class that stores and retrieves various customer information.*/
 public class Customers {
     /**
@@ -33,6 +35,11 @@ public class Customers {
     private int divisionId;
 
     /**
+     * Stores the division name for display.
+     */
+    private String divisionDisplay;
+
+    /**
      * A class constructor that initializes the id, name, address, postal code, phone number
      * and first-level divisions for the country.
      * @param id customer ID
@@ -49,6 +56,7 @@ public class Customers {
         setPostalCode(postalCode);
         setPhoneNum(phoneNum);
         setDivisionId(divisionId);
+        divisionDisplay = DivisionsDAO.selectByDivisionId(divisionId).getName();
     }
 
     /**
@@ -155,5 +163,14 @@ public class Customers {
     @Override
     public String toString() {
         return "[ID: " + id + "]" + " " + name;
+    }
+
+    /**
+     * Returns the division name for display. The method returns a string that can be used in tables to have and
+     * alternate method of displaying the division for the object.
+     * @return the division name
+     */
+    public String getDivisionDisplay() {
+        return divisionDisplay;
     }
 }

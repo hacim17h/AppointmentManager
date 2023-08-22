@@ -176,7 +176,7 @@ public class ViewCustomerController {
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
         customerPostalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phoneNum"));
-        customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
+        customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionDisplay"));
     }
 }
 
