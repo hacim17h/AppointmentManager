@@ -88,6 +88,10 @@ public class EditAppointmentController {
     private ComboBox<String> editAppointmentStartCombo;
 
     @FXML
+    private ComboBox<String> editAppointmentTypeCombo;
+
+
+    @FXML
     private TextField editAppointmentIDTxt;
 
     @FXML
@@ -96,14 +100,8 @@ public class EditAppointmentController {
     @FXML
     private Button editAppointmentSaveBtn;
 
-
-
     @FXML
     private TextField editAppointmentTitleTxt;
-
-    @FXML
-    private TextField editAppointmentTypeTxt;
-
 
 
     /**
@@ -193,7 +191,7 @@ public class EditAppointmentController {
                 if(isValidAppointment()){
                     int rowsUpdated = AppointmentsDAO.update(editAppointmentTitleTxt.getText(),
                         editAppointmentDescriptionTxt.getText(), editAppointmentLocationTxt.getText(),
-                        editAppointmentTypeTxt.getText(), utcStartTimestamp, utcEndTimestamp,
+                        editAppointmentTypeCombo.getValue(), utcStartTimestamp, utcEndTimestamp,
                         editAppointmentCustomerIDCombo.getValue().getId(),
                         editAppointmentUserIDCombo.getValue().getId(),
                         editAppointmentContactCombo.getValue().getId(),
@@ -245,12 +243,12 @@ public class EditAppointmentController {
         editAppointmentTitleTxt.setText(selectedAppointment.getTitle());
         editAppointmentDescriptionTxt.setText(selectedAppointment.getDescription());
         editAppointmentLocationTxt.setText(selectedAppointment.getLocation());
-        editAppointmentTypeTxt.setText(selectedAppointment.getType());
         editAppointmentDate.setValue(selectedAppointment.getStartTime().toLocalDateTime().toLocalDate());
 
         //Populates start time and end time combo boxes and selects proper start time.
         onActionSelectDate();
         int startIndex = 0;
+
         for(LocalDateTime hours : appointmentHours){
             if(hours.isEqual(selectedAppointment.getStartTime().toLocalDateTime())){
                 break;
@@ -264,6 +262,7 @@ public class EditAppointmentController {
         appointmentEndHours = FXCollections.observableArrayList(
                 appointmentHours.subList(startIndex+1, appointmentHours.size()));
         int endIndex = 0;
+
         for(LocalDateTime hours : appointmentEndHours){
             if(hours.isEqual(selectedAppointment.getEndTime().toLocalDateTime())){
                 break;
@@ -271,6 +270,31 @@ public class EditAppointmentController {
             endIndex++;
         }
         editAppointmentEndCombo.getSelectionModel().select(endIndex);
+
+        //Selects the proper appointment type.
+        ObservableList<String> appointmentTypes = FXCollections.observableArrayList();
+        appointmentTypes.addAll("Planning Session", "De-Briefing", "Celebration", "Lunch", "Team Building",
+                "Gaming Session", "Training");
+        editAppointmentTypeCombo.setItems(appointmentTypes);
+        int typeIndex = 0;
+        boolean found = false;
+
+        for(String type : appointmentTypes){
+            if(type.equals(selectedAppointment.getType())){
+                found = true;
+                break;
+            }
+            typeIndex++;
+        }
+        //If the type doesn't exist add it and select it.
+        if(found){
+            editAppointmentTypeCombo.getSelectionModel().select(typeIndex);
+        }
+        else {
+            appointmentTypes.add(selectedAppointment.getType());
+            editAppointmentTypeCombo.setItems(appointmentTypes);
+            editAppointmentTypeCombo.getSelectionModel().selectLast();
+        }
 
         //Populates and selects the remaining combo boxes.
         editAppointmentUserIDCombo.setItems(UsersDAO.selectAllUsers());
@@ -293,7 +317,7 @@ public class EditAppointmentController {
     @FXML
     Boolean isValidInput(){
         return !editAppointmentTitleTxt.getText().isBlank() && !editAppointmentDescriptionTxt.getText().isBlank() &&
-            !editAppointmentLocationTxt.getText().isBlank() && !editAppointmentTypeTxt.getText().isBlank() &&
+            !editAppointmentLocationTxt.getText().isBlank() && !(editAppointmentTypeCombo.getValue() == null) &&
             !(editAppointmentStartCombo.getValue() == null) && !(editAppointmentEndCombo.getValue() == null) &&
             !(editAppointmentContactCombo.getValue() == null) && !(editAppointmentCustomerIDCombo.getValue() == null) &&
             !(editAppointmentUserIDCombo.getValue() == null) && !(editAppointmentDate.getValue() == null);
@@ -345,6 +369,7 @@ public class EditAppointmentController {
         }
         return isValid;
     }
+
 }
 
 
