@@ -5,10 +5,6 @@ import javafx.collections.ObservableList;
 import model.Appointments;
 
 import java.sql.*;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 /** A class that handles basic CRUD functionality for the appointments table.*/
 public class AppointmentsDAO {
@@ -51,7 +47,7 @@ public class AppointmentsDAO {
      * @param customerId the id of the customer
      * @return a list containing all appointments
      */
-    public static ObservableList<Appointments> selectById(int customerId){
+    public static ObservableList<Appointments> selectByCustomerId(int customerId){
         String query = "SELECT * FROM client_schedule.appointments WHERE Customer_ID = ?";
         ObservableList<Appointments> appointments = FXCollections.observableArrayList();
         try{

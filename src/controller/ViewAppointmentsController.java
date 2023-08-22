@@ -131,7 +131,6 @@ public class ViewAppointmentsController {
      * Removes the selected appointment. When the button is pressed, the selected appointment is removed from the
      * tableview as well as the database after confirming with the user that they are sure of their actions.
      * @param event helps get the window that caused the event
-     * @throws IOException for handling any input output exceptions
      */
     @FXML
     void onActionDeleteAppointment(ActionEvent event) {

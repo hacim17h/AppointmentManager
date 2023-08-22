@@ -248,7 +248,7 @@ public class EditAppointmentController {
         editAppointmentTypeTxt.setText(selectedAppointment.getType());
         editAppointmentDate.setValue(selectedAppointment.getStartTime().toLocalDateTime().toLocalDate());
 
-        //Populates time combo boxes.
+        //Populates start time and end time combo boxes and selects proper start time.
         onActionSelectDate();
         int startIndex = 0;
         for(LocalDateTime hours : appointmentHours){
@@ -260,6 +260,9 @@ public class EditAppointmentController {
         editAppointmentStartCombo.getSelectionModel().select(startIndex);
         onActionSelectStart();
 
+        //Selects proper end time.
+        appointmentEndHours = FXCollections.observableArrayList(
+                appointmentHours.subList(startIndex+1, appointmentHours.size()));
         int endIndex = 0;
         for(LocalDateTime hours : appointmentEndHours){
             if(hours.isEqual(selectedAppointment.getEndTime().toLocalDateTime())){
@@ -305,7 +308,7 @@ public class EditAppointmentController {
      */
     boolean isValidAppointment(){
         ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
-        customerAppointments.addAll(AppointmentsDAO.selectById(editAppointmentCustomerIDCombo.getValue().getId()));
+        customerAppointments.addAll(AppointmentsDAO.selectByCustomerId(editAppointmentCustomerIDCombo.getValue().getId()));
         boolean isValid = true;
         boolean sameTime = false;
         //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.

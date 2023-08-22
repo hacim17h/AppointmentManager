@@ -130,4 +130,23 @@ public abstract class CustomersDAO {
         }
         return customers.get(0);
     }
+
+    /**
+     * Deletes a customer. The method takes a customer ID and then compares it against the database. If the
+     * customer ID exists, the customer is deleted.
+     * @param customerId customer ID
+     * @return the number of rows deleted
+     */
+    public static int delete(int customerId ){
+        int rowsDeleted = 0;
+        String query = "DELETE FROM client_schedule.customers WHERE Customer_ID = ?";
+        try {
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setInt(1, customerId);
+            rowsDeleted = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rowsDeleted;
+    }
 }

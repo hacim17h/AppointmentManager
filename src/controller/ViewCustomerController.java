@@ -1,16 +1,18 @@
 package controller;
 
+import DAO.AppointmentsDAO;
 import DAO.CustomersDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointments;
 import model.Customers;
 
 import java.io.IOException;
@@ -101,12 +103,52 @@ public class ViewCustomerController {
     /**
      * Removes the selected customer. When the button is pressed, the selected customer is removed from the tableview
      * as well as the database after confirming with the user that they are sure of their actions.
-     * @param event helps get the window that caused the event
-     * @throws IOException for handling any input output exceptions
      */
     @FXML
-    void onActionDeleteCustomer(ActionEvent event) {
+    void onActionDeleteCustomer() {
+        if (customerTableView.getSelectionModel().getSelectedItem() != null){
+            Alert deleteWarning = new Alert(Alert.AlertType.WARNING);
+            deleteWarning.setTitle("Confirmation");
+            deleteWarning.setHeaderText(null);
+            deleteWarning.setContentText("Are you sure you want to delete the customer?");
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+            deleteWarning.getButtonTypes().setAll(yesButton, noButton);
+            deleteWarning.showAndWait();
+            if (deleteWarning.getResult() == yesButton){
+                //Delete all the appointments associated with the customer first.
+                Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+                ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+                appointments.addAll(AppointmentsDAO.selectByCustomerId(selectedCustomer.getId()));
+                for (Appointments appointment : appointments){
+                    AppointmentsDAO.delete(appointment.getId());
+                    System.out.println("The appointment customer that was deleted was: " + appointment.getCustomerId());
 
+                }
+
+                //Delete the customer.
+                int rowsDeleted = CustomersDAO.delete(selectedCustomer.getId());
+                customerTableView.setItems(CustomersDAO.selectAll());
+                customerTableView.refresh();
+
+                if(rowsDeleted > 0){
+                    //Displays information pertaining to the deleted customer upon success.
+                    Alert notification = new Alert(Alert.AlertType.INFORMATION);
+                    notification.setTitle("Delete successful");
+                    notification.setHeaderText(null);
+                    notification.setContentText("The Customer has been deleted successfully.");
+                    notification.showAndWait();
+                }
+                else {
+                    //Displays information pertaining to the failed deletion of the appointment.
+                    Alert notification = new Alert(Alert.AlertType.WARNING);
+                    notification.setTitle("Delete unsuccessful");
+                    notification.setHeaderText(null);
+                    notification.setContentText("The customer has not been deleted.");
+                    notification.showAndWait();
+                }
+            }
+        }
     }
 
     /**

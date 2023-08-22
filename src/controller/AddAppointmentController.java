@@ -20,7 +20,6 @@ import model.Customers;
 import model.Users;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -247,7 +246,7 @@ public class AddAppointmentController {
      */
     boolean isValidAppointment(){
         ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
-        customerAppointments.addAll(AppointmentsDAO.selectById(addAppointmentCustomerIDCombo.getValue().getId()));
+        customerAppointments.addAll(AppointmentsDAO.selectByCustomerId(addAppointmentCustomerIDCombo.getValue().getId()));
         boolean isValid = true;
 
         //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
