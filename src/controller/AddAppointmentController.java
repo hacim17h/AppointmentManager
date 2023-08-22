@@ -83,6 +83,9 @@ public class AddAppointmentController {
     private ComboBox<Users> addAppointmentUserIDCombo;
 
     @FXML
+    private ComboBox<String> addAppointmentTypeCombo;
+
+    @FXML
     private TextField addAppointmentIDTxt;
 
     @FXML
@@ -90,9 +93,6 @@ public class AddAppointmentController {
 
     @FXML
     private TextField addAppointmentTitleTxt;
-
-    @FXML
-    private TextField addAppointmentTypeTxt;
 
     @FXML
     private Label addAppointmentErrorLbl;
@@ -126,6 +126,8 @@ public class AddAppointmentController {
         ObservableList<String> startTimes = FXCollections.observableArrayList(
                                             displayTime.subList(0, displayTime.size()-1));
         addAppointmentStartCombo.setItems(startTimes);
+
+        addAppointmentEndCombo.setDisable(true);
     }
 
     /**
@@ -184,7 +186,7 @@ public class AddAppointmentController {
                 if(isValidAppointment()){
                     int rowsAdded = AppointmentsDAO.insert(addAppointmentTitleTxt.getText(),
                         addAppointmentDescriptionTxt.getText(), addAppointmentLocationTxt.getText(),
-                        addAppointmentTypeTxt.getText(), utcStartTimestamp, utcEndTimestamp,
+                        addAppointmentTypeCombo.getValue(), utcStartTimestamp, utcEndTimestamp,
                         addAppointmentCustomerIDCombo.getValue().getId(), addAppointmentUserIDCombo.getValue().getId(),
                         addAppointmentContactCombo.getValue().getId());
                     if (rowsAdded > 0){
@@ -231,7 +233,7 @@ public class AddAppointmentController {
     @FXML
     Boolean isValidInput(){
         return !addAppointmentTitleTxt.getText().isBlank() && !addAppointmentDescriptionTxt.getText().isBlank() &&
-             !addAppointmentLocationTxt.getText().isBlank() && !addAppointmentTypeTxt.getText().isBlank() &&
+             !addAppointmentLocationTxt.getText().isBlank() && !(addAppointmentTypeCombo.getValue() == null) &&
              !(addAppointmentStartCombo.getValue() == null) && !(addAppointmentEndCombo.getValue() == null) &&
              !(addAppointmentContactCombo.getValue() == null) && !(addAppointmentCustomerIDCombo.getValue() == null) &&
              !(addAppointmentUserIDCombo.getValue() == null) && !(addAppointmentDate.getValue() == null);
@@ -280,6 +282,10 @@ public class AddAppointmentController {
         ObservableList<Contacts> contacts = FXCollections.observableArrayList();
         ObservableList<Users> users = FXCollections.observableArrayList();
         ObservableList<Customers> customers = FXCollections.observableArrayList();
+        ObservableList<String> appointmentTypes = FXCollections.observableArrayList();
+
+        appointmentTypes.addAll("Planning Session", "De-Briefing", "Celebration", "Lunch", "Team Building",
+                             "Gaming Session", "Training");
         contacts.addAll(ContactsDAO.selectAllContacts());
         users.addAll(UsersDAO.selectAllUsers());
         customers.addAll(CustomersDAO.selectAll());
@@ -287,6 +293,8 @@ public class AddAppointmentController {
         addAppointmentUserIDCombo.setItems(users);
         addAppointmentContactCombo.setItems(contacts);
         addAppointmentCustomerIDCombo.setItems(customers);
+        addAppointmentTypeCombo.setItems(appointmentTypes);
+
 
     }
 }
