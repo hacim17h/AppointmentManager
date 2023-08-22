@@ -4,6 +4,7 @@ import DAO.ContactsDAO;
 
 import java.sql.Timestamp;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 
 /**A class that stores and retrieves various appointment information.*/
@@ -271,5 +272,12 @@ public class Appointments {
      */
     public String getContactDisplay() {
         return contactDisplay;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm");
+        String displayStart = startTime.toLocalDateTime().format(formatter);
+        return "Appointment ID: " + id + " on " + displayStart;
     }
 }

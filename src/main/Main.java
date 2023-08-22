@@ -22,6 +22,7 @@ import java.util.TimeZone;
 
 public class Main extends Application {
     public static Users sessionUser = new Users(999,"Username", "Password");
+    public static boolean loginSuccess = false;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -226,7 +227,8 @@ public class Main extends Application {
             System.out.println("These are not during business hours.");
         }
 
-        TimeZone.setDefault(TimeZone.getTimeZone(denver));
+        //TimeZone.setDefault(TimeZone.getTimeZone(denver));
+        System.out.println(LocalDateTime.now());
         launch(args);
         JDBC.closeConnection();
     }

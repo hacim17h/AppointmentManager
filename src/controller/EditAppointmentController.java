@@ -322,6 +322,12 @@ public class EditAppointmentController {
         Timestamp utcStartTimestamp = Timestamp.from(zonedStart.toInstant());
         Timestamp utcEndTimestamp = Timestamp.from(zonedEnd.toInstant());
 
+        //Checks to see if the appointment is at the same time as it was previously and if so returns true.
+        Appointments selectedAppointment = AppointmentsDAO.selectByAppointmentId(
+                Integer.parseInt(editAppointmentIDTxt.getText()));
+
+        customerAppointments.remove(selectedAppointment);
+
         //Checks to see if there are any appointments for the specific customer that overlap.
         for (Appointments appointment : customerAppointments){
             if(TimeHelper.isOverlapping(appointment.getStartTime(), appointment.getEndTime(),
@@ -330,10 +336,7 @@ public class EditAppointmentController {
             }
         }
 
-        //Checks to see if the appointment is at the same time as it was previously and if so returns true.
-        Appointments selectedAppointment = AppointmentsDAO.selectByAppointmentId(
-                Integer.parseInt(editAppointmentIDTxt.getText()));
-
+/*
         if ((utcStartTimestamp.equals(selectedAppointment.getStartTime()) &&
                 utcEndTimestamp.equals(selectedAppointment.getEndTime())) &&
                 (selectedAppointment.getCustomerId() == editAppointmentCustomerIDCombo.getValue().getId())){
@@ -341,8 +344,9 @@ public class EditAppointmentController {
         }
 
         System.out.println("The value for same time was: " +sameTime);
-        System.out.println("The value for is valid was: " +isValid);
-        return isValid || sameTime;
+        System.out.println("The value for is valid was: " +isValid);*/
+        return isValid;
+//        return isValid || sameTime;
     }
 }
 

@@ -1,14 +1,22 @@
 package controller;
 
+import DAO.AppointmentsDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import main.Main;
+import model.Appointments;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class MainMenuController {
     /**
@@ -91,7 +99,46 @@ public class MainMenuController {
      * minutes of the time they have logged in. This is based upon local time.
      */
     void loginAlert(){
+        if(!Main.loginSuccess)
+        {
+            LocalDateTime now = LocalDateTime.now();
+            ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+            ObservableList<Appointments> upcomingAppointments = FXCollections.observableArrayList();
+            appointments.addAll(AppointmentsDAO.selectAll());
 
+            //If there are appointments upcoming in 15 minutes store them and then show an alert with the details.
+            for (Appointments appointment : appointments) {
+                LocalDateTime localStartTime = appointment.getStartTime().toLocalDateTime();
+                if ((localStartTime.isEqual(now) || localStartTime.isAfter(now)) &&
+                        (localStartTime.isEqual(now.plusMinutes(15)) || localStartTime.isBefore(now.plusMinutes(15)))) {
+                    upcomingAppointments.add(appointment);
+                }
+            }
+            if (!(upcomingAppointments.isEmpty())) {
+                for (Appointments upcoming : upcomingAppointments) {
+                    Alert notification = new Alert(Alert.AlertType.INFORMATION);
+                    notification.setTitle("Upcoming Appointment");
+                    notification.setHeaderText(null);
+                    notification.setContentText("You have an upcoming appointment. Here are the details: \n" +
+                            upcoming.toString() + ".");
+                    notification.showAndWait();
+                }
+            } else {
+                Alert notification = new Alert(Alert.AlertType.INFORMATION);
+                notification.setTitle("Upcoming Appointment");
+                notification.setHeaderText(null);
+                notification.setContentText("You have no upcoming appointments.");
+                notification.showAndWait();
+            }
+        }
+    }
+    /**
+     * A special method that displays the initial values. The table views are populated with the customer information
+     * from the database and the columns values are set properly.
+     */
+    public void initialize(){
+        loginAlert();
+        Main.loginSuccess = true;
     }
 
 }
