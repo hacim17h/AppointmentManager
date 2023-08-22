@@ -369,7 +369,6 @@ public class EditAppointmentController {
         }
         return isValid;
     }
-
 }
 
 

@@ -1,5 +1,8 @@
 package controller;
 
+import DAO.AppointmentsDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +12,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import model.Appointments;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.temporal.TemporalAdjusters;
 
 public class TotalsByTypeReportController {
     /**
@@ -22,26 +30,49 @@ public class TotalsByTypeReportController {
      * Stores the scene.
      */
     Parent scene;
-
+    /**
+     * Stores all appointments.
+     */
+    ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+    @FXML
+    private ComboBox<String> byTypeCombo;
 
     @FXML
-    private ComboBox<?> byCountryCombo;
+    private ComboBox<String> byTypeMonthCombo;
 
     @FXML
-    private Button byCountryGenerateBtn;
+    private Button byTypeGenerateBtn;
 
     @FXML
-    private Button byCountryMainMenuBtn;
+    private Button byTypeMainMenuBtn;
 
     @FXML
-    private Label byCountryResultLbl;
+    private Label byTypeResultLbl;
 
     @FXML
-    private Label byCountryResultTitleLbl;
+    private Label byTypeResultTitleLbl;
 
+    /**
+     * Generates a report when the generate button is clicked. The method checks if there is selections made, and if
+     * there are a report with the user data requested is displayed.
+     */
     @FXML
-    void onActionGenerateReport(ActionEvent event) {
+    void onActionGenerateReport() {
+        //Preforms input validation for if the combo boxes are populated and then generates the report.
+        if(!(byTypeMonthCombo.getValue() == null || byTypeCombo.getValue() == null)){
+            int typeCount = 0;
+            Month monthSelection = Month.valueOf(byTypeMonthCombo.getValue().toUpperCase());
+            String typeSelection = byTypeCombo.getValue();
 
+            for(Appointments appointment : appointments){
+                if((appointment.getType().equals(typeSelection)) &&
+                        appointment.getStartTime().toLocalDateTime().getMonth().equals(monthSelection)){
+                    typeCount++;
+                }
+            }
+            byTypeResultTitleLbl.setText(byTypeMonthCombo.getValue());
+            byTypeResultLbl.setText(byTypeMonthCombo.getValue() + " - " + typeSelection + " - " + typeCount);
+        }
     }
 
     /**
@@ -57,4 +88,33 @@ public class TotalsByTypeReportController {
         stage.show();
     }
 
+    /**
+     * A special method that displays the initial values. The combo boxes are populated with the type and month
+     * information from the database.
+     */
+    public void initialize(){
+        ObservableList<String> months = FXCollections.observableArrayList();
+        months.addAll("January", "February", "March", "April", "May", "June", "July", "August", "September",
+                "October", "November", "December");
+        appointments.addAll(AppointmentsDAO.selectAll());
+        ObservableList<String> types = FXCollections.observableArrayList();
+        types.addAll("Planning Session", "De-Briefing", "Celebration", "Lunch", "Team Building",
+                "Gaming Session", "Training");
+
+        //Goes through the appointments and adds any types that exist if they are new types.
+        for(Appointments appointment : appointments){
+            boolean exists = false;
+            for (String type : types){
+                if (appointment.getType().equals(type)) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists){
+                types.add(appointment.getType());
+            }
+        }
+        byTypeCombo.setItems(types);
+        byTypeMonthCombo.setItems(months);
+    }
 }

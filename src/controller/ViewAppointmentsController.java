@@ -223,17 +223,17 @@ public class ViewAppointmentsController {
     void onActionSelectThisMonth() {
         ObservableList<Appointments> appointments = FXCollections.observableArrayList();
         appointments.addAll(AppointmentsDAO.selectAll());
-        ObservableList<Appointments> appointmentsThisWeek = FXCollections.observableArrayList();
+        ObservableList<Appointments> appointmentsThisMonth = FXCollections.observableArrayList();
         LocalDate today = LocalDate.now();
         LocalDate monthStart = today.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate monthEnd = today.with(TemporalAdjusters.lastDayOfMonth());
         for (Appointments appointment : appointments){
             if(appointment.getStartTime().toLocalDateTime().isAfter(monthStart.atStartOfDay().minusNanos(1)) &&
                     appointment.getStartTime().toLocalDateTime().isBefore(monthEnd.atStartOfDay().plusDays(1))){
-                appointmentsThisWeek.add(appointment);
+                appointmentsThisMonth.add(appointment);
             }
         }
-        appointmentTableView.setItems(appointmentsThisWeek);
+        appointmentTableView.setItems(appointmentsThisMonth);
         appointmentTableView.refresh();
     }
 

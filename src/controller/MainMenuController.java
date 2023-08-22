@@ -139,6 +139,7 @@ public class MainMenuController {
     public void initialize(){
         loginAlert();
         Main.loginSuccess = true;
+
     }
 
 }
