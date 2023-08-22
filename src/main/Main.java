@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 public class Main extends Application {
+    public static Users sessionUser = new Users(999,"Username", "Password");
 
     @Override
     public void start(Stage primaryStage) throws Exception{

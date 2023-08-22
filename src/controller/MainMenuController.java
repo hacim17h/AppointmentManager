@@ -81,4 +81,17 @@ public class MainMenuController {
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
+     /*A custom message should be displayed in the user interface and include the appointment ID, date, and time.
+     If the user does not have any appointments within 15 minutes of logging in, display a custom message in the user
+     interface indicating there are no upcoming appointments.*/
+
+    /**
+     * Notifies the user of any upcoming appointments. Gives a notification if there is an appointment within 15
+     * minutes of the time they have logged in. This is based upon local time.
+     */
+    void loginAlert(){
+
+    }
+
 }

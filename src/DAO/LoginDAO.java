@@ -1,6 +1,8 @@
 package DAO;
 
+import controller.MainMenuController;
 import helper.LogMessage;
+import main.Main;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,12 +58,13 @@ public abstract class LoginDAO {
     public static void recordLogins (Boolean success){
         try{
             Path path = Paths.get("login_activity.txt");
-
             LocalDateTime dateTime = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm:ss");
             String timestamp = dateTime.format(formatter);
-            LogMessage successfulMessage = () -> "Login attempt on " + timestamp + " was successful.";
-            LogMessage unsuccessfulMessage = () -> "Login attempt on " + timestamp + " was unsuccessful.";
+            LogMessage successfulMessage = () -> "Login attempt on " + timestamp + " by "
+                    + Main.sessionUser.getUsername() + " was successful.";
+            LogMessage unsuccessfulMessage = () -> "Login attempt on " + timestamp + " by "
+                    + Main.sessionUser.getUsername() +" was unsuccessful.";
             if(Files.notExists(path)){
                 Files.createFile(path);
                 String logEntry;

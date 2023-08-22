@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import main.Main;
 
 
 import java.io.IOException;
@@ -75,11 +76,13 @@ public class LoginController {
             scene = FXMLLoader.load(getClass().getResource("/view/MainMenuForm.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
+            Main.sessionUser.setUsername(loginUsernameText.getText());
             LoginDAO.recordLogins(success);
         }
         else
         {
             loginErrorLbl.setText(rb.getString("The username and/or password is incorrect."));
+            Main.sessionUser.setUsername(loginUsernameText.getText());
             LoginDAO.recordLogins(success);
         }
 
