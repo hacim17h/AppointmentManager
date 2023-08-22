@@ -308,9 +308,10 @@ public class EditAppointmentController {
      */
     boolean isValidAppointment(){
         ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
-        customerAppointments.addAll(AppointmentsDAO.selectByCustomerId(editAppointmentCustomerIDCombo.getValue().getId()));
+        customerAppointments.addAll(AppointmentsDAO.selectByCustomerId(
+                editAppointmentCustomerIDCombo.getValue().getId()));
         boolean isValid = true;
-        boolean sameTime = false;
+
         //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
         LocalDateTime startTime =  LocalDateTime.parse(editAppointmentStartCombo.getValue(), format);
@@ -322,11 +323,18 @@ public class EditAppointmentController {
         Timestamp utcStartTimestamp = Timestamp.from(zonedStart.toInstant());
         Timestamp utcEndTimestamp = Timestamp.from(zonedEnd.toInstant());
 
-        //Checks to see if the appointment is at the same time as it was previously and if so returns true.
+        //Removes the appointment that is currently being edited from being compared to avoid overlapping with itself.
         Appointments selectedAppointment = AppointmentsDAO.selectByAppointmentId(
                 Integer.parseInt(editAppointmentIDTxt.getText()));
+        int deleteIndex = 0;
 
-        customerAppointments.remove(selectedAppointment);
+        for (int i = 0; i < customerAppointments.size(); i++){
+            if (customerAppointments.get(i).getId() == selectedAppointment.getId()){
+                deleteIndex = i;
+                break;
+            }
+        }
+        customerAppointments.remove(deleteIndex);
 
         //Checks to see if there are any appointments for the specific customer that overlap.
         for (Appointments appointment : customerAppointments){
@@ -335,18 +343,7 @@ public class EditAppointmentController {
                 isValid = false;
             }
         }
-
-/*
-        if ((utcStartTimestamp.equals(selectedAppointment.getStartTime()) &&
-                utcEndTimestamp.equals(selectedAppointment.getEndTime())) &&
-                (selectedAppointment.getCustomerId() == editAppointmentCustomerIDCombo.getValue().getId())){
-            sameTime = true;
-        }
-
-        System.out.println("The value for same time was: " +sameTime);
-        System.out.println("The value for is valid was: " +isValid);*/
         return isValid;
-//        return isValid || sameTime;
     }
 }
 
