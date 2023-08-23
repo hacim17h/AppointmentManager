@@ -78,7 +78,7 @@ public class Users {
     }
 
     /**
-     * Returns the username for display. A method override that displays the username to be displayed when
+     * Returns the username for display. A method override that displays the username and id to be displayed when
      * printing out or displaying a users object.
      * @return the username
      */

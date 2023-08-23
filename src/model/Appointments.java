@@ -3,7 +3,6 @@ package model;
 import DAO.ContactsDAO;
 
 import java.sql.Timestamp;
-import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -96,15 +95,6 @@ public class Appointments {
         setContactId(contactId);
         contactDisplay =  ContactsDAO.selectContactsById(contactId).getName();
 
-
-        //Converts the timestamps to local time to store them.
-/*        ZoneId local = ZoneId.systemDefault();
-        ZoneId utc = ZoneId.of("UTC");
-        ZonedDateTime zonedStart = ZonedDateTime.of(startTime.toLocalDateTime(), utc);
-        ZonedDateTime zonedEnd = ZonedDateTime.of(endTime.toLocalDateTime(), utc);
-        localStartTime = Timestamp.valueOf(ZonedDateTime.ofInstant(zonedStart.toInstant(), local).toLocalDateTime());
-        localEndTime = Timestamp.valueOf(ZonedDateTime.ofInstant(zonedEnd.toInstant(), local).toLocalDateTime());
-        */
     }
 
     /**
