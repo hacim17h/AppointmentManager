@@ -51,20 +51,12 @@ public class EditAppointmentController {
     ObservableList<String> displayTime = FXCollections.observableArrayList();
 
     /**
-     * Stores the contact ids.
-     */
-    ObservableList<Integer> contactIds = FXCollections.observableArrayList();
-
-    /**
      * Stores the valid end time for the appointments.
      */
     ObservableList<LocalDateTime> appointmentEndHours = FXCollections.observableArrayList();
 
     @FXML
     private Label editAppointmentErrorLbl;
-
-    @FXML
-    private Button editAppointmentCancelBtn;
 
     @FXML
     private ComboBox<Contacts> editAppointmentContactCombo;
@@ -90,7 +82,6 @@ public class EditAppointmentController {
     @FXML
     private ComboBox<String> editAppointmentTypeCombo;
 
-
     @FXML
     private TextField editAppointmentIDTxt;
 
@@ -98,16 +89,11 @@ public class EditAppointmentController {
     private TextField editAppointmentLocationTxt;
 
     @FXML
-    private Button editAppointmentSaveBtn;
-
-    @FXML
     private TextField editAppointmentTitleTxt;
-
 
     /**
      * Sets the appointment start and end times properly. When a date is selected, the appointment start and end
-     * combo boxes are populated with correct times and dates based upon the business hours and the users local time
-     * zone.
+     * combo boxes are populated with times and dates based upon the users time zone.
      */
     @FXML
     void onActionSelectDate() {

@@ -29,9 +29,6 @@ public class ViewCustomerController {
     Parent scene;
 
     @FXML
-    private Button customerAddButton;
-
-    @FXML
     private TableView<Customers> customerTableView;
 
     @FXML
@@ -52,16 +49,7 @@ public class ViewCustomerController {
     @FXML
     private TableColumn<Customers, String> customerPostalCodeCol;
 
-    @FXML
-    private Button customerEditButton;
-
-    @FXML
-    private Button customerMainMenu;
-
-    @FXML
-    private Button customerDeleteButton;
-
-    /**
+     /**
      * Displays the add customer form. When the button is pressed, the scene is changed to the
      * AddCustomerForm.fxml which allows the user to add customer details to be inserted into the database and
      * tableview.
@@ -122,8 +110,6 @@ public class ViewCustomerController {
                 appointments.addAll(AppointmentsDAO.selectByCustomerId(selectedCustomer.getId()));
                 for (Appointments appointment : appointments){
                     AppointmentsDAO.delete(appointment.getId());
-                    System.out.println("The appointment customer that was deleted was: " + appointment.getCustomerId());
-
                 }
 
                 //Delete the customer.
@@ -164,7 +150,6 @@ public class ViewCustomerController {
         stage.show();
     }
 
-    /*id name address postal code phone number division id*/
     /**
      * A special method that displays the initial values. The table views are populated with the customer information
      * from the database and the columns values are set properly.

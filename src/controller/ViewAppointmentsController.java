@@ -1,7 +1,6 @@
 package controller;
 
 import DAO.AppointmentsDAO;
-import DAO.ContactsDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointments;
 import model.Contacts;
-import model.Customers;
+
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -66,30 +65,6 @@ public class ViewAppointmentsController {
     @FXML
     private TableColumn<Appointments, Integer> appointmentUserIDCol;
 
-    @FXML
-    private ToggleGroup appointmentGroup;
-
-    @FXML
-    private RadioButton appointmentAllRButton;
-
-    @FXML
-    private RadioButton appointmentWeekRButton;
-
-    @FXML
-    private RadioButton appointmentMonthRButton;
-
-    @FXML
-    private Button appointmentDeleteButton;
-
-    @FXML
-    private Button appointmentEditButton;
-
-    @FXML
-    private Button appointmentMainMenu;
-
-    @FXML
-    private Button appointmentAddButton;
-
     /**
      * Displays the add appointment form. When the button is pressed, the scene is changed to the
      * AddAppointmentForm.fxml which allows the user to add appointment details to be inserted into the database and
@@ -131,10 +106,9 @@ public class ViewAppointmentsController {
     /**
      * Removes the selected appointment. When the button is pressed, the selected appointment is removed from the
      * tableview as well as the database after confirming with the user that they are sure of their actions.
-     * @param event helps get the window that caused the event
      */
     @FXML
-    void onActionDeleteAppointment(ActionEvent event) {
+    void onActionDeleteAppointment() {
         if (appointmentTableView.getSelectionModel().getSelectedItem() != null){
             Alert deleteWarning = new Alert(Alert.AlertType.WARNING);
             deleteWarning.setTitle("Confirmation");
@@ -238,19 +212,6 @@ public class ViewAppointmentsController {
         appointmentTableView.refresh();
     }
 
-
-
-    /*
-     * @param id appointment id
-     * @param title appointment title
-     * @param description appointment description
-     * @param type appointment type
-     * @param location appointment location
-     * @param startTime appointment start time
-     * @param endTime appointment end time
-     * @param customerId customer id associated with the appointment
-     * @param userId user id associated with the appointment
-     * @param contactId contact id associated with the appointment*/
     /**
      * A special method that displays the initial values. The table views are populated with the appointment information
      * from the database and the columns values are set properly.

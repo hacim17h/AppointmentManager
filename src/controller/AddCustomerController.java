@@ -48,9 +48,6 @@ public class AddCustomerController {
     private TextField addCustomerAddressTxt;
 
     @FXML
-    private Button addCustomerCancelBtn;
-
-    @FXML
     private ComboBox<String> addCustomerCountryCombo;
 
     @FXML
@@ -60,9 +57,6 @@ public class AddCustomerController {
     private Label addCustomerErrorLbl;
 
     @FXML
-    private TextField addCustomerIDTxt;
-
-    @FXML
     private TextField addCustomerNameTxt;
 
     @FXML
@@ -70,9 +64,6 @@ public class AddCustomerController {
 
     @FXML
     private TextField addCustomerPostalTxt;
-
-    @FXML
-    private Button addCustomerSaveBtn;
 
     /**
      * Returns to the view customer form. When the button, is pressed the returns to the previous view customer form.

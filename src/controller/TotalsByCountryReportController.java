@@ -1,6 +1,5 @@
 package controller;
 
-import DAO.AppointmentsDAO;
 import DAO.CustomersDAO;
 import DAO.LocationDAO;
 import javafx.collections.FXCollections;
@@ -14,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import model.Appointments;
 import model.Countries;
 import model.Customers;
 
@@ -40,16 +38,7 @@ public class TotalsByCountryReportController {
     private ComboBox<Countries> byCountryCombo;
 
     @FXML
-    private Button byCountryGenerateBtn;
-
-    @FXML
-    private Button byCountryMainMenuBtn;
-
-    @FXML
     private Label byCountryResultLbl;
-
-    @FXML
-    private Label byCountryResultTitleLbl;
 
     /**
      * Generates a report when the generate button is clicked. The method checks if there is selections made, and if
@@ -85,8 +74,8 @@ public class TotalsByCountryReportController {
     }
 
     /**
-     * A special method that displays the initial values. The table views are prepared to display appointment
-     * information from the database and the columns values are set properly.
+     * A special method that displays the initial values. The combo boxes for the countries are initialized providing
+     * starting values for selection.
      */
     public void initialize(){
         countries.addAll(LocationDAO.selectAllCountries());

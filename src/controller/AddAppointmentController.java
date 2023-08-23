@@ -85,8 +85,7 @@ public class AddAppointmentController {
 
     /**
      * Sets the appointment start and end times properly. When a date is selected, the appointment start and end
-     * combo boxes are populated with correct times and dates based upon the business hours and the users local time
-     * zone.
+     * combo boxes are populated with times and dates based upon the users time zone.
      */
     @FXML
     void onActionSelectDate() {

@@ -16,7 +16,6 @@ import model.Appointments;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -30,23 +29,12 @@ public class MainMenuController {
      * Stores the scene.
      */
     Parent scene;
-    @FXML
-    private Button mainExit;
-
-    @FXML
-    private Button mainGenerateReports;
-
-    @FXML
-    private Button mainViewAppointments;
-
-    @FXML
-    private Button mainViewCustomers;
 
     /**
      * Exits the program. When the button, is pressed the program closes.
      */
     @FXML
-    public void onActionExit(ActionEvent event){
+    public void onActionExit(){
         System.exit(0);
     }
 
@@ -92,10 +80,6 @@ public class MainMenuController {
         stage.show();
     }
 
-     /*A custom message should be displayed in the user interface and include the appointment ID, date, and time.
-     If the user does not have any appointments within 15 minutes of logging in, display a custom message in the user
-     interface indicating there are no upcoming appointments.*/
-
     /**
      * Notifies the user of any upcoming appointments. Gives a notification if there is an appointment within 15
      * minutes of the time they have logged in. This is based upon local time.
@@ -137,8 +121,8 @@ public class MainMenuController {
         }
     }
     /**
-     * A special method that displays the initial values. The table views are populated with the customer information
-     * from the database and the columns values are set properly.
+     * A special method that initializes starting values. When the method is called, the login alert activates and
+     * mentions if any appointments are upcoming in addition to reporting the login was successful.
      */
     public void initialize(){
         loginAlert();

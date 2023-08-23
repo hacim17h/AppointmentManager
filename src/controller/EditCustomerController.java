@@ -49,9 +49,6 @@ public class EditCustomerController {
     private TextField editCustomerAddressTxt;
 
     @FXML
-    private Button editCustomerCancelBtn;
-
-    @FXML
     private ComboBox<String> editCustomerCountryCombo;
 
     @FXML
@@ -71,9 +68,6 @@ public class EditCustomerController {
 
     @FXML
     private TextField editCustomerPostalTxt;
-
-    @FXML
-    private Button editCustomerSaveBtn;
 
     /**
      * Returns to the view customer form. When the button, is pressed the returns to the previous view customer form.
