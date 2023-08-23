@@ -49,6 +49,9 @@ public class ViewCustomerController {
     @FXML
     private TableColumn<Customers, String> customerPostalCodeCol;
 
+    @FXML
+    private TableColumn<Customers, String> customerCountryCol;
+
      /**
      * Displays the add customer form. When the button is pressed, the scene is changed to the
      * AddCustomerForm.fxml which allows the user to add customer details to be inserted into the database and
@@ -162,6 +165,8 @@ public class ViewCustomerController {
         customerPostalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phoneNum"));
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionDisplay"));
+        customerCountryCol.setCellValueFactory(new PropertyValueFactory<>("countryDisplay"));
+
     }
 }
 

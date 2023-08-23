@@ -1,6 +1,7 @@
 package model;
 
 import DAO.DivisionsDAO;
+import DAO.LocationDAO;
 
 /**A class that stores and retrieves various customer information.*/
 public class Customers {
@@ -40,6 +41,11 @@ public class Customers {
     private String divisionDisplay;
 
     /**
+     * Stores the country name for display.
+     */
+    private String countryDisplay;
+
+    /**
      * A class constructor that initializes the id, name, address, postal code, phone number
      * and first-level divisions for the country.
      * @param id customer ID
@@ -57,6 +63,7 @@ public class Customers {
         setPhoneNum(phoneNum);
         setDivisionId(divisionId);
         divisionDisplay = DivisionsDAO.selectByDivisionId(divisionId).getName();
+        countryDisplay = LocationDAO.selectByCountryId(LocationDAO.getDivisionCountry(divisionId)).getName();
     }
 
     /**
@@ -172,5 +179,14 @@ public class Customers {
      */
     public String getDivisionDisplay() {
         return divisionDisplay;
+    }
+
+    /**
+     * Returns the country name for display. The method returns a string that can be used in tables to have and
+     * alternate method of displaying the country for the object.
+     * @return the country name
+     */
+    public String getCountryDisplay() {
+        return countryDisplay;
     }
 }

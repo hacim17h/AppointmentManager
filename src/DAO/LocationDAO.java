@@ -47,6 +47,41 @@ public class LocationDAO {
     }
 
     /**
+     * Returns selected the country by country ID. The method accesses the database and adds the selected country to the
+     * Countries object. It also populates the first-level divisions that the Countries objects have inside of them.
+     * @return the country selected from the database
+     */
+    public static Countries selectByCountryId(int countryId){
+        ObservableList<Countries> countries = FXCollections.observableArrayList();
+        String query = "SELECT * FROM client_schedule.countries WHERE Country_ID = ?";
+        String fldQuery = "SELECT * FROM client_schedule.first_level_divisions WHERE Country_ID = ?";
+        try{
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setInt(1, countryId);
+            ResultSet results = statement.executeQuery();
+            while (results.next()) {
+                int id = results.getInt("Country_ID");
+                String name = results.getString("Country");
+                ObservableList<Divisions> divisions = FXCollections.observableArrayList();
+                PreparedStatement fldStatement = JDBC.connection.prepareStatement(fldQuery);
+                fldStatement.setInt(1, id);
+                ResultSet fldResults = fldStatement.executeQuery();
+                //Goes through the first level divisions of that specific country and adds them to the divisions list.
+                while (fldResults.next()){
+                    divisions.add(new Divisions(fldResults.getInt("Division_ID"),
+                            fldResults.getString("Division"), fldResults.getInt("Country_ID")));
+                }
+                Countries country = new Countries(id, name, divisions);
+                countries.add(country);
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return countries.get(0);
+    }
+
+    /**
      * Returns the country id from a given division id. The method accepts a division ID and then checks the database
      * to see if there are any matches. If there is a match it will return the country id that corresponds with the
      * selected division id.
