@@ -54,7 +54,7 @@ public class TotalsByTypeReportController {
 
     /**
      * Generates a report when the generate button is clicked. The method checks if there is selections made, and if
-     * there are a report with the user data requested is displayed.
+     * there are selections, a report with the user data requested is displayed.
      */
     @FXML
     void onActionGenerateReport() {

@@ -111,6 +111,41 @@ public class AppointmentsDAO {
     }
 
     /**
+     * Returns all the appointments in the database that match the selected contact id. The method creates a query that
+     * selects all appointments in the appointments database that match the contact id the user enters. It then
+     * returns all relevant appointment data as an ObservableList<Appointments>.
+     * @param contactId the id of the contact
+     * @return a list containing all appointments
+     */
+    public static ObservableList<Appointments> selectByContactId(int contactId){
+        String query = "SELECT * FROM client_schedule.appointments WHERE Contact_ID = ?";
+        ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+        try{
+            PreparedStatement statement = JDBC.connection.prepareStatement(query);
+            statement.setInt(1, contactId);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                int id = result.getInt("Appointment_ID");
+                String title = result.getString("Title");
+                String description = result.getString("Description");
+                String location = result.getString("Location");
+                String type = result.getString("Type");
+                Timestamp start = result.getTimestamp("Start");
+                Timestamp end = result.getTimestamp("End");
+                int storedCustomerId = result.getInt("Customer_ID");
+                int userId = result.getInt("User_ID");
+                int storedContactId = result.getInt("Contact_ID");
+                appointments.add(new Appointments(id, title, description, location, type, start, end, storedCustomerId,
+                        userId, storedContactId));
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return appointments;
+    }
+
+    /**
      * Inserts an appointment to the appointments table. The method takes the title, description, location, appointment
      * type, the appointment start time, the appointment end time, the customer's id, the user's id, and the contact's
      * id and adds a new appointment to the appointment table. If the add is successful the number of rows that have

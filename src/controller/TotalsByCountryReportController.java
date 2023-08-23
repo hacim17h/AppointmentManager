@@ -1,5 +1,8 @@
 package controller;
 
+import DAO.LocationDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import model.Countries;
 
 import java.io.IOException;
 
@@ -23,9 +27,13 @@ public class TotalsByCountryReportController {
      */
     Parent scene;
 
+    /**
+     * Stores all the countries.
+     */
+    ObservableList<Countries> countries = FXCollections.observableArrayList();
 
     @FXML
-    private ComboBox<?> byCountryCombo;
+    private ComboBox<Countries> byCountryCombo;
 
     @FXML
     private Button byCountryGenerateBtn;
@@ -39,9 +47,15 @@ public class TotalsByCountryReportController {
     @FXML
     private Label byCountryResultTitleLbl;
 
+    /**
+     * Generates a report when the generate button is clicked. The method checks if there is selections made, and if
+     * there are selections, a report with the user data requested is displayed.
+     */
     @FXML
-    void onActionGenerateReport(ActionEvent event) {
+    void onActionGenerateReport() {
+        if(!(byCountryCombo.getValue() == null)){
 
+        }
     }
 
     /**
@@ -55,6 +69,15 @@ public class TotalsByCountryReportController {
         scene = FXMLLoader.load(getClass().getResource("/view/ReportForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
+    }
+
+    /**
+     * A special method that displays the initial values. The table views are prepared to display appointment
+     * information from the database and the columns values are set properly.
+     */
+    public void initialize(){
+        countries.addAll(LocationDAO.selectAllCountries());
+        byCountryCombo.setItems(countries);
     }
 
 }

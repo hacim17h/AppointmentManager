@@ -1,5 +1,9 @@
 package controller;
 
+import DAO.AppointmentsDAO;
+import DAO.ContactsDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +13,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointments;
+import model.Contacts;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 public class AppointmentsReportController  {
     /**
@@ -24,43 +32,44 @@ public class AppointmentsReportController  {
      */
     Parent scene;
 
+    @FXML
+    private TableView<Appointments> byContactTableView;
 
     @FXML
-    private TableColumn<?, ?> byContactAppointmentIDCol;
+    private TableColumn<Appointments, Integer> byContactAppointmentIDCol;
 
     @FXML
-    private ComboBox<?> byContactCombo;
+    private TableColumn<Appointments, Integer> byContactCustomerIDCol;
 
     @FXML
-    private TableColumn<?, ?> byContactCustomerIDCol;
+    private TableColumn<Appointments, String> byContactDescriptionCol;
 
     @FXML
-    private TableColumn<?, ?> byContactDescriptionCol;
+    private TableColumn<Appointments, Timestamp> byContactEndCol;
 
     @FXML
-    private TableColumn<?, ?> byContactEndCol;
+    private TableColumn<Appointments, Timestamp> byContactStartCol;
 
     @FXML
-    private Button byContactGenerateReportBtn;
+    private TableColumn<Appointments, String> byContactTitleCol;
 
     @FXML
-    private Button byContactMainMenuBtn;
+    private TableColumn<Appointments, String> byContactTypeCol;
 
     @FXML
-    private TableColumn<?, ?> byContactStartCol;
+    private ComboBox<Contacts> byContactCombo;
 
+    /**
+     * Generates a report when the generate button is clicked. The method checks if there is selections made, and if
+     * there are selections, a report with the user data requested is displayed.
+     */
     @FXML
-    private TableView<?> byContactTableView;
-
-    @FXML
-    private TableColumn<?, ?> byContactTitleCol;
-
-    @FXML
-    private TableColumn<?, ?> byContactTypeCol;
-
-    @FXML
-    void onActionGenerateReport(ActionEvent event) {
-
+    void onActionGenerateReport() {
+        if(!(byContactCombo.getValue() == null)){
+            ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+            appointments.addAll(AppointmentsDAO.selectByContactId(byContactCombo.getValue().getId()));
+            byContactTableView.setItems(appointments);
+        }
     }
 
     /**
@@ -76,4 +85,21 @@ public class AppointmentsReportController  {
         stage.show();
     }
 
+    /**
+     * A special method that displays the initial values. The table views are prepared to display appointment
+     * information from the database and the columns values are set properly.
+     */
+    public void initialize(){
+        byContactAppointmentIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        byContactTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        byContactDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        byContactTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        byContactStartCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        byContactEndCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        byContactCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+
+        ObservableList<Contacts> contacts = FXCollections.observableArrayList();
+        contacts.addAll(ContactsDAO.selectAllContacts());
+        byContactCombo.setItems(contacts);
+    }
 }

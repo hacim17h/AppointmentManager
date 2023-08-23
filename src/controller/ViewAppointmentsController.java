@@ -1,6 +1,7 @@
 package controller;
 
 import DAO.AppointmentsDAO;
+import DAO.ContactsDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
