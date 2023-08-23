@@ -2,7 +2,6 @@ package DAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Contacts;
 import model.Customers;
 
 import java.sql.PreparedStatement;

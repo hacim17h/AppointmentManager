@@ -1,6 +1,5 @@
 package DAO;
 
-import controller.MainMenuController;
 import helper.LogMessage;
 import main.Main;
 
@@ -49,7 +48,8 @@ public abstract class LoginDAO {
     /**
      * Records information about the user login. The method creates a new login file if one isn't present and records
      * whether the user has successfully logged in as well as the timestamp of the attempt. If there is already
-     * a log file present, it updates the file and adds to it. The lambda successfulMessage and unsuccessfulMessage
+     * a log file present, it updates the file and adds to it.
+     * LAMBDA_EXPRESSION_INFORMATION - The two lambdas used in successfulMessage and unsuccessfulMessage
      * were used to simplify the redundancy of the message text. Due to having repeat the text for the condition of
      * the file already existing, it was helpful in cutting it down and gives added readability and clarity on the
      * success states.
