@@ -344,7 +344,10 @@ public class EditAppointmentController {
                 break;
             }
         }
-        customerAppointments.remove(deleteIndex);
+
+        if(!(customerAppointments.isEmpty())){
+            customerAppointments.remove(deleteIndex);
+        }
 
         //Checks to see if there are any appointments for the specific customer that overlap.
         for (Appointments appointment : customerAppointments){
