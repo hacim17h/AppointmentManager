@@ -10,6 +10,8 @@ import model.*;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+/** The class that holds the main entry point of the program.*/
 public class Main extends Application {
     /**
      * Stores the user who successfully or unsuccessfully logs in.
