@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TotalsByCountryReportController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TotalsByCountryReportController">
    <children>
-      <VBox prefHeight="700.0" prefWidth="650.0">
+      <VBox prefHeight="480.0" prefWidth="650.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label text="Total Appointments By Country">
+                  <Label text="Total Customers By Country">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -54,18 +54,18 @@
                   <Insets left="40.0" right="40.0" />
                </VBox.margin>
             </HBox>
-            <HBox prefHeight="350.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-radius: 5px;">
+            <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black; -fx-border-radius: 5px;">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="650.0">
+                  <VBox prefHeight="348.0" prefWidth="650.0">
                      <children>
-                        <Label fx:id="byCountryResultTitleLbl" text="Country">
+                        <Label fx:id="byCountryResultTitleLbl" text="Totals">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="byCountryResultLbl" text="Division - Total">
+                              <Label fx:id="byCountryResultLbl" text="Country - Total">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
