@@ -1,5 +1,7 @@
 package controller;
 
+import DAO.AppointmentsDAO;
+import DAO.CustomersDAO;
 import DAO.LocationDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,7 +14,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import model.Appointments;
 import model.Countries;
+import model.Customers;
 
 import java.io.IOException;
 
@@ -54,7 +58,16 @@ public class TotalsByCountryReportController {
     @FXML
     void onActionGenerateReport() {
         if(!(byCountryCombo.getValue() == null)){
-
+            ObservableList<Customers> customers = FXCollections.observableArrayList();
+            customers.addAll(CustomersDAO.selectAll());
+            Countries selectedCountry = byCountryCombo.getValue();
+            int total = 0;
+            for (Customers customer : customers){
+                if(LocationDAO.getDivisionCountry(customer.getDivisionId()) == selectedCountry.getId()){
+                    total++;
+                }
+            }
+            byCountryResultLbl.setText(byCountryCombo.getValue().getName() + " - " + total);
         }
     }
 

@@ -35,7 +35,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="generateByCountryBtn" mnemonicParsing="false" onAction="#onActionGenerateByCountry" prefHeight="40.0" prefWidth="200.0" text="Total Appointments by Country" />
+                        <Button fx:id="generateByCountryBtn" mnemonicParsing="false" onAction="#onActionGenerateByCountry" prefHeight="40.0" prefWidth="200.0" text="Total Customers by Country" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">

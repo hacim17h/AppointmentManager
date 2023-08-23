@@ -63,13 +63,13 @@
                <children>
                   <TableView fx:id="byContactTableView" prefWidth="998.0">
                     <columns>
-                      <TableColumn fx:id="byContactAppointmentIDCol" prefWidth="101.0" text="Appointment ID" />
-                      <TableColumn fx:id="byContactTitleCol" minWidth="0.0" prefWidth="161.0" text="Title" />
-                        <TableColumn fx:id="byContactDescriptionCol" prefWidth="177.0" text="Description" />
-                        <TableColumn fx:id="byContactTypeCol" prefWidth="148.0" text="Type" />
-                        <TableColumn fx:id="byContactStartCol" prefWidth="142.0" text="Appointment Start" />
-                        <TableColumn fx:id="byContactEndCol" prefWidth="169.0" text="Appointment End" />
-                        <TableColumn fx:id="byContactCustomerIDCol" prefWidth="99.0" text="Customer ID" />
+                      <TableColumn fx:id="byContactAppointmentIDCol" prefWidth="100.0" text="Appointment ID" />
+                      <TableColumn fx:id="byContactTitleCol" minWidth="0.0" prefWidth="170.0" text="Title" />
+                        <TableColumn fx:id="byContactTypeCol" prefWidth="150.0" text="Type" />
+                        <TableColumn fx:id="byContactDescriptionCol" prefWidth="190.0" text="Description" />
+                        <TableColumn fx:id="byContactStartCol" prefWidth="150.0" text="Appointment Start" />
+                        <TableColumn fx:id="byContactEndCol" prefWidth="150.0" text="Appointment End" />
+                        <TableColumn fx:id="byContactCustomerIDCol" prefWidth="87.0" text="Customer ID" />
                     </columns>
                   </TableView>
                </children>

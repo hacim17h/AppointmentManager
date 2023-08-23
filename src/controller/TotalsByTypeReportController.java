@@ -15,10 +15,8 @@ import javafx.stage.Stage;
 import model.Appointments;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.temporal.TemporalAdjusters;
+
 
 public class TotalsByTypeReportController {
     /**
@@ -34,6 +32,7 @@ public class TotalsByTypeReportController {
      * Stores all appointments.
      */
     ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+
     @FXML
     private ComboBox<String> byTypeCombo;
 
@@ -41,16 +40,7 @@ public class TotalsByTypeReportController {
     private ComboBox<String> byTypeMonthCombo;
 
     @FXML
-    private Button byTypeGenerateBtn;
-
-    @FXML
-    private Button byTypeMainMenuBtn;
-
-    @FXML
     private Label byTypeResultLbl;
-
-    @FXML
-    private Label byTypeResultTitleLbl;
 
     /**
      * Generates a report when the generate button is clicked. The method checks if there is selections made, and if
@@ -70,7 +60,6 @@ public class TotalsByTypeReportController {
                     typeCount++;
                 }
             }
-            byTypeResultTitleLbl.setText(byTypeMonthCombo.getValue());
             byTypeResultLbl.setText(byTypeMonthCombo.getValue() + " - " + typeSelection + " - " + typeCount);
         }
     }

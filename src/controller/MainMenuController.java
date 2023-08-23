@@ -17,6 +17,8 @@ import model.Appointments;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class MainMenuController {
     /**
@@ -101,6 +103,7 @@ public class MainMenuController {
     void loginAlert(){
         if(!Main.loginSuccess)
         {
+            ResourceBundle rb = ResourceBundle.getBundle("helper/Lang", Locale.getDefault());
             LocalDateTime now = LocalDateTime.now();
             ObservableList<Appointments> appointments = FXCollections.observableArrayList();
             ObservableList<Appointments> upcomingAppointments = FXCollections.observableArrayList();
@@ -117,17 +120,18 @@ public class MainMenuController {
             if (!(upcomingAppointments.isEmpty())) {
                 for (Appointments upcoming : upcomingAppointments) {
                     Alert notification = new Alert(Alert.AlertType.INFORMATION);
-                    notification.setTitle("Upcoming Appointment");
+                    notification.setTitle(rb.getString("Upcoming Appointment"));
                     notification.setHeaderText(null);
-                    notification.setContentText("You have an upcoming appointment. Here are the details: \n" +
+                    notification.setContentText(rb.getString(
+                            "You have an upcoming appointment. Here are the details") + ": \n" +
                             upcoming.toString() + ".");
                     notification.showAndWait();
                 }
             } else {
                 Alert notification = new Alert(Alert.AlertType.INFORMATION);
-                notification.setTitle("Upcoming Appointment");
+                notification.setTitle(rb.getString("Upcoming Appointment"));
                 notification.setHeaderText(null);
-                notification.setContentText("You have no upcoming appointments.");
+                notification.setContentText(rb.getString("You have no upcoming appointments."));
                 notification.showAndWait();
             }
         }
@@ -139,7 +143,6 @@ public class MainMenuController {
     public void initialize(){
         loginAlert();
         Main.loginSuccess = true;
-
     }
 
 }

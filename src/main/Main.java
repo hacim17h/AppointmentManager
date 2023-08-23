@@ -228,6 +228,7 @@ public class Main extends Application {
         }
 
         //TimeZone.setDefault(TimeZone.getTimeZone(denver));
+        //Locale.setDefault(new Locale("fr","FR"));
         System.out.println(LocalDateTime.now());
         launch(args);
         JDBC.closeConnection();

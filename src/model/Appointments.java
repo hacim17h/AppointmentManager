@@ -5,6 +5,8 @@ import DAO.ContactsDAO;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 /**A class that stores and retrieves various appointment information.*/
@@ -274,10 +276,18 @@ public class Appointments {
         return contactDisplay;
     }
 
+    /**
+     * Returns various appointment details for display. A method override that displays the appointment id, the start
+     * date, and time when printing out or displaying an Appointments object.
+     * @return the appointment id, start date, and time
+     */
     @Override
     public String toString() {
+        ResourceBundle rb = ResourceBundle.getBundle("helper/Lang", Locale.getDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm");
-        String displayStart = startTime.toLocalDateTime().format(formatter);
-        return "Appointment ID: " + id + " on " + displayStart;
+        String displayStart = startTime.toLocalDateTime().format(formatter).replace(
+                "at", rb.getString("at"));
+
+        return rb.getString("Appointment ID") + ": " + id + " " + rb.getString("on") + " "+ displayStart;
     }
 }

@@ -293,6 +293,7 @@ public class AddAppointmentController {
         addAppointmentUserIDCombo.setItems(users);
         addAppointmentContactCombo.setItems(contacts);
         addAppointmentCustomerIDCombo.setItems(customers);
+        addAppointmentTypeCombo.setItems(appointmentTypes);
 
 
     }

@@ -47,25 +47,26 @@ public class LocationDAO {
     }
 
     /**
-     * Returns the division name from a given id. The method accepts a division ID and then checks the database to see
-     * if there are any matches. If there is a match it will return the division name that corresponds with the
-     * selected id.
+     * Returns the country id from a given division id. The method accepts a division ID and then checks the database
+     * to see if there are any matches. If there is a match it will return the country id that corresponds with the
+     * selected division id.
      * @param divisionId division id
-     * @return division name
+     * @return country id
      */
-    public static String getDivisionName(int divisionId){
-        String query = "SELECT Division FROM client_schedule.first_level_divisions WHERE Division_ID = ?";
-        String divisionName = null;
+    public static int getDivisionCountry(int divisionId){
+        String query = "SELECT Country_ID FROM client_schedule.first_level_divisions WHERE Division_ID = ?";
+        int divisionCountry = 0;
         try{
             PreparedStatement statement = JDBC.connection.prepareStatement(query);
             statement.setInt(1, divisionId);
             ResultSet results = statement.executeQuery();
-             divisionName =  results.getString("Division");
+            results.next();
+            divisionCountry =  results.getInt("Country_ID");
         }
         catch (SQLException e){
             e.printStackTrace();
         }
-        return divisionName;
+        return divisionCountry;
     }
 
 }

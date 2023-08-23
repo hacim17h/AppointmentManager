@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TotalsByTypeReportController">
    <children>
-      <VBox prefHeight="700.0" prefWidth="650.0">
+      <VBox prefHeight="480.0" prefWidth="650.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
@@ -71,7 +71,7 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="650.0">
                      <children>
-                        <Label fx:id="byTypeResultTitleLbl" text="Month">
+                        <Label fx:id="byTypeResultTitleLbl" text="Totals">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>

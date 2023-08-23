@@ -97,12 +97,21 @@ public class Countries {
         return divisionIds;
     }
 
-
     /**
      * Sets the divisions. A setter method that returns the first-level divisions.
      * @param divisions  first-level divisions
      */
     public void setDivisions(ObservableList<Divisions> divisions) {
         this.divisions.addAll(divisions);
+    }
+
+    /**
+     * Returns the country name for display. A method override that displays the country name to be displayed when
+     * printing out or displaying a Countries object.
+     * @return the country name
+     */
+    @Override
+    public String toString() {
+        return name;
     }
 }
