@@ -262,25 +262,24 @@ public class EditAppointmentController {
         appointmentTypes.addAll("Planning Session", "De-Briefing", "Celebration", "Lunch", "Team Building",
                 "Gaming Session", "Training");
         editAppointmentTypeCombo.setItems(appointmentTypes);
-        int typeIndex = 0;
-        boolean found = false;
 
-        for(String type : appointmentTypes){
-            if(type.equals(selectedAppointment.getType())){
-                found = true;
-                break;
+        ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+        appointments.addAll(AppointmentsDAO.selectAll());
+
+        //Goes through the appointments and adds any new types that exist if they are new types.
+        for(Appointments appointment : appointments){
+            boolean exists = false;
+            for (String type : appointmentTypes){
+                if (appointment.getType().equals(type)) {
+                    exists = true;
+                    break;
+                }
             }
-            typeIndex++;
+            if (!exists){
+                appointmentTypes.add(appointment.getType());
+            }
         }
-        //If the type doesn't exist add it and select it.
-        if(found){
-            editAppointmentTypeCombo.getSelectionModel().select(typeIndex);
-        }
-        else {
-            appointmentTypes.add(selectedAppointment.getType());
-            editAppointmentTypeCombo.setItems(appointmentTypes);
-            editAppointmentTypeCombo.getSelectionModel().selectLast();
-        }
+        editAppointmentTypeCombo.getSelectionModel().select(selectedAppointment.getType());
 
         //Populates and selects the remaining combo boxes.
         editAppointmentUserIDCombo.setItems(UsersDAO.selectAllUsers());

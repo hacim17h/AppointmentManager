@@ -90,7 +90,7 @@ public class TotalsByTypeReportController {
         types.addAll("Planning Session", "De-Briefing", "Celebration", "Lunch", "Team Building",
                 "Gaming Session", "Training");
 
-        //Goes through the appointments and adds any types that exist if they are new types.
+        //Goes through the appointments and adds any new types that exist if they are new types.
         for(Appointments appointment : appointments){
             boolean exists = false;
             for (String type : types){

@@ -272,6 +272,24 @@ public class AddAppointmentController {
 
         appointmentTypes.addAll("Planning Session", "De-Briefing", "Celebration", "Lunch", "Team Building",
                              "Gaming Session", "Training");
+
+        ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+        appointments.addAll(AppointmentsDAO.selectAll());
+
+        //Goes through the appointments and adds any new types that exist if they are new types.
+        for(Appointments appointment : appointments){
+            boolean exists = false;
+            for (String type : appointmentTypes){
+                if (appointment.getType().equals(type)) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists){
+                appointmentTypes.add(appointment.getType());
+            }
+        }
+
         contacts.addAll(ContactsDAO.selectAllContacts());
         users.addAll(UsersDAO.selectAllUsers());
         customers.addAll(CustomersDAO.selectAll());
