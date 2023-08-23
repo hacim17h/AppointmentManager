@@ -50,17 +50,6 @@ public class AddAppointmentController {
      */
     ObservableList<String> displayTime = FXCollections.observableArrayList();
 
-    /**
-     * Stores the contact ids.
-     */
-    ObservableList<Integer> contactIds = FXCollections.observableArrayList();
-
-    @FXML
-    private Button addAppointmentSaveBtn;
-
-    @FXML
-    private Button addAppointmentCancelBtn;
-
     @FXML
     private TextField addAppointmentDescriptionTxt;
 
@@ -84,9 +73,6 @@ public class AddAppointmentController {
 
     @FXML
     private ComboBox<String> addAppointmentTypeCombo;
-
-    @FXML
-    private TextField addAppointmentIDTxt;
 
     @FXML
     private TextField addAppointmentLocationTxt;
@@ -133,7 +119,7 @@ public class AddAppointmentController {
     /**
      * Sets the appointment end time based upon the start time. When the start time is selected, the end time
      * dynamically changes to ensure the user cannot choose an appointment time in the past. This serves as input
-     * validation to also ensure the appointments are within business hours.
+     * validation.
      */
     @FXML
     void onActionSelectStart() {
@@ -145,7 +131,8 @@ public class AddAppointmentController {
     }
 
     /**
-     * Returns to the view customer form. When the button, is pressed the returns to the previous view appointment form.
+     * Returns to the view appointments form. When the button, is pressed the returns to the previous view appointment
+     * form.
      * @param event helps get the window that caused the event
      * @throws IOException for handling any input output exception
      */
@@ -167,7 +154,6 @@ public class AddAppointmentController {
     @FXML
     void onActionSave(ActionEvent event) throws IOException {
         //If the input is valid the appointment data is inserted into the database and if not an error displays.
-
         if(isValidInput()){
             //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
             DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
@@ -248,7 +234,8 @@ public class AddAppointmentController {
      */
     boolean isValidAppointment(){
         ObservableList<Appointments> customerAppointments = FXCollections.observableArrayList();
-        customerAppointments.addAll(AppointmentsDAO.selectByCustomerId(addAppointmentCustomerIDCombo.getValue().getId()));
+        customerAppointments.addAll(AppointmentsDAO.selectByCustomerId(
+                addAppointmentCustomerIDCombo.getValue().getId()));
         boolean isValid = true;
 
         //Creates UTC timestamps after parsing the text from the appointment start and end combo boxes.
@@ -272,9 +259,9 @@ public class AddAppointmentController {
     }
 
     /**
-     * A special method that displays the initial values. Time combo boxes are populated with valid times that adjust
-     * based upon the local time of the users computer to stay within business hours. The contact name combo box is
-     * also populated with the names of the contacts and the user ID and customer IDs are also populated.
+     * A special method that displays the initial values. Time combo boxes are populated with initial starting times.
+     * The contact name combo box is  also populated with the names of the contacts and the user ID, customer IDs, and
+     * appointment types are also populated.
      */
     public void initialize() {
         addAppointmentDate.setValue(LocalDate.now());
