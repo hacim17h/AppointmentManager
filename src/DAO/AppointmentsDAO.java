@@ -151,6 +151,10 @@ public class AppointmentsDAO {
      * type, the appointment start time, the appointment end time, the customer's id, the user's id, and the contact's
      * id and adds a new appointment to the appointment table. If the add is successful the number of rows that have
      * been inserted are returned.
+     * LAMBDA_EXPRESSION_INFORMATION - The lambda expression helper was used to ensure the prepared statements were
+     * consistent. It reduces the amount of errors when trying to parse then information since the data switches
+     * between a lot of data types. The helper gives added readability as well. Being a lambda would also allow it
+     * to take on whatever form it needed to instead of having several overloaded methods for different types.
      * @param title appointment title
      * @param description appointment description
      * @param location appointment location
@@ -171,15 +175,26 @@ public class AppointmentsDAO {
         try{
 
             PreparedStatement statement = JDBC.connection.prepareStatement(query);
-            statement.setString(1, title);
-            statement.setString(2, description);
-            statement.setString(3, location);
-            statement.setString(4, type );
-            statement.setTimestamp(5, start);
-            statement.setTimestamp(6, end);
-            statement.setInt(7, customerId);
-            statement.setInt(8, userId);
-            statement.setInt(9, contactId);
+            StatementHelper helper = (stmt, index, item) -> {
+                if (item instanceof Integer) {
+                    stmt.setInt(index, ((Integer) item));
+                } else if (item instanceof String) {
+                    stmt.setString(index, ((String)item));
+                }
+                else if (item instanceof Timestamp){
+                    stmt.setTimestamp(index, ((Timestamp) item));
+                }
+            };
+
+            helper.setItem(statement, 1, title);
+            helper.setItem(statement, 2, description);
+            helper.setItem(statement, 3, location);
+            helper.setItem(statement, 4, type );
+            helper.setItem(statement, 5, start);
+            helper.setItem(statement, 6, end);
+            helper.setItem(statement, 7, customerId);
+            helper.setItem(statement, 8, userId);
+            helper.setItem(statement, 9, contactId);
             rowsAdded = statement.executeUpdate();
             return rowsAdded;
         }
@@ -194,6 +209,10 @@ public class AppointmentsDAO {
      * type, the appointment start time, the appointment end time, the customer's id, the user's id, and the contact's
      * id and updates a previous appointment in the appointment table. If the update is successful the number of rows
      * that have been updated are returned.
+     * LAMBDA_EXPRESSION_INFORMATION - The lambda expression helper was used to ensure the prepared statements were
+     * consistent. It reduces the amount of errors when trying to parse then information since the data switches
+     * between a lot of data types. The helper gives added readability as well. Being a lambda would also allow it
+     * to take on whatever form it needed to instead of having several overloaded methods for different types.
      * @param title appointment title
      * @param description appointment description
      * @param location appointment location
@@ -212,17 +231,29 @@ public class AppointmentsDAO {
                 "User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         int rowsUpdated = 0;
         try{
+
             PreparedStatement statement = JDBC.connection.prepareStatement(query);
-            statement.setString(1, title);
-            statement.setString(2, description);
-            statement.setString(3, location);
-            statement.setString(4, type );
-            statement.setTimestamp(5, start);
-            statement.setTimestamp(6, end);
-            statement.setInt(7, customerId);
-            statement.setInt(8, userId);
-            statement.setInt(9, contactId);
-            statement.setInt(10, appointmentId);
+            StatementHelper helper = (stmt, index, item) -> {
+                if (item instanceof Integer) {
+                    stmt.setInt(index, ((Integer) item));
+                } else if (item instanceof String) {
+                    stmt.setString(index, ((String)item));
+                }
+                else if (item instanceof Timestamp){
+                    stmt.setTimestamp(index, ((Timestamp) item));
+                }
+            };
+
+            helper.setItem(statement,1, title);
+            helper.setItem(statement,2, description);
+            helper.setItem(statement,3, location);
+            helper.setItem(statement,4, type );
+            helper.setItem(statement,5, start);
+            helper.setItem(statement,6, end);
+            helper.setItem(statement,7, customerId);
+            helper.setItem(statement,8, userId);
+            helper.setItem(statement,9, contactId);
+            helper.setItem(statement,10, appointmentId);
             rowsUpdated = statement.executeUpdate();
             return rowsUpdated;
         }
