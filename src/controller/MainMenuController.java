@@ -16,6 +16,8 @@ import model.Appointments;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -88,7 +90,9 @@ public class MainMenuController {
         if(!Main.loginSuccess)
         {
             ResourceBundle rb = ResourceBundle.getBundle("helper/Lang", Locale.getDefault());
-            LocalDateTime now = LocalDateTime.now();
+            ZoneId local = ZoneId.systemDefault();
+            ZonedDateTime zonedTimeNow = ZonedDateTime.of(LocalDateTime.now(), local);
+
             ObservableList<Appointments> appointments = FXCollections.observableArrayList();
             ObservableList<Appointments> upcomingAppointments = FXCollections.observableArrayList();
             appointments.addAll(AppointmentsDAO.selectAll());
@@ -96,8 +100,9 @@ public class MainMenuController {
             //If there are appointments upcoming in 15 minutes store them and then show an alert with the details.
             for (Appointments appointment : appointments) {
                 LocalDateTime localStartTime = appointment.getStartTime().toLocalDateTime();
-                if ((localStartTime.isEqual(now) || localStartTime.isAfter(now)) &&
-                        (localStartTime.isEqual(now.plusMinutes(15)) || localStartTime.isBefore(now.plusMinutes(15)))) {
+                ZonedDateTime zonedStartTime =  ZonedDateTime.of(localStartTime, local);
+                if (zonedTimeNow.isEqual(zonedStartTime.minusMinutes(15)) ||
+                    (zonedTimeNow.isAfter(zonedStartTime.minusMinutes(15)) && zonedTimeNow.isBefore(zonedStartTime))){
                     upcomingAppointments.add(appointment);
                 }
             }

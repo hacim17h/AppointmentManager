@@ -8,8 +8,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /** The class that holds the main entry point of the program.*/
 public class Main extends Application {
@@ -39,6 +42,18 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
         JDBC.openConnection();
+        //ZoneId test
+        ZoneId denver = ZoneId.of("America/Denver");
+        ZoneId la = ZoneId.of("America/Los_Angeles");
+        ZoneId buenosAires = ZoneId.of("America/Buenos_Aires");
+        ZoneId prague = ZoneId.of("Europe/Prague");
+        ZoneId etc = ZoneId.of("Etc/GMT-14");
+        ZoneId tokyo = ZoneId.of("Asia/Tokyo");
+
+        TimeZone.setDefault(TimeZone.getTimeZone(prague));
+        //System.out.println(LocalDateTime.now());
+        //Locale.setDefault(new Locale("fr","FR"));
+
         launch(args);
         JDBC.closeConnection();
     }

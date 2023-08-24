@@ -9,5 +9,5 @@ public interface LogMessage {
      * An abstract method for obtaining a message.
      * @return the message string
      */
-    public String getMessage();
+    String getMessage();
 }
