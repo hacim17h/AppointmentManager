@@ -11,7 +11,7 @@ JavaFX version: javafx-sdk-17.0.8
 
 MySQL Connector Driver Version Number: mysql-connector-java-8.0.25
 
-A3f Report Description: The report generates the total number of customers in the database based
+Report Description: The report generates the total number of customers in the database based
 upon the country they reside in. When selecting a country, the country is shown as well as the
 number of customers in that country and only that country. 
 
